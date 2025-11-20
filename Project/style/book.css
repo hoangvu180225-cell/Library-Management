@@ -1,0 +1,101 @@
+.book-site {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex: 1;
+    margin-right: 25px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.book-by-category {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    flex: 7;
+    background-color: lightblue;
+}
+
+.book {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 0px;
+}
+
+.book-img  {
+    height: 150px;
+    width: 100px;
+    margin-top: 10px;
+    margin-right: 15px;
+    cursor: pointer;
+}
+
+.book-info {
+    display: flex;
+    flex-direction: column;   
+}
+
+.book-name {
+    margin-top: 10px;
+    margin-bottom: 0px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.book-author {
+    margin-top: 5px;
+    margin-bottom: 0px;
+    font-size: 15px;
+
+}
+
+.book-genre {
+    margin-top: 5px;
+    margin-bottom: 0px;
+    font-size: 15px;
+}
+
+.book-intro {
+    margin-top: 5px;
+    margin-bottom: 0px;
+    font-size: 15px;
+}
+
+.book-info-more {
+    text-decoration: underline;
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 20px;
+    cursor: pointer;
+    margin-bottom: 0px;
+}
+
+.rank {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 3;
+    background-color: lightpink;
+}
+
+.rank-time {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.rank-time button {
+    flex: 1;
+    cursor: pointer;
+}
+
+.book-rank {
+    display: flex;
+    flex-direction: row;
+    margin-top: 10px;
+}
+
+.book-rank-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}

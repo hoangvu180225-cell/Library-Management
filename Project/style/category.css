@@ -1,0 +1,17 @@
+.category {
+    display: flex;
+    flex-direction: row;
+    margin-left: 80px;
+    margin-bottom: 30px;   
+}
+
+.category button {
+    background-color: rgb(226, 220, 220);
+    border: none;
+    margin-left: 10px;
+    font-size: 15px;
+    padding: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
