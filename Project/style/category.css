@@ -17,7 +17,7 @@
     margin-bottom: 30px;   
 }
 
-.category button {
+.category-btn {
     background-color: rgb(226, 220, 220);
     border: none;
     margin-left: 10px;
@@ -25,5 +25,11 @@
     padding: 10px;
     border-radius: 10px;
     cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.category-btn.active {
+    background-color: rgb(21, 96, 255);
+    color: white;
 }
 
