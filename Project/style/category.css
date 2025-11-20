@@ -1,3 +1,15 @@
+.category1 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.category1 img {
+    height: 30px;
+    margin-left: 100px;
+    cursor: pointer;
+}
+
 .category {
     display: flex;
     flex-direction: row;
