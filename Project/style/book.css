@@ -106,10 +106,12 @@
 
 .rank-time button {
     flex: 1;
+    background-color: rgb(230, 217, 217);
     height: 30px;
     cursor: pointer;
     border: none;
-    border-radius: 5px;
+    font-size: 20px;
+    font-family: 'Times New Roman', Times, serif;
 }
 
 .book-rank {
