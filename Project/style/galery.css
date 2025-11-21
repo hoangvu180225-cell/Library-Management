@@ -51,6 +51,7 @@
 
     background-color: white;
     color: rgb(21, 96, 255);
+    cursor: pointer;
 }
 
 .buy-button {
@@ -63,6 +64,7 @@
 
     background-color: rgb(21, 96, 255);
     color: white;
+    cursor: pointer;
     
 }
 
@@ -89,10 +91,37 @@
     border-radius: 20px;
 }
 
+.info-table {
+    width: 100%;
+    table-layout: fixed;
+}
+
+.info-table td {
+  border: 1px solid #333;  
+  padding: 8px;             
+  text-align: left;         
+}
+
+.info-table col.col-1 {
+    width: 25%;
+}
+
 .price, .info, .description {
     background-color: white;
     border-radius: 20px;
     padding: 20px;
     margin-bottom: 30px;
+}
+
+.price {
+    
+}
+
+.info {
+
+}
+
+.description {
+
 }
 
