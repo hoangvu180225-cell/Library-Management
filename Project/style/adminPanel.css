@@ -1,0 +1,138 @@
+.main, .admin-header, .admin-info  {
+    display: flex;
+    flex-direction: row;
+}
+
+.left-side, .right-side, .admin-role, .book {
+    display: flex;
+    flex-direction: column;
+}
+
+.galery-space {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 10px;
+    padding-top: 20px;
+    margin-top: 20px;
+    background-color: rgb(246, 238, 238);
+    border-radius: 15px;
+}
+
+.main {
+    gap: 20px;
+}
+
+.left-side {
+    flex: 1;
+    background-color: rgb(246, 238, 238);
+    border-radius: 15px;
+}
+
+.function.off {
+    width: 100%;
+    height: 50px;
+    border: none;
+    cursor: pointer;
+}
+
+.function.active {
+    width: 100%;
+    height: 50px;
+    border: none;
+    cursor: pointer;
+    background-color: rgb(21, 96, 255);
+    color: white;
+}
+
+
+.right-side {
+    flex: 6;
+    background-color: white;
+}
+
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.search {
+    display: flex;
+    justify-content: center;
+}
+
+.search-button {
+    object-fit: contain;
+    border: none;
+    background-color: white;
+    cursor: pointer;
+}
+
+.search-icon {
+    height: 30px;
+}
+
+.search-bar {
+    margin-left: 10px;
+    border: none;
+    width: 500px;
+}
+
+.admin-info {
+    background-color: rgb(244, 236, 236);
+    border-radius: 30px;
+}
+
+.admin-role {
+    
+}
+
+.admin-info button {
+    height: 60px;
+    width: 60px;
+    object-fit: contain;
+    border-radius: 30px;
+    border: none;
+    background-color: rgb(120, 145, 199);
+}
+
+.admin-img {
+    height: 30px;
+    cursor: pointer;
+}
+
+.book {
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.book-img {
+    height: 200px;
+    object-fit: contain;
+    justify-self: center;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.edit-btn {
+    position: absolute;  
+    top: 8px;            
+    right: 88px;          
+    background-color: rgba(255, 255, 255, 0.8); 
+    border: none;
+    border-radius: 50%;
+    padding: 4px;
+    cursor: pointer;
+}
+
+.book-name {
+    font-weight: bold;
+    overflow-wrap: break-word;
+    margin: 5px;
+    
+}
+
+.book-author {
+    justify-self: center;
+    margin: 5px;
+}
