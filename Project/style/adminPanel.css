@@ -26,6 +26,7 @@
     flex: 1;
     background-color: rgb(246, 238, 238);
     border-radius: 15px;
+    margin-left: 20px;
 }
 
 .function.off {
@@ -48,7 +49,7 @@
 .right-side {
     flex: 6;
     background-color: white;
-    margin-left: 40px;
+    margin-left: 20px;
     margin-right: 40px;
 }
 
@@ -83,10 +84,11 @@
     border: none;
     width: 600px;
     border-radius: 20px;
+    padding-left: 20px;
 }
 
 .search-bar::placeholder {
-    padding-left: 10px;
+    
 }
 
 .add-book {
@@ -107,6 +109,7 @@
     color: white;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
 }
 
 .admin-info {
