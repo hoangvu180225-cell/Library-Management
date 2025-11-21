@@ -1,6 +1,6 @@
 // Lấy các phần tử
 var modal = document.getElementById("loginModal");
-var btn = document.getElementById("Login-Btn");
+var btn = document.getElementById("openLoginBtn");
 var span = document.getElementsByClassName("close")[0];
 
 // Khi người dùng click nút, mở Modal

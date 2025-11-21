@@ -38,6 +38,11 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    object-fit: contain;
+}
+
+.img1 {
+    height: 340px;
 }
 
 .double-add {
@@ -59,13 +64,35 @@
     flex: 1;
 }
 
+.final-button {
+    display: flex;
+    flex-direction: row;
+}
+
+.delete {
+    margin: 20px 10px 20px 870px;
+    height: 30px;
+    width: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    background-color: rgb(195, 29, 29); 
+    color: white; 
+    border: none;
+    border-radius: 5px;
+}
+
 .add-save {
-    margin: 20px 10px 20px 990px;
+    margin: 20px 10px 20px 30px;
     height: 30px;
     width: 50px;
     display: flex;
     justify-content: center;
     align-items: center;   
+    background-color: rgb(21, 126, 54);
+    color: white;
+    border: none;
+    border-radius: 5px;
 }
 
  

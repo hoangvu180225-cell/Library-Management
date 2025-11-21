@@ -1,39 +1,4 @@
-.intro {
-    height: 400px;
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    background-color: rgb(21, 96, 255);
-}
-
-.intro-left {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center ;
-    color: white;
-}
-
-.intro-right {
-    height: 400px;
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center ;
-}
-
-.library {
-    height: 300px;
-    width: 100%;
-    object-fit: contain;
-    object-position: center;
-}
-
-.library img{
-    width: 80%;
-}
-
-
+/* Ẩn Modal mặc định */
 .modal {
     /* Đảm bảo lớp phủ toàn màn hình */
     display: none; /* Mặc định ẩn, sẽ hiện bằng JavaScript */
@@ -56,8 +21,6 @@
     width: 80%; /* Có thể điều chỉnh chiều rộng */
     max-width: 400px; /* Giới hạn kích thước tối đa */
     border-radius: 8px;
-    display: flex;
-    flex-direction: column;
 }
 
 /* Nút đóng */
@@ -66,34 +29,6 @@
     float: right;
     font-size: 28px;
     font-weight: bold;
-    display: flex;
-    justify-content: end;
-}
-
-.username {
-    margin-bottom: 10px;
-    display: flex;
-    justify-content: center;
-}
-
-.username label {
-    margin-right: 20px;
-}
-
-.password {
-    margin-bottom: 20px;
-    display: flex;
-    justify-content: center;
-}
-
-.password label {
-    margin-right: 60px;
-}
-
-.miss {
-    text-decoration: underline;
-    margin-bottom: 20px;
-    margin-left: 250px;
 }
 
 .close:hover,
@@ -102,8 +37,3 @@
     text-decoration: none;
     cursor: pointer;
 }
-
-.modal-content button {
-    margin-left: 160px;
-}
-

@@ -27,7 +27,7 @@
                         <input class="search-bar" type="text" placeholder="Search">
                     </div>
                     <div class="cancel">
-                        
+                        <button class="cancel-button">Hủy</button>
                     </div>
                     <div class="admin-info">
                         <div class="admin-role">
@@ -39,9 +39,90 @@
                         </button>
                     </div>           
                 </div>
-                <div class="edit-site">
-
-                </div>
+                    <div class="add-book-site">
+                        <p style="font-size: 25px; font-weight: bold;">Sửa sách</p>
+                        <div class="mix-add">
+                            <div class="triple-add">
+                                <div class="add-book-name">
+                                    <p style="margin-bottom: 5px;">Tên</p>
+                                    <input class="add-name" type="text" placeholder="Tên sách">
+                                </div>
+                                <div class="add-book-author">
+                                    <p style="margin-bottom: 5px;">Tác giả</p>
+                                    <input class="add-author" type="text" placeholder="Tác giả">
+                                </div>
+                                <div class="add-book-description">
+                                    <p style="margin-bottom: 5px;">Mô tả</p>
+                                    <textarea class="add-description" type="text" placeholder="Mô tả"></textarea>
+                                </div>
+                            </div>
+                            <div class="add-img">
+                                <img class="img1" src="images/HP1.jpg">
+                            </div>
+                        </div>
+                           
+                        <div class="double-add">
+                            <div class="add-book-type">
+                                <p style="margin-bottom: 5px;">Thể loại</p>
+                                <input class="add-type" type="text" placeholder="Thể loại">
+                            </div>
+                            <div class="add-book-price">
+                                <p style="margin-bottom: 5px;">Giá</p>
+                                <input class="add-price" type="text" placeholder="Giá">
+                            </div>
+                        </div>                    
+                        <div class="double-add">
+                            <div class="add-book-publisher">
+                                <p style="margin-bottom: 5px;">Nhà xuất bản</p>
+                                <input class="add-publisher" type="text" placeholder="Nhà xuất bản">
+                            </div>
+                            <div class="add-book-year">
+                                <p style="margin-bottom: 5px;">Năm xuất bản</p>
+                                <input class="add-year" type="text" placeholder="Năm xuất bản">
+                            </div>
+                        </div>
+                        <div class="double-add">
+                            <div class="add-book-id">
+                                <p style="margin-bottom: 5px;">Mã ISBN</p>
+                                <input class="add-id" type="text" placeholder="Mã ISBN">
+                            </div>
+                            <div class="add-book-supplier">
+                                <p style="margin-bottom: 5px;">Nhà cung cấp</p>
+                                <input class="add-supplier" type="text" placeholder="Nhà cung cấp">
+                            </div>
+                        </div>
+                        <div class="double-add">
+                            <div class="add-book-weight">
+                                <p style="margin-bottom: 5px;">Trọng lượng</p>
+                                <input class="add-weight" type="text" placeholder="Trọng lượng">
+                            </div>
+                            <div class="add-book-size">
+                                <p style="margin-bottom: 5px;">Kích thước bao bì</p>
+                                <input class="add-size" type="text" placeholder="Kích thước bao bì">
+                            </div>
+                        </div>
+                        <div class="double-add">
+                            <div class="add-book-pageCount">
+                                <p style="margin-bottom: 5px;">Số trang</p>
+                                <input class="add-pageCount" type="text" placeholder="Số trang">
+                            </div>
+                            <div class="add-book-format">
+                                <p style="margin-bottom: 5px;">Hình thức</p>
+                                <select class="add-format" name="Hình thức">
+                                    <option value="" disabled selected>Hình thức</option>
+                                    <option value="hard-cover">Bìa cứng</option>
+                                    <option value="soft-cover">Bìa mềm</option>
+                                    <option value="ebook">Sách điện tử</option>
+                                    <option value="audio-book">Sách nói</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="final-button">
+                            <button class="delete">Xóa sách</button>
+                            <button class="add-save">Lưu</button>
+                        </div>
+                        
+                    </div>
             </div>
         </div>
         <script src="script/AdminPanel.js"></script> 
