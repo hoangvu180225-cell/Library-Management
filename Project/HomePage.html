@@ -3,20 +3,17 @@
     <head>
         <meta charset="utf-8">
         <title> Library Management </title>
-        <link rel="stylesheet" href="style/header.css">
-        <link rel="stylesheet" href="style/intro.css">
-        <link rel="stylesheet" href="style/category.css">
-        <link rel="stylesheet" href="style/book.css">
+        <link rel="stylesheet" href="style/HomePage.css">
     </head>
     <body>
         <div class="header"> 
-            <div class="header-left">
-                <img class="hust-logo" src="icons/Logo HUST.png">
+            <div style="width: 100px;">
+                <img style="width: 50px;" src="icons/Logo HUST.png">
             </div>
             <div class="header-middle">
                 <input class="search-bar" type="text" placeholder="Search">
                 <button class="search-button">
-                    <img class="search-icon" src="icons/search.png">
+                    <img style="height: 30px;" src="icons/search.png">
                 </button>
             </div>
             <div class="header-right guest">
@@ -35,8 +32,11 @@
 
         <div id="loginModal" class="modal">
             <div class="modal-content">
-                <span class="close">&times;</span>
-                <h2 style="display: flex; justify-content: center; margin-top: 10px;">Đăng nhập</h2>
+                <div class="row" style="justify-content: space-between;">
+                    <img class="login-icon" src="icons/login.png">
+                    <h2>Đăng nhập</h2>
+                    <span class="close">&times;</span>
+                </div>
                 <form>
                     <div class="username">
                         <label for="username">Tên người dùng:</label>
@@ -63,8 +63,8 @@
             </div>
         </div>
 
-        <div class="category1">
-            <img class="hamburger-icon" src="icons/Hamburger_icon.svg.png">
+        <div class="row" style="align-items: center;">
+            <img style="height: 30px; margin-left: 100px; cursor: pointer;" src="icons/Hamburger_icon.svg.png">
             <p style="
                 font-size: 20px;
                 margin-left: 10px;
@@ -72,7 +72,7 @@
         </div>
         
 
-        <div class="category">
+        <div class="row" style="margin-left: 80px; margin-bottom: 30px;">
             <button class="category-btn active">Tất cả</button>
             <button class="category-btn">Hành động</button>
             <button class="category-btn">Khoa học viễn tưởng</button>
@@ -148,10 +148,7 @@
                 
             </div>
             <div class="rank">
-                <p style="
-                    font-size: 20px;
-                    font-weight: 100;
-                    ">Bảng xếp hạng</p>
+                <p style="font-size: 20px; font-weight: bold;">Bảng xếp hạng</p>
                 <div class="rank-time">
                     <button>Tuần</button>
                     <button>Tháng</button>
@@ -159,9 +156,9 @@
                 </div>
                 <div class="book-rank">
                     <img class="book-img" src="images/HP1.jpg">
-                    <div class="book-rank-info">
+                    <div class="column" style="justify-content: flex-start;">
                         <p class="book-name">Harry Potter và Hòn đá Phù thủy</p>
-                        <p class="rate">&#9733; 9.3</p>
+                        <p>&#9733; 9.3</p>
                     </div>
                 </div>
                 <div class="book-rank">
