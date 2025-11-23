@@ -198,3 +198,106 @@ button {
     justify-self: center;
     margin: 5px;
 }
+
+
+/*-----------------------------------------------------------BODY GENERAL-----------------------------------------------------------*/
+.add-book-site {
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(246, 238, 238);
+    margin-top: 20px;
+    border-radius: 20px;
+    padding-left: 30px;
+}
+
+.mix-add {
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+}
+
+.triple-add {
+    flex: 3;
+    display: flex;
+    flex-direction: column;
+}
+
+.add-book-site input {
+    width: 100%;
+    height: 20px;
+}
+
+.add-book-site textarea {
+    width: 100%;
+    height: 100px;
+}
+
+.add-img {
+    flex: 1;
+    border: solid;
+    border-width: 2px;
+    margin-right: 110px;
+    margin-left: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    object-fit: contain;
+}
+
+.img1 {
+    height: 340px;
+}
+
+.double-add {
+    display: flex;
+    flex-direction: row;
+}
+
+.double-add input {
+    width: 80%;
+    height: 20px;
+}
+
+.double-add select {
+    width: 81%;
+    height: 26px;
+}
+
+.add-book-publisher, .add-book-supplier, .add-book-id, .add-book-year, .add-book-weight, .add-book-size, .add-book-format, .add-book-pageCount, .add-book-price, .add-book-type {
+    flex: 1;
+}
+
+.final-button {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    margin-right: 105px;
+}
+
+.delete {
+    margin-top: 30px;
+    height: 40px;
+    width: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    background-color: rgb(195, 29, 29); 
+    color: white; 
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.add-save {
+    margin: 30px 0px 20px 30px;
+    height: 40px;
+    width: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;   
+    background-color: rgb(21, 126, 54);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
