@@ -1,27 +1,26 @@
-.main, .admin-header, .admin-info  {
+/*-----------------------------------------------------------GENERAL-----------------------------------------------------------*/
+/*-----------------------------------------------------------GENERAL-----------------------------------------------------------*/
+@import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
+
+body {
+    font-family: 'Nunito', sans-serif;
+}
+
+button {
+    font-family: 'Nunito', sans-serif;
+}
+
+.row, .admin-header, .admin-info {
     display: flex;
     flex-direction: row;
 }
 
-.left-side, .right-side, .admin-role, .book {
+.column, .left-side, .right-side, .admin-role, .book {
     display: flex;
     flex-direction: column;
 }
 
-.galery-space {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    gap: 10px;
-    padding-top: 20px;
-    margin-top: 20px;
-    background-color: rgb(246, 238, 238);
-    border-radius: 15px;
-}
-
-.main {
-    gap: 20px;
-}
-
+/*-----------------------------------------------------------LEFT SIDE-----------------------------------------------------------*/
 .left-side {
     flex: 1;
     background-color: rgb(246, 238, 238);
@@ -45,16 +44,13 @@
     color: white;
 }
 
-
+/*-------------------------------------------------------RIGHT SIDE-----------------------------------------------------------*/
+/*-------------------------------------------------------RIGHT HEADER-----------------------------------------------------------*/
 .right-side {
     flex: 6;
     background-color: white;
     margin-left: 20px;
     margin-right: 40px;
-}
-
-.admin-header {
-    
 }
 
 .search {
@@ -75,20 +71,12 @@
     border-radius: 30px;
 }
 
-.search-icon {
-    height: 30px;
-}
-
 .search-bar {
     margin-left: 10px;
     border: none;
     width: 600px;
     border-radius: 20px;
     padding-left: 20px;
-}
-
-.search-bar::placeholder {
-    
 }
 
 .add-book {
@@ -136,15 +124,17 @@
 }
 
 .admin-info {
-    flex: 2;
+    flex: 3;
     background-color: rgb(244, 236, 236);
     border-radius: 30px;
-    justify-content: flex-end;
-    margin-left: 30px;
+    justify-content: space-between;
+    margin-left: 20px;
+    height: 60px;
 }
 
 .admin-role {
-    
+    margin-left: 30px;
+    margin-bottom: 10px;
 }
 
 .admin-info button {
@@ -159,6 +149,17 @@
 .admin-img {
     height: 30px;
     cursor: pointer;
+}
+
+/*-------------------------------------------------------RIGHT GALERY-----------------------------------------------------------*/
+.galery-space {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 10px;
+    padding-top: 20px;
+    margin-top: 20px;
+    background-color: rgb(246, 238, 238);
+    border-radius: 15px;
 }
 
 .book {

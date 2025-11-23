@@ -5,6 +5,10 @@ body {
     font-family: 'Nunito', sans-serif;
 }
 
+button {
+    font-family: 'Nunito', sans-serif;
+}
+
 .row {
     display: flex;
     flex-direction: row;
@@ -14,6 +18,7 @@ body {
     display: flex;
     flex-direction: column;
 }
+
 /*-----------------------------------------------------------HEADER GENERAL-----------------------------------------------------------*/
 /*-----------------------------------------------------------HEADER GENERAL-----------------------------------------------------------*/
 .header {
@@ -335,7 +340,6 @@ body {
     cursor: pointer;
     border: none;
     font-size: 20px;
-    font-family: 'Times New Roman', Times, serif;
 }
 
 .book-rank {

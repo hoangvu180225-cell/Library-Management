@@ -7,7 +7,7 @@
         <link rel="stylesheet" href="style/AddBook.css">        
     </head>
     <body>
-        <div class="main">
+        <div class="row" style="gap: 20px">
             <div class="left-side">
                 <div class="functions">
                     <p style="font-size: 30px; font-weight: bold; display: flex; justify-content: center;">Thư viện</p>
@@ -19,25 +19,25 @@
                 </div>
             </div>
             <div class="right-side">
-                <div class="admin-header">
+                <div class="row">
                     <div class="search">
                         <button class="search-button">
-                            <img class="search-icon" src="icons/search.png">
+                            <img style="height: 30px;" src="icons/search.png">
                         </button>
                         <input class="search-bar" type="text" placeholder="Search">
                     </div>
-                    <div class="cancel">
-                        <button class="cancel-button">Hủy</button>
+                    <div class="add-book">
+                        <button class="add-button">+ Thêm sách</button>
                     </div>
                     <div class="admin-info">
                         <div class="admin-role">
-                            <p style="margin: 10px 10px 0px 20px; font-weight: bold;">Admin</p>
+                            <p style="margin: 5px 10px 0px 20px; font-weight: bold;">Admin</p>
                             <p class="admin-name" style="margin: 5px 10px 10px 20px;">Phan Hoang Vu</p>
                         </div>
                         <button>
                                 <img class="admin-img" src="icons/Box.png">
                         </button>
-                    </div>           
+                    </div>                   
                 </div>
                     <div class="add-book-site">
                         <p style="font-size: 25px; font-weight: bold;">Thêm sách</p>
@@ -117,7 +117,9 @@
                                 </select>
                             </div>
                         </div>
-                        <button class="add-save">Lưu</button>
+                        <div class="final-button">
+                            <button class="add-save">Lưu</button>
+                        </div>
                     </div>
             </div>
         </div>

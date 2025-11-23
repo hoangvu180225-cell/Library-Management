@@ -1,10 +1,29 @@
+/*-----------------------------------------------------------GENERAL-----------------------------------------------------------*/
+/*-----------------------------------------------------------GENERAL-----------------------------------------------------------*/
+@import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
+
+body {
+    font-family: 'Nunito', sans-serif;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+}
+
+/*-----------------------------------------------------------BODY GENERAL-----------------------------------------------------------*/
 .add-book-site {
     display: flex;
     flex-direction: column;
     background-color: rgb(246, 238, 238);
     margin-top: 20px;
     border-radius: 20px;
-    padding-left: 15px;
+    padding-left: 30px;
 }
 
 .mix-add {
@@ -67,12 +86,14 @@
 .final-button {
     display: flex;
     flex-direction: row;
+    justify-content: flex-end;
+    margin-right: 105px;
 }
 
 .delete {
-    margin: 20px 10px 20px 870px;
-    height: 30px;
-    width: 80px;
+    margin-top: 30px;
+    height: 40px;
+    width: 100px;
     display: flex;
     justify-content: center;
     align-items: center; 
@@ -80,12 +101,13 @@
     color: white; 
     border: none;
     border-radius: 5px;
+    cursor: pointer;
 }
 
 .add-save {
-    margin: 20px 10px 20px 30px;
-    height: 30px;
-    width: 50px;
+    margin: 30px 0px 20px 30px;
+    height: 40px;
+    width: 80px;
     display: flex;
     justify-content: center;
     align-items: center;   
@@ -93,6 +115,7 @@
     color: white;
     border: none;
     border-radius: 5px;
+    cursor: pointer;
 }
 
  

@@ -1,13 +1,26 @@
-.book-galery, .buy, .buy-info-more {
+/*-----------------------------------------------------------GENERAL-----------------------------------------------------------*/
+/*-----------------------------------------------------------GENERAL-----------------------------------------------------------*/
+@import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
+
+body {
+    font-family: 'Nunito', sans-serif;
+}
+
+button {
+    font-family: 'Nunito', sans-serif;
+}
+
+.row, .book-galery, .buy{
     display: flex;
     flex-direction: row;
 }
 
-.book-description {
+.column, .book-description {
     display: flex;
     flex-direction: column;
 }
 
+/*-----------------------------------------------------------LEFT SIDE-----------------------------------------------------------*/
 .book-galery {
     background-color: rgb(245, 242, 242);
     gap: 20px;
@@ -68,27 +81,28 @@
     
 }
 
-.buy-info {
-    margin-left: 20px;
-}
-
-.buy-info-more {
-    align-items: center;
-}
-
 .truck-icon, .shop-icon {
     height: 30px;
     margin-right: 10px;
 }
+
 .box-icon {
     height: 20px;
     margin-left: 5px;
     margin-right: 15px;
 }
 
+/*-----------------------------------------------------------RIGHT SIDE-----------------------------------------------------------*/
 .book-description {
     flex: 2;
     border-radius: 20px;
+}
+
+.price, .info, .description {
+    background-color: white;
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 30px;
 }
 
 .info-table {
@@ -106,22 +120,6 @@
     width: 25%;
 }
 
-.price, .info, .description {
-    background-color: white;
-    border-radius: 20px;
-    padding: 20px;
-    margin-bottom: 30px;
-}
 
-.price {
-    
-}
 
-.info {
-
-}
-
-.description {
-
-}
 
