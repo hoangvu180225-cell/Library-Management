@@ -1,3 +1,4 @@
+/*-----------------------------------------------------------LOGIN/LOGOUT SWITCH-----------------------------------------------------------*/
     const guest = document.querySelector(".header-right.guest");
     const user  = document.querySelector(".header-right.user");
 
@@ -33,7 +34,30 @@
         user.style.display  = "none";
     }
 
-    //-------------------------------------------------------------
+/*-----------------------------------------------------------LOGIN MODAL SWITCH-----------------------------------------------------------*/
+// Lấy các phần tử
+var modal = document.getElementById("loginModal");
+var btn = document.getElementById("Login-Btn");
+var span = document.getElementsByClassName("close")[0];
+
+// Khi người dùng click nút, mở Modal
+btn.onclick = function() {
+    modal.style.display = "block";
+}
+
+// Khi người dùng click vào dấu (x), đóng Modal
+span.onclick = function() {
+    modal.style.display = "none";
+}
+
+// Khi người dùng click bất kỳ đâu bên ngoài Modal, đóng Modal
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+
+/*-----------------------------------------------------------CATEGORY BUTTON SWITCH-----------------------------------------------------------*/
 
     const category_btns = document.querySelectorAll('.category-btn');
 
@@ -46,13 +70,13 @@
         });
     });
 
-    //-------------------------------------------------------------
+/*-----------------------------------------------------------BOOKDETAIL SWITCH-----------------------------------------------------------*/
 
     const img_btn = document.querySelectorAll('.book-img');
 
     img_btn.forEach(img => {
         img.addEventListener('click', function () {
-        window.location.href = "ChiTietSach.html";
+        window.location.href = "BookDetail.html";
         });
     });
 
