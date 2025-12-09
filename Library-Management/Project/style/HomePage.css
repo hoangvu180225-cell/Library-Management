@@ -1,0 +1,350 @@
+/*-----------------------------------------------------------GENERAL-----------------------------------------------------------*/
+@import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
+
+body {
+    font-family: 'Nunito', sans-serif;
+}
+
+button {
+    font-family: 'Nunito', sans-serif;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+}
+
+/*-----------------------------------------------------------HEADER GENERAL-----------------------------------------------------------*/
+/*-----------------------------------------------------------HEADER GENERAL-----------------------------------------------------------*/
+.header {
+    display: flex;
+    flex-direction: row;   
+    justify-content: space-between;
+    background-color: white;
+}
+
+/*-----------------------------------------------------------HEADER LEFT-----------------------------------------------------------*/
+
+
+/*-----------------------------------------------------------HEADER MID-----------------------------------------------------------*/
+.header-middle {
+    flex: 3;
+    margin-left: 30px;
+    margin-right: 30px;
+    max-width: 1000px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-bar {
+    height: 30px;
+    width: 500px;
+    padding-left: 15px;
+}
+
+.search-button {
+    height: 36px;
+    cursor: pointer;
+}
+
+/*-----------------------------------------------------------HEADER RIGHT-----------------------------------------------------------*/
+.header-right {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+}
+
+.header-right button {
+    width:  100px;
+    height: 30px;
+    margin-right: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.home-icon {
+    width: 30px;
+    margin-right: 30px;
+    cursor: pointer;
+}
+
+/*-----------------------------------------------------------LOGIN LAYOUT-----------------------------------------------------------*/
+/*-----------------------------------------------------------LOGIN LAYOUT-----------------------------------------------------------*/
+.modal {
+    display: none; 
+    position: fixed; 
+    z-index: 1; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%;
+    overflow: auto; 
+    background-color: rgba(0,0,0,0.4); 
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; 
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; 
+    max-width: 400px; 
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+}
+
+.login-icon {
+    height: 50px;
+    justify-self: center;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    display: flex;
+    justify-content: end;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.username {
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+.username label {
+    margin-right: 20px;
+}
+
+.password {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.password label {
+    margin-right: 63px;
+}
+
+.miss {
+    text-decoration: underline;
+    margin-bottom: 20px;
+    margin-left: 250px;
+    color: rgb(39, 105, 127);
+}
+
+.submit-btn {
+    background-color: rgb(39, 105, 127);
+    border: none;
+    color: white;
+    height: 30px;
+    width: 100px;
+    cursor: pointer;
+    display: flex;
+    justify-self: center;
+    align-items: center;
+    padding-left: 18px;
+}
+
+/*-----------------------------------------------------------INTRO GENERAL-----------------------------------------------------------*/
+/*-----------------------------------------------------------INTRO GENERAL-----------------------------------------------------------*/
+.intro {
+    height: 400px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    background-color: rgb(21, 96, 255);
+}
+
+/*-----------------------------------------------------------INTRO LEFT-----------------------------------------------------------*/
+.intro-left {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center ;
+    color: white;
+}
+
+/*-----------------------------------------------------------INTRO RIGHT-----------------------------------------------------------*/
+.intro-right {
+    height: 400px;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center ;
+}
+
+.library {
+    height: 300px;
+    width: 100%;
+    object-fit: contain;
+    object-position: center;
+}
+
+.library img{
+    width: 80%;
+}
+
+/*-----------------------------------------------------------CATEGORY GENERAL-----------------------------------------------------------*/
+/*-----------------------------------------------------------CATEGORY GENERAL-----------------------------------------------------------*/
+.category-btn {
+    background-color: rgb(226, 220, 220);
+    border: none;
+    margin-left: 10px;
+    font-size: 15px;
+    padding: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.category-btn.active {
+    background-color: rgb(21, 96, 255);
+    color: white;
+}
+
+/*-----------------------------------------------------------BOOK GENERAL-----------------------------------------------------------*/
+/*-----------------------------------------------------------BOOK GENERAL-----------------------------------------------------------*/
+.book-site {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex: 1;
+}
+
+/*-----------------------------------------------------------BOOK LEFT-----------------------------------------------------------*/
+.book-by-category {
+    display: grid;
+    grid-auto-rows: 200px;
+    grid-template-columns: 1fr 1fr;
+    flex: 7;
+    background-color: rgb(250, 250, 250);
+    align-items: flex-start;
+    gap: 30px;
+}
+
+.book {
+    display: flex;
+    flex-direction: row;
+    margin-left: 30px;
+    margin-right: 30px;
+    border: solid;
+    border-radius: 10px;
+    height: 200px;
+}
+
+.book-img  {
+    height: 180px;
+    width: auto;
+    margin-top: 10px;
+    margin-right: 15px;
+    margin-left: 20px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.book-info {
+    display: flex;
+    flex-direction: column;
+    align-self: start;
+    margin-bottom: 0px;
+}
+
+.book-name {
+    margin-top: 10px;
+    margin-bottom: 0px;
+    font-size: 20px;
+    font-weight: bold;
+
+    white-space: nowrap;        
+    overflow: hidden;           
+    text-overflow: ellipsis;    
+    max-width: 250px;           
+}
+
+.book-author {
+    margin-top: 5px;
+    margin-bottom: 0px;
+    font-size: 15px;
+
+}
+
+.book-genre {
+    margin-top: 5px;
+    margin-bottom: 0px;
+    font-size: 15px;
+}
+
+.book-intro {
+    margin-top: 5px;
+    margin-bottom: 0px;
+    font-size: 15px;
+    margin-right: 10px;
+    height: 70px;
+    
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;            
+    text-overflow: ellipsis;
+    line-height: 25px;
+}
+
+.book-info-more {
+    text-decoration: underline;
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 20px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+/*-----------------------------------------------------------BOOK RIGHT-----------------------------------------------------------*/
+.rank {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 10px;
+    flex: 3;
+    background-color: rgb(230, 217, 217);
+}
+
+.rank-time {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.rank-time button {
+    flex: 1;
+    background-color: rgb(230, 217, 217);
+    height: 30px;
+    cursor: pointer;
+    border: none;
+    font-size: 20px;
+}
+
+.book-rank {
+    display: flex;
+    flex-direction: row;
+    margin-top: 10px;
+}
+

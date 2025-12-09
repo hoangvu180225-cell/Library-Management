@@ -1,0 +1,125 @@
+/*-----------------------------------------------------------GENERAL-----------------------------------------------------------*/
+/*-----------------------------------------------------------GENERAL-----------------------------------------------------------*/
+@import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
+
+body {
+    font-family: 'Nunito', sans-serif;
+}
+
+button {
+    font-family: 'Nunito', sans-serif;
+}
+
+.row, .book-galery, .buy{
+    display: flex;
+    flex-direction: row;
+}
+
+.column, .book-description {
+    display: flex;
+    flex-direction: column;
+}
+
+/*-----------------------------------------------------------LEFT SIDE-----------------------------------------------------------*/
+.book-galery {
+    background-color: rgb(245, 242, 242);
+    gap: 20px;
+    padding: 50px;
+}
+
+.book-image {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    border-radius: 10px;
+    background-color: white;
+    border-radius: 20px;
+}
+
+.buy {
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+
+.book-img {
+    height: 400px;
+    object-fit: contain;
+    padding-top: 20px;
+    padding-bottom: 30px;
+    margin-bottom: 20px;
+}
+
+.cart-button {
+    width: 200px;
+    height: 50px;
+
+    border: solid;
+    border-color: rgb(21, 96, 255);
+    border-width: 1px;
+    border-radius: 5px;
+
+    font-size: 16px;
+
+    background-color: white;
+    color: rgb(21, 96, 255);
+    cursor: pointer;
+}
+
+.buy-button {
+    width: 200px;
+
+    border: none;
+    border-radius: 5px;
+
+    font-size: 16px;
+
+    background-color: rgb(21, 96, 255);
+    color: white;
+    cursor: pointer;
+    
+}
+
+.truck-icon, .shop-icon {
+    height: 30px;
+    margin-right: 10px;
+}
+
+.box-icon {
+    height: 20px;
+    margin-left: 5px;
+    margin-right: 15px;
+}
+
+/*-----------------------------------------------------------RIGHT SIDE-----------------------------------------------------------*/
+.book-description {
+    flex: 2;
+    border-radius: 20px;
+}
+
+.price, .info, .description {
+    background-color: white;
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+.info-table {
+    width: 100%;
+    table-layout: fixed;
+}
+
+.info-table td {
+  border: 1px solid #333;  
+  padding: 8px;             
+  text-align: left;         
+}
+
+.info-table col.col-1 {
+    width: 25%;
+}
+
+
+
+

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title> Library Management </title>
+        <link rel="stylesheet" href="style/HomePage.css">
+    </head>
+    <body>
+        <div class="header"> 
+            <div style="width: 100px;">
+                <img style="width: 50px;" src="icons/Logo HUST.png">
+            </div>
+            <div class="header-middle">
+                <input class="search-bar" type="text" placeholder="Search">
+                <button class="search-button">
+                    <img style="height: 30px;" src="icons/search.png">
+                </button>
+            </div>
+            <div class="header-right guest">
+                <button id="Login-Btn"> Đăng nhập</button>
+                <button id="Register-Btn"> Đăng kí</button>
+                <img class="home-icon" src="icons/Home.png">
+            </div>
+            <div class="header-right user" style="display: none;"> 
+                <button> Danh mục sách</button>
+                <button> Sách của tôi</button>
+                <button> Giới thiệu</button>
+                <button id="Logout-Btn"> Đăng xuất</button>
+                <img class="home-icon" src="icons/Home.png">
+            </div>
+        </div>
+
+        <div id="loginModal" class="modal">
+            <div class="modal-content">
+                <div class="row" style="justify-content: space-between;">
+                    <img class="login-icon" src="icons/login.png">
+                    <h2>Đăng nhập</h2>
+                    <span class="close">&times;</span>
+                </div>
+                <form id="login-form">
+                    <div class="username">
+                        <label for="username">Tên người dùng:</label>
+                        <input type="text" id="username" name="username" required>
+                    </div>
+                    <div class="password">
+                        <label for="password">Mật khẩu:</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <div class="miss">
+                        <label>Quên mật khẩu</label>
+                    </div>
+                    <button class="submit-btn" type="submit">Đăng nhập</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="intro">
+            <div class="intro-left">
+                <p style="font-size: 50px;">Chào mừng đến với thư viện!!</p>
+            </div>
+            <div class="intro-right">
+                <img class="library" src="images/Library2.png">
+            </div>
+        </div>
+
+        <div class="row" style="align-items: center;">
+            <img style="height: 30px; margin-left: 100px; cursor: pointer;" src="icons/Hamburger_icon.svg.png">
+            <p style="
+                font-size: 20px;
+                margin-left: 10px;
+            "> Danh mục sách</p>
+        </div>
+        
+
+        <div class="row" style="margin-left: 80px; margin-bottom: 30px;">
+            <button class="category-btn active">Tất cả</button>
+            <button class="category-btn">Hành động</button>
+            <button class="category-btn">Khoa học viễn tưởng</button>
+            <button class="category-btn">Lãng mạn</button>
+            <button class="category-btn">Lịch sử</button>
+            <button class="category-btn">Tiểu thuyết</button>
+            <button class="category-btn">Thiếu nhi</button>
+            <button class="category-btn">Giáo trình</button>
+        </div>
+
+        <div class="book-site">
+            <div class="book-by-category">
+                <div class="book">
+                    <img class="book-img" src="images/HP1.jpg">
+                    <div class="book-info">
+                        <p class="book-name">Harry Potter và Hòn đá Phù thủy</p>
+                        <p class="book-author">J. K. Rowling</p>
+                        <p class="book-genre">Fantasy</p>
+                        <p class="book-intro">Harry Potter và Hòn đá Phù thủy là ấn phẩm đầu tay và là phần đầu tiên của bộ tiểu thuyết Harry Potter của nhà văn người Anh J...</p>
+                        <p  class="book-info-more">Xem thêm</p>
+                    </div>
+                </div>
+                <div class="book">
+                    <img class="book-img" src="images/HP2.jpg">
+                    <div class="book-info">
+                        <p class="book-name">Harry Potter và Phòng chứa Bí mật</p>
+                        <p class="book-author">J. K. Rowling</p>
+                        <p class="book-genre">Fantasy</p>
+                        <p class="book-intro">Harry Potter và Phòng chứa Bí mật là quyển thứ hai trong loạt truyện Harry Potter của J. K. Rowling. Truyện được phát hành bằng tiếng Anh tại Anh, Hoa Kỳ và nhiều nước khác vào ngày 2 ...</p>
+                        <p  class="book-info-more">Xem thêm</p>
+                    </div>
+                </div>
+                <div class="book">
+                    <img class="book-img" src="images/HP3.jpg">
+                    <div class="book-info">
+                        <p class="book-name">Harry Potter và Tên tù nhân ngục Azkaban</p>
+                        <p class="book-author">J. K. Rowling</p>
+                        <p class="book-genre">Fantasy</p>
+                        <p class="book-intro">Harry Potter và tên tù nhân ngục Azkaban là cuốn tiểu thuyết giả tưởng kỳ ảo viết bởi văn sĩ người Anh J. K. Rowling, là tập thứ 3 trong bộ truyện Harry Potter, được xuất bản lần đầu tại ... </p>
+                        <p  class="book-info-more">Xem thêm</p>
+                    </div>
+                </div>
+                <div class="book">
+                    <img class="book-img" src="images/HP4.jpg">
+                    <div class="book-info">
+                        <p class="book-name">Harry Potter và Chiếc cốc lửa</p>
+                        <p class="book-author">J. K. Rowling</p>
+                        <p class="book-genre">Fantasy</p>
+                        <p class="book-intro">Harry Potter và chiếc cốc lửa là cuốn tiểu thuyết giả tưởng do tác giả người Anh J. K. Rowling viết, là phần thứ tư của bộ tiểu thuyết Harry Potter, được xuất bản ở Anh bởi Nhà xuất bản ...</p>
+                        <p  class="book-info-more">Xem thêm</p>
+                    </div>
+                </div>
+                <div class="book">
+                    <img class="book-img" src="images/HP5.jpg">
+                    <div class="book-info">
+                        <p class="book-name">Harry Potter và Hội Phượng Hoàng</p>
+                        <p class="book-author">J. K. Rowling</p>
+                        <p class="book-genre">Fantasy</p>
+                        <p class="book-intro">Harry Potter và hội Phượng hoàng là tập thứ năm trong bộ tiểu thuyết Harry Potter của nhà văn J. K. Rowling được đồng loạt xuất bản vào ngày 21/6/2003 tại Anh, Hoa Kỳ, Canada, Úc cùng một ...</p>
+                        <p  class="book-info-more">Xem thêm</p>
+                    </div>
+                </div>
+                <div class="book">
+                    <img class="book-img" src="images/HP6.jpg">
+                    <div class="book-info">
+                        <p class="book-name">Harry Potter và Hoàng tử lai</p>
+                        <p class="book-author">J. K. Rowling</p>
+                        <p class="book-genre">Fantasy</p>
+                        <p class="book-intro">Harry Potter và Hoàng tử lai là phần 6 trong bộ tiểu thuyết Harry Potter của tác giả J.K. Rowling, được xuất bản cùng lúc trên toàn thế giới vào ngày 16/7/2005, bán được hơn 6,9 triệu cuốn ...</p>
+                        <p  class="book-info-more">Xem thêm</p>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="rank">
+                <p style="font-size: 20px; font-weight: bold;">Bảng xếp hạng</p>
+                <div class="rank-time">
+                    <button>Tuần</button>
+                    <button>Tháng</button>
+                    <button>Năm</button>
+                </div>
+                <div class="book-rank">
+                    <img class="book-img" src="images/HP1.jpg">
+                    <div class="column" style="justify-content: flex-start;">
+                        <p class="book-name">Harry Potter và Hòn đá Phù thủy</p>
+                        <p>&#9733; 9.3</p>
+                    </div>
+                </div>
+                <div class="book-rank">
+                    <img class="book-img" src="images/HP2.jpg">
+                    <div class="book-rank-info">
+                        <p class="book-name">Harry Potter và Phòng chứa Bí mật</p>
+                        <p class="rate">&#9733; 9.0</p>
+                    </div>
+                </div>
+                <div class="book-rank">
+                    <img class="book-img" src="images/HP3.jpg">
+                    <div class="book-rank-info">
+                        <p class="book-name">Harry Potter và Tên tù nhân ngục Azkaban</p>
+                        <p class="rate">&#9733; 8.5</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="script/HomePage.js"></script>
+    </body>
+</html>
