@@ -9,23 +9,25 @@
 
         <style>
             /*-------------------------------Table-------------------------------*/
-            .staff-table { width: 100%; border-collapse: collapse; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border-radius: 8px; overflow: hidden; margin-top: 20px; }
-            .staff-table thead { background-color: #337ab7; color: white; }
-            .staff-table th { padding: 15px 12px; text-align: left; font-weight: bold; }
-            .staff-table td { padding: 12px; border-bottom: 1px solid #eee; /* Đường viền nhẹ giữa các hàng */ }
-            .staff-table tbody tr:hover { background-color: #f5f5f5; }
+            .user-table { width: 100%; border-collapse: collapse; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border-radius: 8px; overflow: hidden; margin-top: 20px; }
+            .user-table thead { background-color: #337ab7; color: white; }
+            .user-table th { padding: 15px 12px; text-align: left; font-weight: bold; }
+            .user-table td { padding: 12px; border-bottom: 1px solid #eee; /* Đường viền nhẹ giữa các hàng */ }
+            .user-table tbody tr:hover { background-color: #f5f5f5; }
 
             /* Thiết lập chiều rộng cột bằng cách dùng nth-child() */
-            .staff-table th:nth-child(1), .staff-table td:nth-child(1) { width: 30%; } /* Họ tên */
-            .staff-table th:nth-child(2), .staff-table td:nth-child(2) { width: 20%; } /* Chức vụ */
-            .staff-table th:nth-child(3), .staff-table td:nth-child(3) { width: 20%; } /* Email */
-            .staff-table th:nth-child(4), .staff-table td:nth-child(4) { width: 20%; } /* Số điện thoại */
-            .staff-table th:nth-child(5), .staff-table td:nth-child(5) { width: 10%; } /* Thao tác */
+            .user-table th:nth-child(1), .user-table td:nth-child(1) { width: 20%; } 
+            .user-table th:nth-child(2), .user-table td:nth-child(2) { width: 20%; } 
+            .user-table th:nth-child(3), .user-table td:nth-child(3) { width: 20%; } 
+            .user-table th:nth-child(4), .user-table td:nth-child(4) { width: 10%; } 
+            .user-table th:nth-child(5), .user-table td:nth-child(5) { width: 10%; } 
+            .user-table th:nth-child(6), .user-table td:nth-child(6) { width: 10%; }
+            .user-table th:nth-child(7), .user-table td:nth-child(7) { width: 10%; }
 
             .action-cell { text-align: center; }
             .action-btn { border: none; padding: 8px 10px; margin: 0 3px; cursor: pointer; border-radius: 4px; transition: background-color 0.3s ease, transform 0.1s ease; 
                         font-size: 14px; color: white; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); }
-            .staff-edit-btn { background-color: #5cb85c; }
+            .user-edit-btn { background-color: #5cb85c; }
             .edit-btn:hover { background-color: #4cae4c; transform: translateY(-1px); /* Nâng nhẹ nút khi hover */ }
             .delete-btn { background-color: #d9534f; }
             .delete-btn:hover { background-color: #c9302c; transform: translateY(-1px); /* Nâng nhẹ nút khi hover */  }
@@ -117,8 +119,8 @@
                 <div class="functions">
                     <p style="font-size: 30px; font-weight: bold; display: flex; justify-content: center;">Thư viện</p>
                     <button class="function off">Quản lý sách</button>
-                    <button class="function active">Quản lý nhân viên</button>
-                    <button class="function off">Quản lý người dùng</button>
+                    <button class="function off">Quản lý nhân viên</button>
+                    <button class="function active">Quản lý người dùng</button>
                     <button class="function off">Thống kê / báo cáo</button>
                     <button class="function off">Cài đặt</button>
                 </div>
@@ -133,7 +135,7 @@
                         <input class="search-bar" type="text" placeholder="Search">
                     </div>
                     <div class="add-book">
-                        <button class="add-button">+ Thêm nhân viên</button>
+                        <button class="add-button">+ Thêm người dùng</button>
                         <button class="cancel-button" style="display: none;">Hủy</button>
                     </div>
                     <div class="admin-info">
@@ -147,90 +149,150 @@
                     </div>                   
                 </div>
 
-                <table class="staff-table">
+                <table class="user-table">
                     <thead>
                         <tr>
-                            <th>Họ tên</th>
-                            <th>Chức vụ</th>
+                            <th>Họ Tên</th>
+                            <th>SĐT</th>
                             <th>Email</th>
-                            <th>Số điện thoại</th>
+                            <th>Điểm</th>
+                            <th>Tier</th>
+                            <th>Trạng Thái</th>
                             <th>Thao tác</th>
                         </tr>
                     </thead>
+
                     <tbody>
                         <tr>
                             <td>Nguyễn Văn A</td>
-                            <td>Trưởng phòng</td>
-                            <td>nguyenvana@gmail.com</td>
                             <td>0987645312</td>
-                            <td class="action-cell"> 
-                                <button class="action-btn staff-edit-btn">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button class="action-btn delete-btn" onclick="DeleteStaff()">
-                                    <i class="fas fa-trash-alt"></i>
-                                </button>
+                            <td>vana@example.com</td>
+                            <td>820</td>
+                            <td>Gold</td>
+                            <td>Hoạt động</td>
+                            <td class="action-cell">
+                                <button class="action-btn user-edit-btn"><i class="fas fa-edit"></i></button>
+                                <button class="action-btn delete-btn"><i class="fas fa-trash-alt"></i></button>
                             </td>
                         </tr>
+
                         <tr>
                             <td>Trần Thị B</td>
-                            <td>Nhân viên</td>
-                            <td>tranthib@gmail.com</td>
                             <td>0978654321</td>
-                            <td class="action-cell"> 
-                                <button class="action-btn staff-edit-btn">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button class="action-btn delete-btn" onclick="DeleteStaff()">
-                                    <i class="fas fa-trash-alt"></i>
-                                </button>
+                            <td>thib@example.com</td>
+                            <td>460</td>
+                            <td>Silver</td>
+                            <td>Hoạt động</td>
+                            <td class="action-cell">
+                                <button class="action-btn user-edit-btn"><i class="fas fa-edit"></i></button>
+                                <button class="action-btn delete-btn"><i class="fas fa-trash-alt"></i></button>
                             </td>
                         </tr>
+
                         <tr>
                             <td>Lê Văn C</td>
-                            <td>Kế toán</td>
-                            <td>levanc@gmail.com</td>
-                            <td>0909988776</td>
+                            <td>0912456789</td>
+                            <td>vanc@example.com</td>
+                            <td>1150</td>
+                            <td>Platinum</td>
+                            <td>Hạn chế</td>
                             <td class="action-cell">
-                                <button class="action-btn staff-edit-btn">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button class="action-btn delete-btn" onclick="DeleteStaff()">
-                                    <i class="fas fa-trash-alt"></i>
-                                </button>
+                                <button class="action-btn user-edit-btn"><i class="fas fa-edit"></i></button>
+                                <button class="action-btn delete-btn"><i class="fas fa-trash-alt"></i></button>
                             </td>
                         </tr>
 
                         <tr>
                             <td>Phạm Thị D</td>
-                            <td>Thủ kho</td>
-                            <td>phamt hid@example.com</td>
                             <td>0933221100</td>
+                            <td>thid@example.com</td>
+                            <td>120</td>
+                            <td>Bronze</td>
+                            <td>Khoá</td>
                             <td class="action-cell">
-                                <button class="action-btn staff-edit-btn">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button class="action-btn delete-btn" onclick="DeleteStaff()">
-                                    <i class="fas fa-trash-alt"></i>
-                                </button>
+                                <button class="action-btn user-edit-btn"><i class="fas fa-edit"></i></button>
+                                <button class="action-btn delete-btn"><i class="fas fa-trash-alt"></i></button>
                             </td>
                         </tr>
 
                         <tr>
                             <td>Hoàng Văn E</td>
-                            <td>Bảo vệ</td>
-                            <td>hoangvane@example.com</td>
                             <td>0988112233</td>
+                            <td>evan@example.com</td>
+                            <td>300</td>
+                            <td>Silver</td>
+                            <td>Hoạt động</td>
                             <td class="action-cell">
-                                <button class="action-btn staff-edit-btn">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button class="action-btn delete-btn" onclick="DeleteStaff()">
-                                    <i class="fas fa-trash-alt"></i>
-                                </button>
+                                <button class="action-btn user-edit-btn"><i class="fas fa-edit"></i></button>
+                                <button class="action-btn delete-btn"><i class="fas fa-trash-alt"></i></button>
                             </td>
                         </tr>
-                        </tbody>
+
+                        <tr>
+                            <td>Ngô Thị F</td>
+                            <td>0365124789</td>
+                            <td>thif@example.com</td>
+                            <td>980</td>
+                            <td>Gold</td>
+                            <td>Hoạt động</td>
+                            <td class="action-cell">
+                                <button class="action-btn user-edit-btn"><i class="fas fa-edit"></i></button>
+                                <button class="action-btn delete-btn"><i class="fas fa-trash-alt"></i></button>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>Đinh Văn G</td>
+                            <td>0887456123</td>
+                            <td>vang@example.com</td>
+                            <td>55</td>
+                            <td>Bronze</td>
+                            <td>Khoá</td>
+                            <td class="action-cell">
+                                <button class="action-btn user-edit-btn"><i class="fas fa-edit"></i></button>
+                                <button class="action-btn delete-btn"><i class="fas fa-trash-alt"></i></button>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>Bùi Thị H</td>
+                            <td>0903221456</td>
+                            <td>thih@example.com</td>
+                            <td>1350</td>
+                            <td>Platinum</td>
+                            <td>Hoạt động</td>
+                            <td class="action-cell">
+                                <button class="action-btn user-edit-btn"><i class="fas fa-edit"></i></button>
+                                <button class="action-btn delete-btn"><i class="fas fa-trash-alt"></i></button>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>Tạ Văn I</td>
+                            <td>0823228765</td>
+                            <td>vani@example.com</td>
+                            <td>700</td>
+                            <td>Gold</td>
+                            <td>Hạn chế</td>
+                            <td class="action-cell">
+                                <button class="action-btn user-edit-btn"><i class="fas fa-edit"></i></button>
+                                <button class="action-btn delete-btn"><i class="fas fa-trash-alt"></i></button>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>Vũ Thị K</td>
+                            <td>0799988776</td>
+                            <td>thik@example.com</td>
+                            <td>240</td>
+                            <td>Silver</td>
+                            <td>Khoá</td>
+                            <td class="action-cell">
+                                <button class="action-btn user-edit-btn"><i class="fas fa-edit"></i></button>
+                                <button class="action-btn delete-btn"><i class="fas fa-trash-alt"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
                 </table>
 
                 <div id="editModal" class="modal-overlay">
@@ -260,57 +322,31 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label>Chức vụ <span class="required">*</span></label>
+                                    <label>Điểm <span class="required">*</span></label>
+                                    <input type="text" value="910" class="form-control">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Tier <span class="required">*</span></label>
                                     <select class="form-control">
-                                        <option>Quản lý</option>
-                                        <option>Nhân viên</option>
-                                        <option>Thực tập sinh</option>
+                                        <option>Bronze</option>
+                                        <option>Silver</option>
+                                        <option>Gold</option>
+                                        <option>Platinum</option>
                                     </select>
                                 </div>
 
                                 <div class="form-group">
-                                    <label>Ngày vào làm <span class="required">*</span></label>
-                                    <input type="date" value="2023-10-20" class="form-control">
+                                    <label>Trạng thái <span class="required">*</span></label>
+                                    <select class="form-control">
+                                        <option>Hoạt động</option>
+                                        <option>Khóa</option>
+                                        <option>Hạn chế</option>
+                                    </select>
                                 </div>
                             </div>
 
-                            <div class="column-right">
-                                <h4 class="section-title">Quyền hạn</h4>
-                                <p class="section-desc">Chọn các quyền truy cập cho nhân viên</p>
-
-                                <div class="permission-list">
-                                    <label class="perm-item">
-                                        <input type="checkbox" checked>
-                                        <div class="perm-info">
-                                            <span class="perm-name">Quản lý sách</span>
-                                            <span class="perm-detail">Thêm, sửa, xóa thông tin sách trong hệ thống</span>
-                                        </div>
-                                    </label>
-
-                                    <label class="perm-item">
-                                        <input type="checkbox" checked>
-                                        <div class="perm-info">
-                                            <span class="perm-name">Quản lý độc giả</span>
-                                            <span class="perm-detail">Thêm, sửa, xóa thông tin độc giả</span>
-                                        </div>
-                                    </label>
-
-                                    <label class="perm-item">
-                                        <input type="checkbox">
-                                        <div class="perm-info">
-                                            <span class="perm-name">Quản lý mượn/trả sách</span>
-                                            <span class="perm-detail">Xử lý các giao dịch mượn và trả sách</span>
-                                        </div>
-                                    </label>
-                                    <label class="perm-item">
-                                        <input type="checkbox" checked>
-                                        <div class="perm-info">
-                                            <span class="perm-name">Xem báo cáo</span>
-                                            <span class="perm-detail">Truy cập các báo cáo thống kê và phân tích</span>
-                                        </div>
-                                    </label>
-                                </div>
-                            </div>
+                            
                         </div>
 
                         <div class="modal-footer">
@@ -321,37 +357,7 @@
                 </div>
             </div>
         <script>
-            const add_btn = document.querySelector('.add-button');
-            const title = document.querySelector('.title');
-            const staff_edit_btn = document.querySelector('.staff-edit-btn')
 
-            add_btn.addEventListener('click', function() {
-                title.innerText = "Thêm nhân viên";
-                openEditModal();
-            })
-
-            staff_edit_btn.addEventListener('click', function() {
-                title.innerText = "Chỉnh sửa nhân viên";
-                openEditModal();
-            })
-
-            function openEditModal() {
-                document.getElementById('editModal').style.display = 'flex';
-            }
-            function closeEditModal() {
-                document.getElementById('editModal').style.display = 'none';
-            }
-
-            window.onclick = function(event) {
-                var modal = document.getElementById('editModal');
-                if (event.target == modal) {
-                    modal.style.display = "none";
-                }
-            }
-
-            function DeleteStaff() {
-                alert("Bạn có chắc chắn muốn xóa nhân viên này không")
-            }
         </script>
     </body>
 </html>

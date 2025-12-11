@@ -1,0 +1,101 @@
+/* --- css/main.css --- */
+:root {
+    --primary-blue: #2563eb;
+    --sidebar-bg: #fff5f5;
+    --main-bg: #f8f9fa;
+    --white: #ffffff;
+    --text-dark: #333;
+    --text-gray: #666;
+    --border-color: #eee;
+    
+    /* Màu Tier & Status */
+    --success-bg: #dcfce7; --success-text: #15803d;
+    --warning-bg: #fef9c3; --warning-text: #a16207;
+    --danger-bg: #fee2e2;  --danger-text: #b91c1c;
+    --info-bg: #e0f2fe;    --info-text: #0369a1;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+body { display: flex; height: 100vh; overflow: hidden; background-color: var(--main-bg); }
+
+/* --- SIDEBAR & LAYOUT --- */
+.sidebar {
+    width: 260px; background-color: var(--sidebar-bg); padding: 20px;
+    display: flex; flex-direction: column; border-right: 1px solid #f0e0e0;
+}
+.brand { font-size: 24px; font-weight: bold; margin-bottom: 40px; color: #000; padding-left: 10px; }
+.menu-item {
+    display: block; padding: 12px 20px; margin-bottom: 8px;
+    text-decoration: none; color: var(--text-dark); border-radius: 8px;
+    font-size: 15px; transition: all 0.3s;
+}
+.menu-item:hover { background-color: rgba(0,0,0,0.05); }
+.menu-item.active { background-color: var(--primary-blue); color: white; box-shadow: 0 4px 6px rgba(37, 99, 235, 0.2); }
+
+.main-content { flex: 1; display: flex; flex-direction: column; overflow-y: auto; }
+
+/* --- HEADER --- */
+.top-bar {
+    background-color: var(--white); padding: 15px 30px;
+    display: flex; justify-content: space-between; align-items: center;
+    border-bottom: 1px solid var(--border-color);
+}
+.search-box { position: relative; width: 350px; }
+.search-box input {
+    width: 100%; padding: 10px 15px 10px 40px;
+    border-radius: 20px; border: 1px solid #ddd; outline: none;
+}
+.search-box i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #aaa; }
+.user-actions { display: flex; align-items: center; gap: 15px; }
+.admin-profile { display: flex; align-items: center; gap: 10px; background: #f1f5f9; padding: 5px 15px; border-radius: 30px; }
+.avatar-circle { width: 32px; height: 32px; background: #2c3e50; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+
+/* --- BUTTONS --- */
+.btn-add {
+    background-color: #198754; color: white; padding: 8px 16px; border: none;
+    border-radius: 6px; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 5px;
+}
+.action-btn {
+    width: 32px; height: 32px; border-radius: 6px; border: none; cursor: pointer;
+    transition: 0.2s; display: inline-flex; align-items: center; justify-content: center; margin-right: 5px;
+}
+.btn-edit { background: #eff6ff; color: var(--primary-blue); }
+.btn-edit:hover { background: var(--primary-blue); color: white; }
+.btn-delete { background: #fef2f2; color: #ef4444; }
+.btn-delete:hover { background: #ef4444; color: white; }
+
+/* --- TABLE GENERAL STYLES --- */
+.content-wrapper { padding: 30px; }
+.table-card { background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.02); overflow: hidden; }
+.card-header { padding: 20px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
+table { width: 100%; border-collapse: collapse; }
+th { background-color: #f8f9fc; text-align: left; padding: 15px 20px; font-size: 0.85rem; color: #888; text-transform: uppercase; font-weight: 600; border-bottom: 1px solid #eee; }
+td { padding: 15px 20px; vertical-align: middle; border-bottom: 1px solid #eee; color: #444; font-size: 0.95rem; }
+tr:hover { background-color: #fafafa; }
+
+/* --- USER SPECIFIC STYLES (Gộp vào đây) --- */
+.user-info { display: flex; align-items: center; gap: 15px; }
+.avatar { 
+    width: 40px; height: 40px; border-radius: 50%; background: #e0e7ff; color: #4f46e5; 
+    display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px;
+}
+.user-detail h4 { margin: 0 0 3px 0; font-size: 0.95rem; color: #333; font-weight: 600; }
+.user-detail span { font-size: 0.8rem; color: #888; }
+
+.tier-badge { padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; display: inline-flex; align-items: center; gap: 5px; border: 1px solid transparent; }
+.tier-gold { background: #fff7d6; color: #b7791f; border-color: #fae69e; }
+.tier-silver { background: #f3f4f6; color: #4b5563; border-color: #e5e7eb; }
+.tier-platinum { background: #e0f2fe; color: #0369a1; border-color: #bae6fd; }
+.tier-bronze { background: #fff1e3; color: #9c4221; border-color: #fed7aa; }
+
+.status-dot { height: 8px; width: 8px; border-radius: 50%; display: inline-block; margin-right: 6px; }
+.st-active { color: var(--success-text); background-color: var(--success-bg); padding: 5px 12px; border-radius: 6px; font-weight: 500; font-size: 0.85rem; }
+.st-active .status-dot { background-color: var(--success-text); }
+.st-locked { color: var(--danger-text); background-color: var(--danger-bg); padding: 5px 12px; border-radius: 6px; font-weight: 500; font-size: 0.85rem; }
+.st-locked .status-dot { background-color: var(--danger-text); }
+.st-restricted { color: var(--warning-text); background-color: var(--warning-bg); padding: 5px 12px; border-radius: 6px; font-weight: 500; font-size: 0.85rem; }
+.st-restricted .status-dot { background-color: var(--warning-text); }
+
+.pagination { padding: 20px; display: flex; justify-content: flex-end; gap: 5px; }
+.page-btn { padding: 5px 12px; border: 1px solid #eee; background: white; cursor: pointer; border-radius: 4px; color: #666; }
+.page-btn.active { background: var(--primary-blue); color: white; border-color: var(--primary-blue); }

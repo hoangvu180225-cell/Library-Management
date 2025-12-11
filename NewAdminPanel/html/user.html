@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý Người dùng - Thư viện</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="../css/main.css">
+</head>
+<body>
+    <nav class="sidebar">
+        <div class="brand">Thư viện</div>
+        <a href="#" class="menu-item">Quản lý sách</a>
+        <a href="#" class="menu-item">Quản lý nhân viên</a>
+        <a href="users.html" class="menu-item active">Quản lý người dùng</a>
+        <a href="index.html" class="menu-item">Thống kê / báo cáo</a>
+        <a href="#" class="menu-item">Cài đặt</a>
+    </nav>
+
+    <main class="main-content">
+        <header class="top-bar">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Tìm kiếm tên, email, sđt...">
+            </div>
+            <div class="user-actions">
+                <button class="btn-add"><i class="fas fa-plus"></i> Thêm User</button>
+                <div class="admin-profile">
+                    <div style="text-align: right; line-height: 1.2;">
+                        <small style="color: #888; font-size: 0.75rem; display: block;">Admin</small>
+                        <span style="font-weight: 600; font-size: 0.9rem;">Phan Hoang Vu</span>
+                    </div>
+                    <div class="avatar-circle"><i class="fas fa-user"></i></div>
+                </div>
+            </div>
+        </header>
+
+        <div class="content-wrapper">
+            <div class="table-card">
+                <div class="card-header">
+                    <h3 style="margin:0; color: #333;">Danh sách người dùng</h3>
+                    <select style="padding: 6px 10px; border:1px solid #ddd; border-radius:6px;">
+                        <option>Tất cả trạng thái</option>
+                        <option>Hoạt động</option>
+                        <option>Đã khoá</option>
+                    </select>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th width="30%">Họ Tên & Email</th>
+                            <th>Số điện thoại</th>
+                            <th>Điểm</th>
+                            <th>Hạng (Tier)</th>
+                            <th>Trạng thái</th>
+                            <th style="text-align:center;">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="user-info">
+                                    <div class="avatar" style="background:#e0f2fe; color:#0369a1;">A</div>
+                                    <div class="user-detail">
+                                        <h4>Nguyễn Văn An</h4>
+                                        <span>vana@example.com</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>0987.654.321</td>
+                            <td style="font-weight:600;">820</td>
+                            <td><span class="tier-badge tier-gold"><i class="fas fa-crown"></i> Gold</span></td>
+                            <td><span class="st-active"><span class="status-dot"></span>Hoạt động</span></td>
+                            <td style="text-align:center;">
+                                <button class="action-btn btn-edit"><i class="fas fa-pen"></i></button>
+                                <button class="action-btn btn-delete"><i class="fas fa-trash"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="user-info">
+                                    <div class="avatar" style="background:#fce7f3; color:#be185d;">C</div>
+                                    <div class="user-detail">
+                                        <h4>Lê Văn Cường</h4>
+                                        <span>cuongle@example.com</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>0912.456.789</td>
+                            <td style="font-weight:600;">1,150</td>
+                            <td><span class="tier-badge tier-platinum"><i class="fas fa-gem"></i> Platinum</span></td>
+                            <td><span class="st-restricted"><span class="status-dot"></span>Hạn chế</span></td>
+                            <td style="text-align:center;">
+                                <button class="action-btn btn-edit"><i class="fas fa-pen"></i></button>
+                                <button class="action-btn btn-delete"><i class="fas fa-trash"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="user-info">
+                                    <div class="avatar" style="background:#fee2e2; color:#b91c1c;">D</div>
+                                    <div class="user-detail">
+                                        <h4>Phạm Thị Dung</h4>
+                                        <span>dung.pham@example.com</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>0933.221.100</td>
+                            <td style="font-weight:600;">120</td>
+                            <td><span class="tier-badge tier-bronze"><i class="fas fa-shield-alt"></i> Bronze</span></td>
+                            <td><span class="st-locked"><span class="status-dot"></span>Đã khoá</span></td>
+                            <td style="text-align:center;">
+                                <button class="action-btn btn-edit"><i class="fas fa-pen"></i></button>
+                                <button class="action-btn btn-delete"><i class="fas fa-trash"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="pagination">
+                    <button class="page-btn">Trước</button>
+                    <button class="page-btn active">1</button>
+                    <button class="page-btn">2</button>
+                    <button class="page-btn">Sau</button>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

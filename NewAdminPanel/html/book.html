@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý Sách - Thư viện</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/book.css">
+</head>
+<body>
+
+    <nav class="sidebar">
+        <div class="brand">Thư viện</div>
+        <a href="books.html" class="menu-item active">Quản lý sách</a>
+        <a href="staff.html" class="menu-item">Quản lý nhân viên</a>
+        <a href="users.html" class="menu-item">Quản lý người dùng</a>
+        <a href="index.html" class="menu-item">Thống kê / báo cáo</a>
+        <a href="#" class="menu-item">Cài đặt</a>
+    </nav>
+
+    <main class="main-content">
+        <header class="top-bar">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Tìm tên sách, tác giả, ISBN...">
+            </div>
+            <div class="user-actions">
+                <button class="btn-add"><i class="fas fa-plus"></i> Nhập sách mới</button>
+                <div class="admin-profile">
+                    <div style="text-align: right; line-height: 1.2;">
+                        <small style="color: #888; font-size: 0.75rem; display: block;">Admin</small>
+                        <span style="font-weight: 600; font-size: 0.9rem;">Phan Hoang Vu</span>
+                    </div>
+                    <div class="avatar-circle"><i class="fas fa-user"></i></div>
+                </div>
+            </div>
+        </header>
+
+        <div class="content-wrapper">
+            
+            <div class="toolbar">
+                <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+                    <h3 style="margin:0; color: #333; font-size: 1.5rem;">Tủ Sách</h3>
+                    <div class="filter-group">
+                        <select class="filter-select">
+                            <option>Thể loại: Tất cả</option>
+                            <option>Văn học</option>
+                            <option>Kinh tế</option>
+                            <option>CNTT & Công nghệ</option>
+                        </select>
+                        <select class="filter-select">
+                            <option>Trạng thái: Tất cả</option>
+                            <option>Còn hàng</option>
+                            <option>Hết hàng</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="view-switcher">
+                    <button class="btn-view active" id="btnGridView"><i class="fas fa-th-large"></i> Lưới</button>
+                    <button class="btn-view" id="btnListView"><i class="fas fa-list"></i> Danh sách</button>
+                </div>
+            </div>
+
+            <div class="book-grid" id="bookGrid">
+                <div class="book-card">
+                    <div class="book-cover-container">
+                        <img src="https://cdn0.fahasa.com/media/catalog/product/8/9/8934974146594.jpg" alt="Book" class="book-cover-img">
+                        <span class="book-status-badge status-available">Còn 15</span>
+                    </div>
+                    <div class="book-info">
+                        <h4 class="book-title">Harry Potter và Hòn đá Phù thủy</h4>
+                        <span class="book-author">J.K. Rowling</span>
+                        <div class="book-meta">
+                            <span class="meta-item"><i class="fas fa-bookmark"></i> Văn học</span>
+                            <span class="meta-item"><i class="fas fa-map-marker-alt"></i> Kệ A1 - T2</span>
+                        </div>
+                    </div>
+                    <div class="book-actions">
+                        <button class="btn-card-action btn-view-detail"><i class="fas fa-eye"></i> Chi tiết</button>
+                        <div class="action-group">
+                            <button class="btn-card-action"><i class="fas fa-pen"></i></button>
+                            <button class="btn-card-action btn-delete-card"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="book-card">
+                    <div class="book-cover-container">
+                        <img src="https://cdn0.fahasa.com/media/catalog/product/8/9/8934974146617.jpg" alt="Book" class="book-cover-img" style="opacity:0.6; filter:grayscale(50%);">
+                        <span class="book-status-badge status-out">Hết hàng</span>
+                    </div>
+                    <div class="book-info">
+                        <h4 class="book-title">Harry Potter và Tên tù nhân ngục Azkaban</h4>
+                        <span class="book-author">J.K. Rowling</span>
+                        <div class="book-meta">
+                            <span class="meta-item"><i class="fas fa-bookmark"></i> Văn học</span>
+                            <span class="meta-item"><i class="fas fa-map-marker-alt"></i> Kệ A2 - T2</span>
+                        </div>
+                    </div>
+                    <div class="book-actions">
+                        <button class="btn-card-action btn-view-detail"><i class="fas fa-eye"></i> Chi tiết</button>
+                        <div class="action-group">
+                            <button class="btn-card-action"><i class="fas fa-pen"></i></button>
+                            <button class="btn-card-action btn-delete-card"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-card book-list-view" id="bookList">
+                <table>
+                    <thead>
+                        <tr>
+                            <th width="40%">Thông tin sách</th>
+                            <th>Thể loại</th>
+                            <th>Vị trí</th>
+                            <th>Số lượng</th>
+                            <th>Trạng thái</th>
+                            <th style="text-align:center;">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div style="display:flex; gap:15px; align-items:center;">
+                                    <img src="https://cdn0.fahasa.com/media/catalog/product/8/9/8934974146594.jpg" class="list-cover">
+                                    <div>
+                                        <h4 style="margin:0; color:#333;">Harry Potter và Hòn đá Phù thủy</h4>
+                                        <span style="font-size:0.8rem; color:#888;">TG: J.K. Rowling</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><span class="tier-badge tier-platinum">Văn học</span></td>
+                            <td>Kệ A1 - T2</td>
+                            <td style="font-weight:600;">15</td>
+                            <td><span class="st-active"><span class="status-dot"></span>Còn hàng</span></td>
+                            <td style="text-align:center;">
+                                <button class="action-btn btn-edit"><i class="fas fa-pen"></i></button>
+                                <button class="action-btn btn-delete"><i class="fas fa-trash"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        const btnGrid = document.getElementById('btnGridView');
+        const btnList = document.getElementById('btnListView');
+        const contentWrapper = document.querySelector('.content-wrapper');
+
+        btnGrid.addEventListener('click', () => {
+            btnGrid.classList.add('active');
+            btnList.classList.remove('active');
+            contentWrapper.classList.remove('list-mode');
+        });
+
+        btnList.addEventListener('click', () => {
+            btnList.classList.add('active');
+            btnGrid.classList.remove('active');
+            contentWrapper.classList.add('list-mode');
+        });
+    </script>
+</body>
+</html>

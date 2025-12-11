@@ -1,584 +1,310 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="vi">
 <head>
-    <meta charset="utf-8" />
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CTT ĐHBKHN</title>
-    <link href="/Content/bootstrap.css" rel="stylesheet">
-    <link href="/Content/Site.css" rel="stylesheet">
-    <script src="/Scripts/jquery-3.4.1.js"></script>
-
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
     <style>
-        /* Button used to open the contact form - fixed at the bottom of the page */
-        .open-button {
-            background-color: #555;
-            color: white;
-            padding: 16px 20px;
-            border: none;
-            cursor: pointer;
+        :root {
+            --primary-color: #4e73df;
+            --success-color: #1cc88a;
+            --info-color: #36b9cc;
+            --warning-color: #f6c23e;
+            --danger-color: #e74a3b;
+            --light-bg: #f8f9fc;
+            --white: #ffffff;
+            --text-gray: #858796;
+            --text-dark: #5a5c69;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light-bg);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* --- 1. PHẦN THẺ THỐNG KÊ (TOP CARDS) --- */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 5px solid transparent;
+        }
+
+        /* Màu viền trái cho từng thẻ */
+        .card.revenue { border-left-color: var(--success-color); }
+        .card.books { border-left-color: var(--primary-color); }
+        .card.orders { border-left-color: var(--danger-color); }
+        .card.customers { border-left-color: var(--warning-color); }
+
+        .card-info h6 {
+            margin: 0;
+            color: var(--text-gray);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+
+        .card-info h2 {
+            margin: 5px 0;
+            color: var(--text-dark);
+            font-size: 1.5rem;
+        }
+
+        .trend {
+            font-size: 0.8rem;
+            margin-top: 5px;
+        }
+        .trend.up { color: var(--success-color); }
+        .trend.down { color: var(--danger-color); }
+
+        .icon-box {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
             opacity: 0.8;
-            position: fixed;
-            bottom: 23px;
-            right: 28px;
-            width: 280px;
         }
 
-        /* The popup form - hidden by default */
-        .form-popup {
-            display: none;
-            position: fixed;
-            bottom: 0;
-            right: 15px;
-            border: 3px solid #f1f1f1;
-            z-index: 9;
+        /* Màu nền icon */
+        .bg-green { background-color: #e6fffa; color: var(--success-color); }
+        .bg-blue { background-color: #ebf8ff; color: var(--primary-color); }
+        .bg-purple { background-color: #f3e8ff; color: #805ad5; }
+        .bg-orange { background-color: #fffaf0; color: var(--warning-color); }
+
+        /* --- 2. PHẦN BIỂU ĐỒ (CHART) --- */
+        .chart-section {
+            background: var(--white);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+        }
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .btn-group button {
+            padding: 8px 16px;
+            border: 1px solid #e3e6f0;
+            background: var(--white);
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: 600;
+        }
+        .btn-group button.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
         }
 
-        /* Add styles to the form container */
-        .form-container {
-            max-width: 300px;
-            padding: 10px;
-            background-color: white;
+        /* --- 3. PHẦN BẢNG ĐƠN HÀNG (TABLE) --- */
+        .table-section {
+            background: var(--white);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
         }
 
-            /* Full-width input fields */
-            .form-container input[type=text], .form-container input[type=password] {
-                width: 100%;
-                padding: 15px;
-                margin: 5px 0 22px 0;
-                border: none;
-                background: #f1f1f1;
-            }
+        th {
+            text-align: left;
+            padding: 12px;
+            background-color: #f8f9fc;
+            color: var(--text-dark);
+            font-weight: 700;
+            border-bottom: 2px solid #e3e6f0;
+        }
 
-                /* When the inputs get focus, do something */
-                .form-container input[type=text]:focus, .form-container input[type=password]:focus {
-                    background-color: #ddd;
-                    outline: none;
-                }
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #e3e6f0;
+            color: var(--text-dark);
+        }
 
-            /* Set a style for the submit/login button */
-            .form-container .btn {
-                background-color: #04AA6D;
-                color: white;
-                padding: 16px 20px;
-                border: none;
-                cursor: pointer;
-                width: 100%;
-                margin-bottom: 10px;
-                opacity: 0.8;
-            }
+        /* Badge trạng thái */
+        .badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+        .badge-success { background-color: #d1e7dd; color: #0f5132; } /* Hoàn thành */
+        .badge-shipping { background-color: #cfe2ff; color: #084298; } /* Đang giao */
+        .badge-pending { background-color: #fff3cd; color: #664d03; } /* Chờ xử lý */
+        .badge-cancel { background-color: #f8d7da; color: #842029; } /* Đã hủy */
 
-            /* Add a red background color to the cancel button */
-            .form-container .cancel {
-                background-color: red;
-            }
-
-            /* Add some hover effects to buttons */
-            .form-container .btn:hover, .open-button:hover {
-                opacity: 1;
-            }
     </style>
 </head>
-
 <body>
-    <div class="wrapper">
-        <div class="header">
-            <div class="container">
-                <div class="w-left col-md-6 col-xs-12">
-                    <a href="https://ctt.hust.edu.vn/"><img src="/Images/logo.png"></a>
-                </div>
-                <div class="w-right col-md-6 col-xs-12">
-                    <div class="search">
-<form action="/BaiViets/SearchBaiViet" method="post">                            <input type="text" name="strSearch" placeholder="Tìm kiếm">
-                            <img src="/Images/mask.svg">
-</form>
-                    </div>
-                    <div class="">
-                            <div class="logIn">
-        <div class="btn-submit">
-            <a id="loginLink" href="https://asso.hust.edu.vn/adfs/ls/?wtrealm=https%3A%2F%2Fctt.hust.edu.vn%2F&wctx=WsFedOwinState%3DDuNr3hbm4Ne4GNNtLx4f4_Dt54ECMPwvbdtOJzi1bGT5S4pDTqU0pREWhJY-fbdCgqP65IoohcbJRcFhqWwktsYO6YaZANjvpwfllWoYFgiqj5bLNOTjicl72xHxFcNG3aVCHfLWPOwIAO2bkXJGaA&wa=wsignin1.0&wreply=https%3A%2F%2Fctt.hust.edu.vn%2F">
-                Đăng nhập
-            </a>
-        </div>
-    </div>
-    <div class="logIn">
-        <div class="btn-submit">
-            <a id="loginLink" href="https://ctt-sis.hust.edu.vn">
-                Dành cho phụ huynh
-            </a>
-        </div>
-    </div>
 
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div id="menu">
-            <div class="navigation">
-                <div class="container">
-                    <div class="navbar-header">
-                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </button>
-                    </div>
-                    <div class="navbar-collapse collapse" id="myNavbar">
-                        <ul class="nav navbar-nav">
-                            <li class="dropdown" id="trangchu"><a href="/">Trang chủ</a><div class="pseudo_after"></div></li>
-                            <li class="dropdown" id="thongbao">
-                                <a href="#" class="activeMenu">Thông báo</a>
-                                <ul class="child-menu dropdown-menu">
-                                    <li><a href="/DisplayWeb/DisplayListBaiViet?tag=ĐTĐH">Đại học</a></li>
-                                    <li><a href="/DisplayWeb/DisplayListBaiViet?tag=ĐTSĐH">Sau đại học</a></li>
-                                    <li><a href="/DisplayWeb/DisplayListBaiViet?tag=VLVH">Vừa làm vừa học</a></li>
-                                </ul>
-                            </li>
-							
-                            <!-- <li class="dropdown" id="kehoach"> -->
-                                <!-- <a href="#" class="activeMenu">Kế hoạch</a> -->
-                                <!-- <ul class="child-menu dropdown-menu"> -->
-                                    <!-- <li><a href="/DisplayWeb/DisplayListKeHoach?tag=ĐTĐH">Đại học</a></li> -->
-                                    <!-- <li><a href="/DisplayWeb/DisplayListKeHoach?tag=ĐTSĐH">Sau đại học</a></li> -->
-                                    <!-- <li><a href="/DisplayWeb/DisplayListKeHoach?tag=VLVH">Vừa làm vừa học</a></li> -->
-                                <!-- </ul> -->
-                            <!-- </li> -->
-                            <li class="dropdown" id="quydinh">
-                                <a href="#" class="activeMenu">Quy định</a>
-                                <ul class="child-menu dropdown-menu">
-                                    <li><a href="/DisplayWeb/DisplayQuyChe?tag=ĐTĐH">Đại học</a></li>
-                                    <li><a href="/DisplayWeb/DisplayQuyChe?tag=ĐTSĐH">Sau đại học</a></li>
-                                    <li><a href="/DisplayWeb/DisplayQuyChe?tag=VLVH">Vừa làm vừa học</a></li>
-                                    
-                                    <li><a href="/DisplayWeb/DisplayMenu?menu=13">Biểu mẫu</a></li>
-                                </ul>
-                            </li>
-							<li class="dropdown" id="sotay">
-                                <a href="https://sv-ctt.hust.edu.vn/#/so-tay-sv">Sổ tay</a>
-                            </li>
-                            <li class="dropdown" id="dichvu">
-                                <a href="/Services">Dịch vụ</a>
-                            </li>
-							<!-- <li class="dropdown" id="nhaphoc">
-                                <a href="https://sv-ctt.hust.edu.vn/#/nhap-hoc">Nhập học</a>
-                                
-                            </li> -->
-                            <li class="dropdown" id="tracuuvanbang">
-                                <a href="https://ctt-sis.hust.edu.vn/pub/SearchGraduation.aspx">Tra cứu</a>
-                                
-                            </li>
-                            <li class="dropdown" id="lienhe">
-                                <a href="/DisplayWeb/DisplayMenu?menu=2058">Li&#234;n hệ</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="body">
-            
-
-
-
-<div class="home">
-    <div class="slideAnh">
-
-        <img src="/Images/slides/img1.jpg" class="slide">
-        <img src="Images/slides/img2.jpg" class="slide">
-        <img src="Images/slides/img3.jpg" class="slide">
-    </div>
-    <div class="warpper">
-        <input class="radio" id="tonghop" name="group" type="radio" checked>
-        <input class="radio" id="daotaodaihoc" name="group" type="radio">
-        <input class="radio" id="daotaosaudaihoc" name="group" type="radio">
-        <input class="radio" id="contacsinhvien" name="group" type="radio">
-        <div class="tabs">
-            <div class="container">
-                <label class="tab tongHop" id="tonghop-tab" for="tonghop">Tổng hợp</label>
-                <label class="tab daiHoc" id="daotaodaihoc-tab" for="daotaodaihoc">Đào tạo đại học</label>
-                <label class="tab sauDaiHoc" id="daotaosaudaihoc-tab" for="daotaosaudaihoc">Đào tạo sau đại học</label>
-                <label class="tab congTacSinhVien" id="contacsinhvien-tab" for="contacsinhvien">Vừa làm vừa học</label>
-            </div>
-        </div>
-        <div class="panels">
-            <div class="container">
-                <div class="panel" id="tonghop-panel">
-                    <div class="info w-left">
-                        <h3>KẾ HOẠCH</h3>
-                        <div class="content" id="tabs-1">
-                                <div class="item">
-                                    <div class="item-content item-left date">
-                                        <p class="month">Tháng  12</p>
-                                        <p class="date"> 10</p>
-                                    </div>
-                                    <div class="item-content item-right">
-                                        <a href="/DisplayWeb/DisplayKehoach?kehoach=27231">
-                                            <p class="title">
-                                                <b>[DTDH]</b> TH&#212;NG B&#193;O VỀ HỌC PH&#205; KỲ I NĂM HỌC 2025-2026 (20251) - ĐỢT 2
-                                            </p>
-                                            <p class="datetime">10/12/2025</p>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="item">
-                                    <div class="item-content item-left date">
-                                        <p class="month">Tháng  12</p>
-                                        <p class="date"> 01</p>
-                                    </div>
-                                    <div class="item-content item-right">
-                                        <a href="/DisplayWeb/DisplayKehoach?kehoach=26231">
-                                            <p class="title">
-                                                <b>[DTDH]</b> LỊCH TIẾP NHẬN TRỞ LẠI HỌC TỪ HỌC KỲ 2 NĂM HỌC 2025-2026 (20252)
-                                            </p>
-                                            <p class="datetime">01/12/2025</p>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="item">
-                                    <div class="item-content item-left date">
-                                        <p class="month">Tháng  11</p>
-                                        <p class="date"> 10</p>
-                                    </div>
-                                    <div class="item-content item-right">
-                                        <a href="/DisplayWeb/DisplayKehoach?kehoach=26229">
-                                            <p class="title">
-                                                <b>[DTDH]</b> LỊCH THI GIỮA KỲ - CUỐI KỲ HỌC KỲ 20251
-                                            </p>
-                                            <p class="datetime">10/11/2025</p>
-                                        </a>
-                                    </div>
-                                </div>
-                            
-                        </div>
-                    </div>
-                    <div class="info w-right">
-                        <h3>TIN TỨC</h3>
-                        <div class="content" id="tabs-2">
-                                <div class="item">
-                                    <div class="item-content item-left img">
-                                        <img src="Images/news-1.jpg">
-                                    </div>
-                                    <div class="item-content item-right">
-                                        <a href="/DisplayWeb/DisplayBaiViet?baiviet=46590">
-                                            
-                                            <p class="title"><b>[ĐTĐH]</b>Th&#244;ng b&#225;o về học ph&#237; kỳ 1 năm học 2025-2026 (20251) - Đợt 2</p>
-                                        </a>
-                                        <p class="datetime">8/12/2025</p>
-                                    </div>
-                                </div>
-                                <div class="item">
-                                    <div class="item-content item-left img">
-                                        <img src="Images/news-1.jpg">
-                                    </div>
-                                    <div class="item-content item-right">
-                                        <a href="/DisplayWeb/DisplayBaiViet?baiviet=46588">
-                                            
-                                            <p class="title"><b>[ĐTĐH]</b>Lịch ph&#225;t bằng tốt nghiệp hệ đại học đợt h&#232; 20243</p>
-                                        </a>
-                                        <p class="datetime">11/11/2025</p>
-                                    </div>
-                                </div>
-                                <div class="item">
-                                    <div class="item-content item-left img">
-                                        <img src="Images/news-1.jpg">
-                                    </div>
-                                    <div class="item-content item-right">
-                                        <a href="/DisplayWeb/DisplayBaiViet?baiviet=46587">
-                                            
-                                            <p class="title"><b>[CTSV]</b>Chương tr&#236;nh tham quan tuyển dụng v&#224; học bổng của c&#244;ng ty LG Electronics VN Hải Ph&#242;ng 2025</p>
-                                        </a>
-                                        <p class="datetime">9/11/2025</p>
-                                    </div>
-                                </div>
-                            
-                        </div>
-                    </div>
-                </div>
-                <div class="panel" id="daotaodaihoc-panel">
-                    <div class="info w-left">
-                        <h3>KẾ HOẠCH</h3>
-                        <div class="content" id="tabs-3">
-                                <div class="item">
-                                    <div class="item-content item-left date">
-                                        <p class="month">Tháng  12</p>
-                                        <p class="date"> 10</p>
-                                    </div>
-                                    <div class="item-content item-right">
-                                        <a href="/DisplayWeb/DisplayKehoach?kehoach=27231">
-                                            <p class="title">
-                                                <b>[DTDH]</b> TH&#212;NG B&#193;O VỀ HỌC PH&#205; KỲ I NĂM HỌC 2025-2026 (20251) - ĐỢT 2
-                                            </p>
-                                            <p class="datetime">10/12/2025</p>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="item">
-                                    <div class="item-content item-left date">
-                                        <p class="month">Tháng  12</p>
-                                        <p class="date"> 01</p>
-                                    </div>
-                                    <div class="item-content item-right">
-                                        <a href="/DisplayWeb/DisplayKehoach?kehoach=26231">
-                                            <p class="title">
-                                                <b>[DTDH]</b> LỊCH TIẾP NHẬN TRỞ LẠI HỌC TỪ HỌC KỲ 2 NĂM HỌC 2025-2026 (20252)
-                                            </p>
-                                            <p class="datetime">01/12/2025</p>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="item">
-                                    <div class="item-content item-left date">
-                                        <p class="month">Tháng  11</p>
-                                        <p class="date"> 10</p>
-                                    </div>
-                                    <div class="item-content item-right">
-                                        <a href="/DisplayWeb/DisplayKehoach?kehoach=26229">
-                                            <p class="title">
-                                                <b>[DTDH]</b> LỊCH THI GIỮA KỲ - CUỐI KỲ HỌC KỲ 20251
-                                            </p>
-                                            <p class="datetime">10/11/2025</p>
-                                        </a>
-                                    </div>
-                                </div>
-                            
-
-                        </div>
-                    </div>
-                    <div class="info w-right">
-                        <h3>TIN TỨC</h3>
-                        <div class="content" id="tabs-4">
-                                <div class="item">
-                                    <div class="item-content item-left img">
-                                        <img src="Images/news-1.jpg">
-                                    </div>
-                                    <div class="item-content item-right">
-                                        <a href="/DisplayWeb/DisplayBaiViet?baiviet=46590">
-                                            
-                                            <p class="title"><b>[ĐTĐH]</b>Th&#244;ng b&#225;o về học ph&#237; kỳ 1 năm học 2025-2026 (20251) - Đợt 2</p>
-                                        </a>
-                                        <p class="datetime">8/12/2025</p>
-                                    </div>
-                                </div>
-                                <div class="item">
-                                    <div class="item-content item-left img">
-                                        <img src="Images/news-1.jpg">
-                                    </div>
-                                    <div class="item-content item-right">
-                                        <a href="/DisplayWeb/DisplayBaiViet?baiviet=46588">
-                                            
-                                            <p class="title"><b>[ĐTĐH]</b>Lịch ph&#225;t bằng tốt nghiệp hệ đại học đợt h&#232; 20243</p>
-                                        </a>
-                                        <p class="datetime">11/11/2025</p>
-                                    </div>
-                                </div>
-                                <div class="item">
-                                    <div class="item-content item-left img">
-                                        <img src="Images/news-1.jpg">
-                                    </div>
-                                    <div class="item-content item-right">
-                                        <a href="/DisplayWeb/DisplayBaiViet?baiviet=46587">
-                                            
-                                            <p class="title"><b>[CTSV]</b>Chương tr&#236;nh tham quan tuyển dụng v&#224; học bổng của c&#244;ng ty LG Electronics VN Hải Ph&#242;ng 2025</p>
-                                        </a>
-                                        <p class="datetime">9/11/2025</p>
-                                    </div>
-                                </div>
-                            
-                        </div>
-                    </div>
-                </div>
-                <div class="panel" id="daotaosaudaihoc-panel">
-                    <div class="info w-left">
-                        <h3>KẾ HOẠCH</h3>
-                        <div class="content" id="tabs-5">
-                                <div class="item">
-                                    <div class="item-content item-left date">
-                                        <p class="month">Tháng  10</p>
-                                        <p class="date"> 07</p>
-                                    </div>
-                                    <div class="item-content item-right">
-                                        <a href="/DisplayWeb/DisplayKehoach?kehoach=25096">
-                                            <p class="title">
-                                                <b>[DTDH]</b> Th&#244;ng b&#225;o kiểm tra tiếng anh đầu v&#224;o K65 (d&#224;nh cho sinh vi&#234;n Chương tr&#236;nh ti&#234;n tiến v&#224; quốc tế)
-                                            </p>
-                                            <p class="datetime">07/10/2020</p>
-                                        </a>
-                                    </div>
-                                </div>
-                            
-
-                        </div>
-                    </div>
-                    <div class="info w-right">
-                        <h3>TIN TỨC</h3>
-                        <div class="content" id="tabs-6">
-                                <div class="item">
-                                    <div class="item-content item-left img">
-                                        <img src="Images/news-1.jpg">
-                                    </div>
-                                    <div class="item-content item-right">
-                                        <a href="/DisplayWeb/DisplayBaiViet?baiviet=39136">
-                                            
-                                            <p class="title"><b>[ĐTSĐH]</b>Bảo vệ luận &#225;n Tiến sĩ cấp Trường cho nghi&#234;n cứu sinh Mai Văn Chung</p>
-                                        </a>
-                                        <p class="datetime">20/12/2021</p>
-                                    </div>
-                                </div>
-                                <div class="item">
-                                    <div class="item-content item-left img">
-                                        <img src="Images/news-1.jpg">
-                                    </div>
-                                    <div class="item-content item-right">
-                                        <a href="/DisplayWeb/DisplayBaiViet?baiviet=39134">
-                                            
-                                            <p class="title"><b>[ĐTSĐH]</b>Bảo vệ luận &#225;n Tiến sĩ cấp Trường cho nghi&#234;n cứu sinh Trần Thị Ngọc Hoa</p>
-                                        </a>
-                                        <p class="datetime">16/12/2021</p>
-                                    </div>
-                                </div>
-                                <div class="item">
-                                    <div class="item-content item-left img">
-                                        <img src="Images/news-1.jpg">
-                                    </div>
-                                    <div class="item-content item-right">
-                                        <a href="/DisplayWeb/DisplayBaiViet?baiviet=39133">
-                                            
-                                            <p class="title"><b>[ĐTSĐH]</b> Luận &#225;n tiến sĩ: Ứng dụng điều khiển th&#237;ch nghi hệ thiếu cơ cấu chấp h&#224;nh cho xe tự h&#224;nh ba b&#225;nh - NCS Phạm Thị Hương Sen</p>
-                                        </a>
-                                        <p class="datetime">16/12/2021</p>
-                                    </div>
-                                </div>
-                            
-                        </div>
-                    </div>
-                </div>
-                <div class="panel" id="contacsinhvien-panel">
-                    <div class="info w-left">
-                        <h3>KẾ HOẠCH</h3>
-                        <div class="content" id="tabs-7">
-                            
-
-                        </div>
-                    </div>
-                    <div class="info w-right">
-                        <h3>TIN TỨC</h3>
-                        <div class="content" id="tabs-8">
-                                <div class="item">
-                                    <div class="item-content item-left img">
-                                        <img src="Images/news-1.jpg">
-                                    </div>
-                                    <div class="item-content item-right">
-                                        <a href="/DisplayWeb/DisplayBaiViet?baiviet=38097">
-                                            
-                                            <p class="title"><b>[VĐTLT]</b>BIỂU ĐỒ KẾ HOẠCH HỌC TẬP NĂM HỌC 2022-2023</p>
-                                        </a>
-                                        <p class="datetime">17/9/2022</p>
-                                    </div>
-                                </div>
-                                <div class="item">
-                                    <div class="item-content item-left img">
-                                        <img src="Images/news-1.jpg">
-                                    </div>
-                                    <div class="item-content item-right">
-                                        <a href="/DisplayWeb/DisplayBaiViet?baiviet=38096">
-                                            
-                                            <p class="title"><b>[VĐTLT]</b>Quy chế đ&#224;o tạo vừa l&#224;m vừa học tr&#236;nh độ đại học</p>
-                                        </a>
-                                        <p class="datetime">5/10/2021</p>
-                                    </div>
-                                </div>
-                                <div class="item">
-                                    <div class="item-content item-left img">
-                                        <img src="Images/news-1.jpg">
-                                    </div>
-                                    <div class="item-content item-right">
-                                        <a href="/DisplayWeb/DisplayBaiViet?baiviet=38051">
-                                            
-                                            <p class="title"><b>[VĐTLT]</b>TUYỂN SINH KH&#211;A HỌC BỒI DƯỠNG TIẾNG ANH</p>
-                                        </a>
-                                        <p class="datetime">6/8/2021</p>
-                                    </div>
-                                </div>
-                            
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-    var indexValue = 0;
-    function slideShow() {
-        setTimeout(slideShow, 2500);
-        var x;
-        const img = document.getElementsByClassName("slide");
-        for (x = 0; x < img.length; x++) {
-            img[x].style.display = "none";
-        }
-        indexValue++;
-        if (indexValue > img.length) { indexValue = 1 }
-        img[indexValue - 1].style.display = "block";
-    }
-    slideShow();
-</script>
-<script type="text/javascript">
-    $("#trangchu").css("border-bottom", "3px solid #e70000");
-	$("#trangchu a").css("color", "#e70000");
-</script>
-
-        </div>
-        <div class="footer">
-            <div class="text">
-                <p>Bản quyền thuộc về Đại học Bách Khoa Hà Nội</p>
-                <p class="normal">Địa chỉ: Số 1 Đại Cồ Việt, Hai Bà Trưng, Hà Nội</p>
-            </div>
-        </div>
-        <script src="/bundles/jquery?v=eb2jXqSfUvTzglcYJmAPvAmCoKM7It9q8QvAflpVkwA1"></script>
-
-        <script src="/bundles/bootstrap?v=M4Nk6kIOwMFflsEKET0iPL9i5YBqbzMzvUOrd8gyCnw1"></script>
-
+    <div class="dashboard-container">
         
-        
+        <div class="stats-grid">
+            <div class="card revenue">
+                <div class="card-info">
+                    <h6>Tổng Doanh Thu</h6>
+                    <h2>1,245,800,000 ₫</h2>
+                    <div class="trend up"><i class="fas fa-arrow-up"></i> +12.5% so với tháng trước</div>
+                </div>
+                <div class="icon-box bg-green"><i class="fas fa-dollar-sign"></i></div>
+            </div>
 
-        <!-- <button class="open-button" onclick="openForm()">THÔNG TIN LIÊN HỆ</button> -->
+            <div class="card books">
+                <div class="card-info">
+                    <h6>Số Sách Đã Bán</h6>
+                    <h2>3,247</h2>
+                    <div class="trend up"><i class="fas fa-arrow-up"></i> +8.2% so với tháng trước</div>
+                </div>
+                <div class="icon-box bg-blue"><i class="fas fa-box"></i></div>
+            </div>
 
-        <!-- <div class="form-popup" id="myForm" style="display:block"> -->
-            <!-- <form action="/action_page.php" class="form-container"> -->
-                <!-- <p style="box-sizing: border-box; margin: 0px 0px 10px; font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; font-size: 20px; color: rgb(0, 0, 0);"> -->
-                    <!-- <span style="box-sizing: border-box; font-weight: 700; color: rgb(0, 119, 179); outline: 0px; font-family: &quot;times new roman&quot;, serif;"><span style="box-sizing: border-box;"><span style="box-sizing: border-box; color: maroon;">THÔNG TIN LIÊN HỆ</span></span></span> -->
-                <!-- </p> -->
-                <!-- <div class="content1" data-v-759c90ec="" style="box-sizing: inherit; color: rgb(0, 0, 0); font-family: &quot;Helvetica Neue&quot;, Helvetica, &quot;PingFang SC&quot;, &quot;Hiragino Sans GB&quot;, &quot;Microsoft YaHei&quot;, Arial, sans-serif; font-size: 14px;"> -->
-                    <!-- <div class="contact_title" data-v-759c90ec="" style="box-sizing: inherit; font-weight: 700; text-transform: uppercase;"> -->
-                        <!-- TRƯỜNG ĐẠI HỌC BÁCH KHOA HÀ NỘI <br/> -->
-                        <!-- PHÒNG ĐÀO TẠO ĐẠI HỌC -->
-                    <!-- </div> -->
-                    <!-- <div data-v-759c90ec="" style="box-sizing: inherit;"> -->
-                        <!-- <p data-v-759c90ec="" style="box-sizing: inherit; margin: 3px 0px;"> -->
-                            <!-- Ph&ograve;ng 202, Nh&agrave; C1, Trường Đại học B&aacute;ch Khoa H&agrave; Nội -->
-                        <!-- </p> -->
-                        <!-- <p data-v-759c90ec="" style="box-sizing: inherit; margin: 3px 0px;"> -->
-                            <!-- Điện thoại: 024 3869 2008 -->
-                        <!-- </p> -->
-                        <!-- <p data-v-759c90ec="" style="box-sizing: inherit; margin: 3px 0px;"> -->
-                            <!-- Email: dt@hust.edu.vn -->
-                        <!-- </p> -->
-                    <!-- </div> -->
-                <!-- </div> -->
+            <div class="card orders">
+                <div class="card-info">
+                    <h6>Đơn Hàng</h6>
+                    <h2>1,842</h2>
+                    <div class="trend down"><i class="fas fa-arrow-down"></i> -3.1% so với tháng trước</div>
+                </div>
+                <div class="icon-box bg-purple"><i class="fas fa-shopping-cart"></i></div>
+            </div>
 
-                <!-- <button type="button" class="btn cancel" onclick="closeForm()">Close</button> -->
-            <!-- </form> -->
-        <!-- </div> -->
+            <div class="card customers">
+                <div class="card-info">
+                    <h6>Khách Hàng</h6>
+                    <h2>1,234</h2>
+                    <div class="trend up"><i class="fas fa-arrow-up"></i> +15.3% so với tháng trước</div>
+                </div>
+                <div class="icon-box bg-orange"><i class="fas fa-users"></i></div>
+            </div>
+        </div>
 
-        <!-- <script> -->
-            <!-- function openForm() { -->
-                <!-- document.getElementById("myForm").style.display = "block"; -->
-            <!-- } -->
+        <div class="chart-section">
+            <div class="chart-header">
+                <h3 style="margin:0; color:var(--text-dark)">Biểu Đồ Doanh Thu</h3>
+                <div class="btn-group">
+                    <button>Doanh Thu</button>
+                    <button class="active">Đơn Hàng</button>
+                </div>
+            </div>
+            <canvas id="myAreaChart" height="80"></canvas>
+        </div>
 
-            <!-- function closeForm() { -->
-                <!-- document.getElementById("myForm").style.display = "none"; -->
-            <!-- } -->
-        <!-- </script> -->
+        <div class="table-section">
+            <h3 style="margin:0 0 15px 0; color:var(--text-dark)">Đơn Hàng Gần Đây</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Mã ĐH</th>
+                        <th>Khách hàng</th>
+                        <th>Số lượng</th>
+                        <th>Tổng tiền</th>
+                        <th>Trạng thái</th>
+                        <th>Thời gian</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><a href="#" style="text-decoration:none; color:var(--primary-color)">DH001234</a></td>
+                        <td>Nguyễn Văn An</td>
+                        <td>3 sản phẩm</td>
+                        <td>485.000 ₫</td>
+                        <td><span class="badge badge-success">✔ Hoàn thành</span></td>
+                        <td>11/12/2024 14:30</td>
+                    </tr>
+                    <tr>
+                        <td><a href="#" style="text-decoration:none; color:var(--primary-color)">DH001235</a></td>
+                        <td>Trần Thị Bình</td>
+                        <td>1 sản phẩm</td>
+                        <td>140.000 ₫</td>
+                        <td><span class="badge badge-shipping">📦 Đang giao</span></td>
+                        <td>11/12/2024 13:15</td>
+                    </tr>
+                    <tr>
+                        <td><a href="#" style="text-decoration:none; color:var(--primary-color)">DH001236</a></td>
+                        <td>Lê Hoàng Cường</td>
+                        <td>5 sản phẩm</td>
+                        <td>1.250.000 ₫</td>
+                        <td><span class="badge badge-pending">🕒 Chờ xử lý</span></td>
+                        <td>11/12/2024 11:45</td>
+                    </tr>
+                    <tr>
+                        <td><a href="#" style="text-decoration:none; color:var(--primary-color)">DH001238</a></td>
+                        <td>Võ Minh Đức</td>
+                        <td>4 sản phẩm</td>
+                        <td>680.000 ₫</td>
+                        <td><span class="badge badge-cancel">✖ Đã hủy</span></td>
+                        <td>11/12/2024 09:00</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const ctx = document.getElementById('myAreaChart').getContext('2d');
+        const myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11', 'T12'],
+                datasets: [{
+                    label: 'Đơn hàng',
+                    data: [1200, 1350, 1500, 1400, 1600, 1700, 1500, 1800, 1900, 1850, 2000, 1900],
+                    borderColor: '#805ad5', // Màu tím giống trong ảnh
+                    backgroundColor: 'rgba(128, 90, 213, 0.1)',
+                    borderWidth: 2,
+                    pointBackgroundColor: '#fff',
+                    pointBorderColor: '#805ad5',
+                    pointRadius: 5,
+                    pointHoverRadius: 7,
+                    tension: 0.4 // Độ cong mềm mại của đường
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false } // Ẩn chú thích để giống ảnh
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { borderDash: [2, 4], color: "#e3e6f0" } // Nét đứt
+                    },
+                    x: {
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+    </script>
 </body>
 </html>
