@@ -13,9 +13,9 @@
 <body>
     <nav class="sidebar">
         <div class="brand">Thư viện</div>
-        <a href="#" class="menu-item">Quản lý sách</a>
-        <a href="#" class="menu-item">Quản lý nhân viên</a>
-        <a href="users.html" class="menu-item">Quản lý người dùng</a>
+        <a href="book.html" class="menu-item">Quản lý sách</a>
+        <a href="staff.html" class="menu-item">Quản lý nhân viên</a>
+        <a href="user.html" class="menu-item">Quản lý người dùng</a>
         <a href="index.html" class="menu-item active">Thống kê / báo cáo</a>
         <a href="#" class="menu-item">Cài đặt</a>
     </nav>
@@ -44,7 +44,6 @@
                     <div class="stat-info">
                         <h6>Tổng Doanh Thu</h6>
                         <h2>1,245,800 đ</h2>
-                        <div class="stat-trend text-up"><i class="fas fa-arrow-up"></i> +12.5%</div>
                     </div>
                     <div class="icon-square bg-green-light"><i class="fas fa-dollar-sign"></i></div>
                 </div>
@@ -52,7 +51,6 @@
                     <div class="stat-info">
                         <h6>Sách Đã Bán</h6>
                         <h2>3,247</h2>
-                        <div class="stat-trend text-up"><i class="fas fa-arrow-up"></i> +8.2%</div>
                     </div>
                     <div class="icon-square bg-blue-light"><i class="fas fa-book"></i></div>
                 </div>
@@ -60,7 +58,6 @@
                     <div class="stat-info">
                         <h6>Đơn Hàng</h6>
                         <h2>1,842</h2>
-                        <div class="stat-trend text-down"><i class="fas fa-arrow-down"></i> -3.1%</div>
                     </div>
                     <div class="icon-square bg-purple-light"><i class="fas fa-shopping-cart"></i></div>
                 </div>
@@ -68,7 +65,6 @@
                     <div class="stat-info">
                         <h6>Khách Hàng</h6>
                         <h2>1,234</h2>
-                        <div class="stat-trend text-up"><i class="fas fa-arrow-up"></i> +15.3%</div>
                     </div>
                     <div class="icon-square bg-orange-light"><i class="fas fa-users"></i></div>
                 </div>
@@ -82,7 +78,6 @@
     </main>
 
     <script>
-        // Script vẽ biểu đồ đơn giản
         const ctx = document.getElementById('myChart').getContext('2d');
         new Chart(ctx, {
             type: 'line',

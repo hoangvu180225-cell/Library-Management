@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý Giao dịch</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/transactions.css">
+</head>
+<body>
+
+    <nav class="sidebar">
+        <div class="brand">Thư viện</div>
+        <a href="books.html" class="menu-item">Quản lý sách</a>
+        <a href="staff.html" class="menu-item">Quản lý nhân viên</a>
+        <a href="users.html" class="menu-item">Quản lý người dùng</a>
+        <a href="transactions.html" class="menu-item active">Quản lý giao dịch</a>
+        <a href="index.html" class="menu-item">Thống kê / báo cáo</a>
+    </nav>
+
+    <main class="main-content">
+        
+        <header class="top-bar">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Tìm mã GD, tên khách hàng...">
+            </div>
+            <div class="user-actions">
+                <div class="admin-profile">
+                    <div style="text-align: right; line-height: 1.2;">
+                        <small style="color: #888; font-size: 0.75rem;">Admin</small><br>
+                        <span style="font-weight: 600; font-size: 0.9rem;">Phan Hoang Vu</span>
+                    </div>
+                    <div class="avatar-circle"><i class="fas fa-user"></i></div>
+                </div>
+            </div>
+        </header>
+
+        <div class="content-wrapper">
+            
+            <div class="stats-row">
+                <div class="stat-box">
+                    <div class="stat-content"><h6>Tổng giao dịch</h6><h3>8</h3></div>
+                    <div class="stat-icon bg-blue"><i class="fas fa-shopping-cart"></i></div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-content"><h6>Chờ xử lý</h6><h3>2</h3></div>
+                    <div class="stat-icon bg-orange"><i class="fas fa-clock"></i></div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-content"><h6>Hoàn thành</h6><h3>2</h3></div>
+                    <div class="stat-icon bg-green"><i class="fas fa-check-circle"></i></div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-content"><h6>Doanh thu</h6><h3>256.000 ₫</h3></div>
+                    <div class="stat-icon bg-purple"><i class="fas fa-chart-line"></i></div>
+                </div>
+            </div>
+
+            <div style="display:flex; justify-content:space-between; margin-bottom:15px; align-items:center;">
+                <h3 style="margin:0; color:#333;">Danh sách giao dịch</h3>
+                <select style="padding: 8px 15px; border-radius:6px; border:1px solid #ddd; outline:none;"><option>Tất cả trạng thái</option></select>
+            </div>
+
+            <div class="transaction-layout">
+                
+                <div class="col-list">
+                    <div class="list-header">
+                        <span style="color:#666; font-size:0.9rem;">8 giao dịch</span>
+                    </div>
+                    <div class="list-body">
+                        <div class="trans-item active">
+                            <div class="item-row-1">
+                                <div>#GD001 <span class="badge-sm bg-orange">Chờ xử lý</span></div>
+                                <span class="item-price">245.000 ₫</span>
+                            </div>
+                            <div class="item-row-2"><i class="far fa-user"></i> Nguyễn Văn An</div>
+                            <div class="item-row-2" style="font-size:0.8rem; color:#999; margin-top:4px;"><i class="far fa-clock"></i> 2025-12-12 14:30</div>
+                        </div>
+                        
+                        <div class="trans-item">
+                            <div class="item-row-1">
+                                <div>#GD002 <span class="badge-sm bg-blue">Đã xác nhận</span></div>
+                                <span class="item-price">195.000 ₫</span>
+                            </div>
+                            <div class="item-row-2"><i class="far fa-user"></i> Trần Thị Bình</div>
+                            <div class="item-row-2" style="font-size:0.8rem; color:#999; margin-top:4px;"><i class="far fa-clock"></i> 2025-12-12 10:15</div>
+                        </div>
+
+                         <div class="trans-item">
+                            <div class="item-row-1">
+                                <div>#GD003 <span class="badge-sm bg-purple">Đang giao</span></div>
+                                <span class="item-price">425.000 ₫</span>
+                            </div>
+                            <div class="item-row-2"><i class="far fa-user"></i> Lê Minh Châu</div>
+                            <div class="item-row-2" style="font-size:0.8rem; color:#999; margin-top:4px;"><i class="far fa-clock"></i> 2025-12-11 16:45</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-detail">
+                    <div class="detail-header">
+                        <div>
+                            <h3 style="margin:0; color:#333;">Chi tiết giao dịch</h3>
+                            <span style="color:#666; font-size:0.9rem;">#GD001</span>
+                        </div>
+                        <span class="badge-sm bg-orange">Chờ xử lý</span>
+                    </div>
+
+                    <div class="detail-body">
+                        
+                        <div class="info-section">
+                            <div class="section-label">Thông tin khách hàng</div>
+                            <div class="info-row"><i class="far fa-user"></i> <span>Nguyễn Văn An</span></div>
+                            <div class="info-row"><i class="fas fa-phone-alt"></i> <span>0901234567</span></div>
+                            <div class="info-row"><i class="far fa-envelope"></i> <span>nguyenvanan@email.com</span></div>
+                            <div class="info-row"><i class="fas fa-map-marker-alt"></i> <span>123 Nguyễn Huệ, Q.1, TP.HCM</span></div>
+                        </div>
+
+                        <div class="info-section">
+                            <div class="section-label">Sản phẩm</div>
+                            <div class="product-item">
+                                <div>
+                                    <div style="font-weight:600; color:#333;">Đắc Nhân Tâm</div>
+                                    <small style="color:#888;">Dale Carnegie • SL: 2</small>
+                                </div>
+                                <div style="text-align:right;">
+                                    <div style="font-weight:600; color:#333;">85.000 ₫</div>
+                                    <small style="color:#888;">170.000 ₫</small>
+                                </div>
+                            </div>
+                            <div class="product-item">
+                                <div>
+                                    <div style="font-weight:600; color:#333;">Nhà Giả Kim</div>
+                                    <small style="color:#888;">Paulo Coelho • SL: 1</small>
+                                </div>
+                                <div style="text-align:right;">
+                                    <div style="font-weight:600; color:#333;">75.000 ₫</div>
+                                    <small style="color:#888;">75.000 ₫</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="margin-top:auto; padding-top:20px; border-top:1px solid #eee;">
+                            <div style="display:flex; justify-content:space-between; font-size:1.1rem; font-weight:bold; color:var(--primary-blue);">
+                                <span>Tổng cộng</span>
+                                <span>245.000 ₫</span>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top:20px; text-align:right; display:flex; gap:10px; justify-content:flex-end;">
+                            <button class="btn-action btn-outline">Hủy đơn</button>
+                            <button class="btn-action btn-primary">Xác nhận</button>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+</body>
+</html>
