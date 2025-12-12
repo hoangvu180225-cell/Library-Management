@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quản lý Sách - Thư viện</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <link rel="stylesheet" href="../css/main.css">
     <link rel="stylesheet" href="../css/book.css">
 </head>
@@ -38,8 +37,113 @@
             </div>
         </header>
 
-        <div class="content-wrapper">
-            
+        <div class="modal" id="addBookModal">
+            <div class="modal-overlay"></div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="modalTitle">Thêm sách mới</h3>
+                    <button class="btn-close-modal"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addBookForm">
+                        <div class="form-row">
+                            <div class="form-group" style="flex: 1;">
+                                <label>Mã ISBN</label>
+                                <input type="text" id="bookISBN" placeholder="978-..." required>
+                            </div>
+                            <div class="form-group" style="flex: 1;">
+                                <label>Tên sách</label>
+                                <input type="text" id="bookName" placeholder="Nhập tên sách..." required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Tác giả</label>
+                                <input type="text" id="bookAuthor" placeholder="Tên tác giả..." required>
+                            </div>
+                            <div class="form-group">
+                                <label>Nhà Cung Cấp</label>
+                                <input type="text" id="bookSupplier" placeholder="VD: NXB Trẻ, Fahasa...">
+                            </div>
+                        </div>
+                    
+                        <div class="form-row cols-3">
+                            <div class="form-group">
+                                <label>NXB</label>
+                                <input type="text" id="bookPublisher" placeholder="Nhà xuất bản">
+                            </div>
+                            <div class="form-group">
+                                <label>Năm XB</label>
+                                <input type="number" id="bookYear" placeholder="2024">
+                            </div>
+                            <div class="form-group">
+                                <label>Hình thức</label>
+                                <select id="bookFormat">
+                                    <option value="mem">Bìa mềm</option>
+                                    <option value="cung">Bìa cứng</option>
+                                    <option value="ebook">Ebook</option>
+                                </select>
+                            </div>
+                        </div>
+                    
+                        <div class="form-row cols-3">
+                            <div class="form-group">
+                                <label>Số trang</label>
+                                <input type="number" id="bookPages" placeholder="VD: 366">
+                            </div>
+                            <div class="form-group">
+                                <label>Kích thước</label>
+                                <input type="text" id="bookSize" placeholder="20 x 14 cm">
+                            </div>
+                            <div class="form-group">
+                                <label>Trọng lượng</label>
+                                <div class="input-suffix">
+                                    <input type="number" id="bookWeight" placeholder="300">
+                                    <span>gr</span>
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <hr style="border: 0; border-top: 1px dashed #ddd; margin: 10px 0 20px;">
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Thể loại</label>
+                                <select id="bookCategory">
+                                    <option value="">Chọn thể loại...</option>
+                                    <option value="vh">Văn học</option>
+                                    <option value="kt">Kinh tế</option>
+                                    <option value="cntt">CNTT & Công nghệ</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Số lượng</label>
+                                <input type="number" id="bookQuantity" min="1" value="10">
+                            </div>
+                            <div class="form-group">
+                                <label>Vị trí</label>
+                                <input type="text" id="bookLocation" placeholder="Kệ A1-02">
+                            </div>
+                        </div>
+                    
+                        <div class="form-group">
+                            <label>Ảnh bìa sách</label>
+                            <div class="upload-box">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <p>Kéo thả ảnh hoặc nhấn để tải lên</p>
+                                <input type="file" hidden id="bookCoverInput">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-secondary btn-close-modal">Hủy bỏ</button>
+                    <button class="btn-primary" type="submit" form="addBookForm" id="btnSaveBook">Lưu sách</button>
+                </div>
+            </div>
+        </div>
+        <div class="content-wrapper">   
             <div class="toolbar">
                 <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
                     <h3 style="margin:0; color: #333; font-size: 1.5rem;">Tủ Sách</h3>
@@ -147,6 +251,7 @@
     </main>
 
     <script>
+        // 1. Chuyển đổi View (Lưới / Danh sách)
         const btnGrid = document.getElementById('btnGridView');
         const btnList = document.getElementById('btnListView');
         const contentWrapper = document.querySelector('.content-wrapper');
@@ -161,6 +266,73 @@
             btnList.classList.add('active');
             btnGrid.classList.remove('active');
             contentWrapper.classList.add('list-mode');
+        });
+
+        // 2. Logic Modal
+        const modal = document.getElementById('addBookModal');
+        const btnAdd = document.querySelector('.btn-add'); 
+        const closeBtns = document.querySelectorAll('.btn-close-modal');
+        const overlay = document.querySelector('.modal-overlay');
+        const modalTitle = document.getElementById('modalTitle');
+        const btnSaveBook = document.getElementById('btnSaveBook');
+        const bookForm = document.getElementById('addBookForm');
+        // Lấy nút edit ở cả 2 view (nút có chứa icon .fa-pen)
+        const editBtns = document.querySelectorAll('.fa-pen');
+
+        const openModal = () => modal.classList.add('active');
+        const closeModal = () => modal.classList.remove('active');
+
+        // Nút Thêm mới
+        btnAdd.addEventListener('click', () => {
+            bookForm.reset(); // Xóa trắng form cũ
+            modalTitle.innerText = "Thêm sách mới";
+            btnSaveBook.innerText = "Lưu sách";
+            openModal();
+        });
+
+        // Nút Sửa (Edit)
+        editBtns.forEach(btn => {
+            // Tìm thẻ button cha gần nhất của icon cây bút
+            btn.closest('button').addEventListener('click', (e) => {
+                e.stopPropagation(); // Ngăn sự kiện nổi bọt
+
+                modalTitle.innerText = "Cập nhật thông tin sách";
+                btnSaveBook.innerText = "Lưu thay đổi";
+
+                // --- MOCK DATA: Điền dữ liệu giả định ---
+                document.getElementById('bookISBN').value = "8934974179672";
+                document.getElementById('bookName').value = "Harry Potter và Hòn đá Phù thủy";
+                document.getElementById('bookAuthor').value = "J.K. Rowling";
+                document.getElementById('bookSupplier').value = "NXB Trẻ";
+                document.getElementById('bookPublisher').value = "Trẻ";
+                document.getElementById('bookYear').value = "2002";
+                document.getElementById('bookFormat').value = "mem"; 
+                
+                document.getElementById('bookPages').value = "366";
+                document.getElementById('bookSize').value = "20 x 14 cm";
+                document.getElementById('bookWeight').value = "300";
+                
+                document.getElementById('bookCategory').value = "vh";
+                document.getElementById('bookQuantity').value = "15";
+                document.getElementById('bookLocation').value = "Kệ A1 - T2";
+
+                openModal();
+            });
+        });
+
+        // Đóng Modal
+        closeBtns.forEach(btn => btn.addEventListener('click', closeModal));
+        overlay.addEventListener('click', closeModal);
+
+        // Upload Ảnh
+        const uploadBox = document.querySelector('.upload-box');
+        const fileInput = document.getElementById('bookCoverInput');
+        
+        uploadBox.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', (e) => {
+            if(e.target.files.length > 0) {
+                uploadBox.innerHTML = `<p style="color:#333; font-weight:600;">${e.target.files[0].name}</p>`;
+            }
         });
     </script>
 </body>

@@ -1,6 +1,4 @@
-/* --- css/books.css --- */
-
-/* 1. Toolbar (Thanh công cụ & Bộ lọc) */
+/* --- 1. Toolbar (Thanh công cụ & Bộ lọc) --- */
 .toolbar {
     display: flex;
     justify-content: space-between;
@@ -42,14 +40,14 @@
     border-color: var(--primary-blue);
 }
 
-/* 2. Grid Layout (Lưới chứa các thẻ sách) */
+/* --- 2. Grid Layout --- */
 .book-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
     gap: 25px;
 }
 
-/* 3. Book Card (Thẻ sách) */
+/* --- 3. Book Card --- */
 .book-card {
     background: white;
     border-radius: 12px;
@@ -65,7 +63,6 @@
     box-shadow: 0 10px 25px rgba(0,0,0,0.1);
 }
 
-/* Phần ảnh bìa */
 .book-cover-container {
     position: relative;
     height: 300px;
@@ -93,7 +90,7 @@
 .status-available { background: var(--success-text); }
 .status-out { background: var(--danger-text); }
 
-/* Phần thông tin sách */
+/* Thông tin sách */
 .book-info {
     padding: 15px;
     flex: 1;
@@ -139,11 +136,123 @@
 .action-group .btn-card-action:last-child { border-top-right-radius: 6px; border-bottom-right-radius: 6px; border-left: none; }
 .btn-delete-card:hover { background: var(--danger-bg); color: var(--danger-text); border-color: var(--danger-bg); }
 
-/* --- List View Styles --- */
+/* --- 4. List View Styles --- */
 .book-list-view { display: none; }
 
-/* Class JS toggle */
 .list-mode .book-grid { display: none; }
 .list-mode .book-list-view { display: block; }
-
 .list-cover { width: 45px; height: 65px; object-fit: cover; border-radius: 4px; border: 1px solid #eee; }
+
+/* --- 5. MODAL STYLES (Phần quan trọng) --- */
+.modal {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 1000;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.modal.active { opacity: 1; visibility: visible; }
+
+.modal-overlay {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(2px);
+}
+
+.modal-content {
+    background: white;
+    width: 600px; /* Tăng độ rộng */
+    max-width: 90%;
+    border-radius: 12px;
+    position: relative;
+    z-index: 2;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+    transform: translateY(20px);
+    transition: transform 0.3s ease;
+    display: flex; flex-direction: column;
+}
+
+.modal.active .modal-content { transform: translateY(0); }
+
+/* Header, Body, Footer Modal */
+.modal-header {
+    padding: 20px 25px;
+    border-bottom: 1px solid #eee;
+    display: flex; justify-content: space-between; align-items: center;
+}
+.modal-header h3 { margin: 0; color: #333; }
+.btn-close-modal { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #888; }
+.btn-close-modal:hover { color: #333; }
+
+.modal-body { padding: 25px; max-height: 70vh; overflow-y: auto; }
+
+.modal-footer {
+    padding: 15px 25px;
+    border-top: 1px solid #eee;
+    background: #f9f9f9;
+    border-bottom-left-radius: 12px; border-bottom-right-radius: 12px;
+    display: flex; justify-content: flex-end; gap: 10px;
+}
+
+/* --- 6. FORM STYLES --- */
+.form-group { margin-bottom: 15px; }
+.form-group label { display: block; margin-bottom: 8px; font-weight: 500; color: #555; font-size: 0.9rem; }
+.form-group input, .form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    box-sizing: border-box; 
+}
+.form-group input:focus, .form-group select:focus {
+    border-color: var(--primary-blue);
+    outline: none;
+}
+
+.form-row { display: flex; gap: 15px; }
+.form-row .form-group { flex: 1; }
+
+/* Chia 3 cột */
+.form-row.cols-3 .form-group {
+    flex: 0 0 32%;
+    min-width: 0;
+}
+
+/* Input có đơn vị (gr) */
+.input-suffix {
+    position: relative;
+    display: flex; align-items: center;
+}
+.input-suffix input { padding-right: 35px; }
+.input-suffix span {
+    position: absolute; right: 10px;
+    color: #888; font-size: 0.85rem; pointer-events: none;
+}
+
+/* Upload Box */
+.upload-box {
+    border: 2px dashed #ddd;
+    padding: 20px; text-align: center;
+    border-radius: 8px; cursor: pointer; color: #888;
+    transition: all 0.2s;
+}
+.upload-box:hover { border-color: var(--primary-blue); color: var(--primary-blue); background: #f0f7ff; }
+.upload-box i { font-size: 2rem; margin-bottom: 10px; }
+
+/* Buttons Modal */
+.btn-primary {
+    background: var(--primary-blue); color: white;
+    padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: 500;
+}
+.btn-secondary {
+    background: white; color: #555; border: 1px solid #ddd;
+    padding: 10px 20px; border-radius: 6px; cursor: pointer;
+}
+.btn-secondary:hover { background: #eee; }
+.btn-primary:hover { opacity: 0.9; }
