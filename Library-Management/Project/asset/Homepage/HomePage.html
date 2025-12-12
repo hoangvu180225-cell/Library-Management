@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thư viện Bách Khoa - Library Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../style/HomePage/Homepage.css">
+</head>
+<body>
+
+    <header class="header"> 
+        <div class="header-logo">
+            <img src="../icons/Logo HUST.png" alt="Logo HUST">
+        </div>
+        
+        <div class="header-middle">
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" placeholder="Tìm tên sách, tác giả, ISBN...">
+            </div>
+        </div>
+
+        <div class="header-right guest">
+            <button id="Login-Btn" class="btn btn-outline">Đăng nhập</button>
+            <button id="Register-Btn" class="btn btn-primary">Đăng ký</button>
+        </div>
+
+        <div class="header-right user" style="display: none;"> 
+            <button class="nav-link">Tìm sách</button>
+            <button class="nav-link">Sách của tôi</button>
+            <button class="nav-link">Thông báo</button>
+            <button class="nav-link">Giới thiệu</button>
+            <div class="user-avatar">
+                <img src="https://ui-avatars.com/api/?name=Phan+Vu&background=random" alt="Avatar">
+            </div>
+        </div>
+    </header>
+
+    <section class="intro">
+        <div class="intro-content">
+            <h1>Chào mừng đến với thư viện!</h1>
+            <p>Kho tàng tri thức - Khởi nguồn sáng tạo. <br>Tra cứu hàng ngàn tài liệu, giáo trình và sách tham khảo chất lượng cao.</p>
+        </div>
+        <div class="intro-image">
+            <img src="../../images/Library2.png" alt="Library Illustration">
+        </div>
+    </section>
+
+    <section class="category-section">
+        <div class="section-header">
+            <i class="fa-solid fa-layer-group"></i> Danh mục sách
+        </div>
+        <div class="category-list">
+            <button class="cat-btn active">Tất cả</button>
+            <button class="cat-btn">Hành động</button>
+            <button class="cat-btn">Khoa học viễn tưởng</button>
+            <button class="cat-btn">Lãng mạn</button>
+            <button class="cat-btn">Lịch sử</button>
+            <button class="cat-btn">Tiểu thuyết</button>
+            <button class="cat-btn">Thiếu nhi</button>
+        </div>
+    </section>
+
+    <div class="main-container">
+        
+        <div class="book-grid">
+            
+            <div class="book-card">
+                <div class="book-thumb">
+                    <span class="badge in-stock">Còn 15</span>
+                    <img src="../../images/HP1.jpg" alt="Book Cover">
+                </div>
+                <div class="book-details">
+                    <h3 class="book-title">Harry Potter và Hòn đá Phù thủy</h3>
+                    <p class="book-author">J. K. Rowling</p>
+                    <div class="book-meta">
+                        <span class="genre">Văn học</span>
+                        <span class="rating"><i class="fa-solid fa-star"></i> 4.8</span>
+                    </div>
+                    <p class="book-desc">Harry Potter và Hòn đá Phù thủy là ấn phẩm đầu tay và là phần đầu tiên của bộ tiểu thuyết...</p>
+                </div>
+                <div class="book-actions">
+                    <button class="btn-text">Xem chi tiết</button>
+                    <div class="action-icons">
+                        <button class="icon-btn edit"><i class="fa-solid fa-pen"></i></button>
+                        <button class="icon-btn delete"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="book-card">
+                <div class="book-thumb">
+                    <span class="badge out-stock">Hết hàng</span>
+                    <img src="../../images/HP2.jpg" alt="Book Cover">
+                </div>
+                <div class="book-details">
+                    <h3 class="book-title">Harry Potter và Phòng chứa Bí mật</h3>
+                    <p class="book-author">J. K. Rowling</p>
+                    <div class="book-meta">
+                        <span class="genre">Văn học</span>
+                        <span class="rating"><i class="fa-solid fa-star"></i> 4.5</span>
+                    </div>
+                    <p class="book-desc">Harry Potter và Phòng chứa Bí mật là quyển thứ hai trong loạt truyện Harry Potter...</p>
+                </div>
+                <div class="book-actions">
+                    <button class="btn-text">Xem chi tiết</button>
+                    <div class="action-icons">
+                        <button class="icon-btn edit"><i class="fa-solid fa-pen"></i></button>
+                        <button class="icon-btn delete"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>
+            </div>
+
+             <div class="book-card">
+                <div class="book-thumb">
+                    <span class="badge in-stock">Còn 5</span>
+                    <img src="../../images/HP3.jpg" alt="Book Cover">
+                </div>
+                <div class="book-details">
+                    <h3 class="book-title">Harry Potter và Tên tù nhân ngục Azkaban</h3>
+                    <p class="book-author">J. K. Rowling</p>
+                    <div class="book-meta">
+                        <span class="genre">Văn học</span>
+                        <span class="rating"><i class="fa-solid fa-star"></i> 4.9</span>
+                    </div>
+                    <p class="book-desc">Harry Potter và tên tù nhân ngục Azkaban là cuốn tiểu thuyết giả tưởng kỳ ảo viết bởi...</p>
+                </div>
+                <div class="book-actions">
+                    <button class="btn-text">Xem chi tiết</button>
+                    <div class="action-icons">
+                        <button class="icon-btn edit"><i class="fa-solid fa-pen"></i></button>
+                        <button class="icon-btn delete"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            </div>
+
+        <aside class="sidebar-rank">
+            <div class="rank-header">
+                <h3>Bảng xếp hạng</h3>
+                <div class="time-filter">
+                    <button class="active">Tuần</button>
+                    <button>Tháng</button>
+                </div>
+            </div>
+
+            <div class="rank-list">
+                <div class="rank-item">
+                    <div class="rank-num top-1">1</div>
+                    <img src="../../images/HP1.jpg" alt="Rank 1">
+                    <div class="rank-info">
+                        <h4>Harry Potter 1</h4>
+                        <span class="views">1.2k lượt mượn</span>
+                    </div>
+                </div>
+                
+                <div class="rank-item">
+                    <div class="rank-num top-2">2</div>
+                    <img src="../../images/HP2.jpg" alt="Rank 2">
+                    <div class="rank-info">
+                        <h4>Harry Potter 2</h4>
+                        <span class="views">980 lượt mượn</span>
+                    </div>
+                </div>
+
+                <div class="rank-item">
+                    <div class="rank-num top-3">3</div>
+                    <img src="../../images/HP3.jpg" alt="Rank 3">
+                    <div class="rank-info">
+                        <h4>Harry Potter 3</h4>
+                        <span class="views">850 lượt mượn</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <div id="loginModal" class="modal-overlay">
+        <div class="modal-box">
+            <span class="close-modal">&times;</span>
+            <div class="modal-header">
+                <h2>Đăng nhập</h2>
+                <p>Chào mừng bạn quay trở lại!</p>
+            </div>
+            <form id="login-form">
+                <div class="input-group">
+                    <label>Tên đăng nhập</label>
+                    <input type="text" placeholder="Nhập tên đăng nhập">
+                </div>
+                <div class="input-group">
+                    <label>Mật khẩu</label>
+                    <input type="password" placeholder="Nhập mật khẩu">
+                </div>
+                <div class="form-footer">
+                    <a href="#">Quên mật khẩu?</a>
+                </div>
+                <button type="submit" class="btn-submit">Đăng nhập</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="../../script/Homepage.js"></script>
+</body>
+</html>

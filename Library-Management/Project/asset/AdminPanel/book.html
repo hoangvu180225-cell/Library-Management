@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quản lý Sách - Thư viện</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="../css/main.css">
-    <link rel="stylesheet" href="../css/book.css">
+    <link rel="stylesheet" href="../../style/AdminPanel/main.css">
+    <link rel="stylesheet" href="../../style/AdminPanel/book.css">
 </head>
 <body>
 
@@ -170,7 +170,7 @@
             <div class="book-grid" id="bookGrid">
                 <div class="book-card">
                     <div class="book-cover-container">
-                        <img src="../../../images/HP1.jpg" alt="Book" class="book-cover-img">
+                        <img src="../../images/HP1.jpg" alt="Book" class="book-cover-img">
                         <span class="book-status-badge status-available">Còn 15</span>
                     </div>
                     <div class="book-info">
@@ -191,7 +191,7 @@
                 
                 <div class="book-card">
                     <div class="book-cover-container">
-                        <img src="../../../images/HP3.jpg" alt="Book" class="book-cover-img" style="opacity:0.6; filter:grayscale(50%);">
+                        <img src="../../images/HP3.jpg" alt="Book" class="book-cover-img" style="opacity:0.6; filter:grayscale(50%);">
                         <span class="book-status-badge status-out">Hết hàng</span>
                     </div>
                     <div class="book-info">
@@ -333,6 +333,28 @@
             if(e.target.files.length > 0) {
                 uploadBox.innerHTML = `<p style="color:#333; font-weight:600;">${e.target.files[0].name}</p>`;
             }
+        });
+
+        const deleteBtns = document.querySelectorAll('.btn-delete, .btn-delete-card');
+
+        deleteBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                // Ngăn sự kiện nổi bọt (để không bị kích hoạt sự kiện click vào thẻ sách/dòng)
+                e.stopPropagation();
+
+                if(confirm('Bạn có chắc chắn muốn xóa sách này không?')) {
+                    // Tìm phần tử cha là Thẻ sách (Grid) hoặc Dòng bảng (List)
+                    const card = btn.closest('.book-card');
+                    const row = btn.closest('tr');
+
+                    // Xóa phần tử tìm thấy
+                    if(card) card.remove();
+                    if(row) row.remove();
+                    
+                    // (Optional) Sau này chỗ này sẽ là gọi API xóa: 
+                    // fetch('/api/books/' + id, { method: 'DELETE' })...
+                }
+            });
         });
     </script>
 </body>

@@ -6,8 +6,8 @@
     <title>Quản lý Người dùng - Thư viện</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <link rel="stylesheet" href="../css/main.css">
-    <link rel="stylesheet" href="../css/user.css">
+    <link rel="stylesheet" href="../../style/AdminPanel/main.css">
+    <link rel="stylesheet" href="../../style/AdminPanel/user.css">
 </head>
 <body>
     <nav class="sidebar">
@@ -248,6 +248,26 @@
         // 3. Đóng Modal
         closeBtns.forEach(btn => btn.addEventListener('click', closeModal));
         overlay.addEventListener('click', closeModal);
+
+        // --- LOGIC XÓA (Dùng chung cho Staff và User) ---
+    const deleteBtns = document.querySelectorAll('.btn-delete');
+
+    deleteBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation(); // Ngăn sự kiện click nhầm vào dòng
+
+            // Kiểm tra xem đang ở trang nào để hiện thông báo cho hợp lý
+            const msg = document.title.includes("Nhân sự") 
+                        ? 'Bạn có chắc muốn xóa nhân viên này?' 
+                        : 'Bạn có chắc muốn xóa người dùng này?';
+
+            if(confirm(msg)) {
+                // Tìm dòng tr chứa nút bấm và xóa nó đi
+                const row = btn.closest('tr');
+                if(row) row.remove();
+            }
+        });
+    });
     </script>
 </body>
 </html>
