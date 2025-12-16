@@ -26,12 +26,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- 2. XỬ LÝ NÚT DANH MỤC ---
+    // --- 2. XỬ LÝ NÚT DANH MỤC/RANK TIME ---
     const catBtns = document.querySelectorAll('.cat-btn');
+    const rankTime = document.querySelectorAll('.ranktime');
     catBtns.forEach(btn => {
         btn.addEventListener('click', function() {
             // Xóa class active ở nút cũ
             document.querySelector('.cat-btn.active').classList.remove('active');
+            // Thêm class active vào nút được click
+            this.classList.add('active');
+        });
+    });
+
+    rankTime.forEach(btn => {
+        btn.addEventListener('click', function() {
+            // Xóa class active ở nút cũ
+            document.querySelector('.ranktime.active').classList.remove('active');
             // Thêm class active vào nút được click
             this.classList.add('active');
         });
@@ -65,4 +75,24 @@ document.addEventListener('DOMContentLoaded', () => {
             document.querySelector('.header-right.user').style.display = 'flex';
         });
     }
+
+    // --- 5. Mở tran chi tiết sách --- 
+    const detailBtns = document.querySelectorAll('.btn-text');
+
+    detailBtns.forEach(btn => {
+        /*
+        button.addEventListener("click", (event) => {
+            // Lấy id sách từ thuộc tính data-id
+            const bookId = event.target.getAttribute("data-id");
+            
+            // Chuyển trang kèm theo id
+            if (bookId) {
+                window.location.href = `BookDetail.html?id=${bookId}`;
+            }
+        });
+        */
+        btn.addEventListener("click", function() {
+            window.location.href = 'BookDetail.html';
+        })
+    })
 });
