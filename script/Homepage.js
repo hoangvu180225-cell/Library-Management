@@ -143,7 +143,7 @@ function setupHeaderNav() {
     const logo = document.querySelector('.header-logo');
     if(logo) {
         logo.style.cursor = 'pointer';
-        logo.addEventListener('click', () => window.location.href = 'index.html');
+        logo.addEventListener('click', () => window.location.href = 'HomePage.html');
     }
 }
 
