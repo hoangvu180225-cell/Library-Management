@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8">
+    <title>Thông báo - Thư viện Bách Khoa</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../style/HomePage/Homepage.css">
+</head>
+<body>
+    <header class="header"> 
+        <div class="header-logo">
+            <img src="../../icons/Logo HUST.png" alt="Logo HUST">
+        </div>
+        
+        <div class="header-middle">
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" placeholder="Tìm tên sách, tác giả, ISBN...">
+            </div>
+        </div>
+
+        <div class="header-right guest">
+            <button id="Login-Btn" class="btn btn-outline">Đăng nhập</button>
+            <button id="Register-Btn" class="btn btn-primary">Đăng ký</button>
+        </div>
+
+        <div class="header-right user" style="display: none;"> 
+            <button id="nav-home" class="nav-link">Trang Chủ</button>
+            <button id="nav-books" class="nav-link">Sách của tôi</button>
+            <button id="nav-policy" class="nav-link">Chính sách</button>
+            <button id="nav-contact" class="nav-link">Liên hệ</button>
+            <button id="nav-notif" class="nav-link">Thông báo</button>
+            <div class="user-avatar">
+                <img src="https://ui-avatars.com/api/?name=Phan+Vu&background=random" alt="Avatar">
+            </div>
+        </div>
+    </header>
+
+    <div class="page-container">
+        <h1 class="page-title">Bảng tin thư viện</h1>
+        <div class="content-box" style="padding: 10px 0;"> <div class="notif-item">
+                <div class="notif-date"><i class="fa-regular fa-clock"></i> 25/12/2025</div>
+                <div class="notif-title">Thông báo nghỉ Tết Dương lịch 2026 <span class="badge-new">Mới</span></div>
+                <p>Thư viện sẽ đóng cửa từ ngày 01/01/2026 đến hết ngày 03/01/2026. Chúc các bạn sinh viên kỳ nghỉ vui vẻ.</p>
+            </div>
+
+            <div class="notif-item">
+                <div class="notif-date"><i class="fa-regular fa-clock"></i> 20/12/2025</div>
+                <div class="notif-title">Cập nhật 500 đầu sách Khoa học máy tính</div>
+                <p>Thư viện vừa nhập về lô giáo trình mới phục vụ cho kỳ học 2025.2, bao gồm các sách về AI, Big Data...</p>
+            </div>
+
+            <div class="notif-item">
+                <div class="notif-date"><i class="fa-regular fa-clock"></i> 10/12/2025</div>
+                <div class="notif-title">Bảo trì hệ thống mượn sách online</div>
+                <p>Hệ thống sẽ tạm ngưng hoạt động từ 0h00 đến 4h00 ngày 12/12 để nâng cấp server.</p>
+            </div>
+
+        </div>
+    </div>
+
+    <footer class="footer"><div class="footer-bottom">&copy; 2025 Library Management System</div></footer>
+
+    <div id="loginModal" class="modal-overlay">
+        <div class="modal-box">
+            <span class="close-modal">&times;</span>
+            <div class="modal-header">
+                <h2>Đăng nhập</h2>
+                <p>Chào mừng bạn quay trở lại!</p>
+            </div>
+            <form id="login-form">
+                <div class="input-group">
+                    <label>Tên đăng nhập</label>
+                    <input type="text" placeholder="Nhập tên đăng nhập" required>
+                </div>
+                <div class="input-group">
+                    <label>Mật khẩu</label>
+                    <input type="password" placeholder="Nhập mật khẩu" required>
+                </div>
+                <div class="form-footer">
+                    <a href="#">Quên mật khẩu?</a>
+                </div>
+                <button type="submit" class="btn-submit">Đăng nhập</button>
+            </form>
+        </div>
+    </div>
+    <script src="../../script/Homepage.js"></script>
+</body>
+</html>

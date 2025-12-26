@@ -1,0 +1,156 @@
+/* --- CẤU HÌNH TRANG --- */
+.mybooks-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.page-title {
+    margin-bottom: 0; /* Override style cũ */
+    text-align: left;
+}
+
+/* --- TABS BỘ LỌC --- */
+.status-tabs {
+    display: flex;
+    background: white;
+    padding: 5px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.tab-btn {
+    border: none;
+    background: transparent;
+    padding: 8px 20px;
+    border-radius: 6px;
+    font-weight: 600;
+    color: var(--text-light);
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.tab-btn:hover { color: var(--primary-color); background: #f1f5f9; }
+.tab-btn.active { background: var(--primary-light); color: white; }
+
+/* --- DANH SÁCH SÁCH (GRID 1 CỘT) --- */
+.my-book-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* --- THẺ SÁCH (ITEM) --- */
+.my-book-item {
+    display: flex;
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: var(--shadow-card);
+    transition: 0.3s;
+    align-items: center;
+    border: 1px solid transparent;
+}
+
+.my-book-item:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-hover);
+    border-color: #cbd5e1;
+}
+
+.my-book-item img {
+    width: 80px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 6px;
+    margin-right: 25px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.item-info {
+    flex: 1; /* Chiếm hết khoảng trống ở giữa */
+}
+
+.item-info h3 {
+    font-size: 1.2rem;
+    color: var(--text-dark);
+    margin-bottom: 5px;
+}
+
+.item-info .author {
+    color: var(--text-light);
+    margin-bottom: 12px;
+    font-style: italic;
+}
+
+.item-meta p {
+    font-size: 0.9rem;
+    color: var(--text-main);
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.item-meta i { width: 16px; text-align: center; color: var(--text-light); }
+.due-date { color: #e11d48 !important; font-weight: 600; } /* Màu đỏ cho hạn trả */
+
+/* --- PHẦN BÊN PHẢI (TRẠNG THÁI & NÚT) --- */
+.item-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 15px;
+    min-width: 150px;
+}
+
+/* Badge trạng thái */
+.status-badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-badge.borrowed { background: #fef3c7; color: #d97706; } /* Vàng cam */
+.status-badge.bought { background: #dcfce7; color: #16a34a; }   /* Xanh lá */
+.status-badge.wishlist { background: #f1f5f9; color: #64748b; } /* Xám */
+
+/* Nút bấm hành động */
+.btn-action {
+    padding: 8px 16px;
+    border-radius: 6px;
+    border: 1px solid;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    background: transparent;
+    transition: 0.2s;
+}
+
+.btn-action.return {
+    border-color: #d97706; color: #d97706;
+}
+.btn-action.return:hover { background: #d97706; color: white; }
+
+.btn-action.read {
+    border-color: #16a34a; color: #16a34a;
+}
+.btn-action.read:hover { background: #16a34a; color: white; }
+
+.btn-action.remove {
+    border-color: #ef4444; color: #ef4444;
+}
+.btn-action.remove:hover { background: #ef4444; color: white; }
+
+/* Responsive Mobile */
+@media (max-width: 768px) {
+    .my-book-item { flex-direction: column; align-items: flex-start; }
+    .my-book-item img { margin-bottom: 15px; width: 100px; height: 150px; }
+    .item-actions { width: 100%; flex-direction: row; justify-content: space-between; align-items: center; margin-top: 15px; border-top: 1px solid #f1f5f9; padding-top: 15px; }
+}

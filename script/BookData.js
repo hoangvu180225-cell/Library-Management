@@ -69,17 +69,7 @@ const books = [
         desc: "Câu chuyện về Paul Atreides và cuộc chiến giành quyền kiểm soát hành tinh sa mạc Arrakis, nguồn hương dược duy nhất...",
         views: 14567
     },
-    {
-        id: "SCI2",
-        title: "Người về từ Sao Hỏa (The Martian)",
-        author: "Andy Weir",
-        image: "../../images/scifi_2.webp",
-        genre: "Khoa học viễn tưởng",
-        rating: 4.8,
-        stock: 18,
-        desc: "Mark Watney bị bỏ lại một mình trên Sao Hỏa. Anh phải sử dụng trí tuệ và kỹ năng để sinh tồn...",
-        views: 10291
-    },
+  
     {
         id: "SCI3",
         title: "Tam Thể (The Three-Body Problem)",
@@ -95,7 +85,7 @@ const books = [
         id: "SCI4",
         title: "451 Độ F",
         author: "Ray Bradbury",
-        image: "../../images/scifi_4.webp",
+        image: "../../images/scifi_4.jpg",
         genre: "Khoa học viễn tưởng",
         rating: 4.5,
         stock: 22,
@@ -117,7 +107,7 @@ const books = [
         id: "SCI6",
         title: "1984",
         author: "George Orwell",
-        image: "../../images/scifi_6.webp",
+        image: "../../images/scifi_6.jpg",
         genre: "Khoa học viễn tưởng",
         rating: 4.9,
         stock: 40,

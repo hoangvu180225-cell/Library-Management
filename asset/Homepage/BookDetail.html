@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Chi tiết sách - Harry Potter</title>
+        <title>Chi tiết sách</title>
         <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
         
@@ -14,7 +14,7 @@
         
         <header class="header"> 
             <div class="header-logo">
-                <img src="../../icons/Logo HUST.png" alt="Logo HUST">
+                <a href="index.html"><img src="../../icons/Logo HUST.png" alt="Logo HUST"></a>
             </div>
             
             <div class="header-middle">
@@ -36,18 +36,20 @@
         </header>
 
         <div class="breadcrumb">
-            <a href="#">Trang chủ</a> / <a href="#">Văn học</a> / <span>Harry Potter</span>
+            <a href="index.html">Trang chủ</a> / 
+            <a href="#" id="crumb-genre">Thể loại</a> / 
+            <span id="crumb-title">Tên sách</span>
         </div>
 
         <div class="book-container">
             
             <div class="left-column">
                 <div class="product-image-box">
-                    <img class="main-img" src="../../images/HP1.jpg" alt="Harry Potter 1">
+                    <img id="detail-image" class="main-img" src="" alt="Book Cover">
                 </div>
 
                 <div class="action-buttons">
-                    <button class="btn btn-cart"><i class="fa-solid fa-cart-plus"></i> Thêm vào giỏ</button>
+                    <button class="btn btn-cart" onclick="addToCart()"><i class="fa-solid fa-cart-plus"></i> Thêm vào giỏ</button>
                     <button class="btn btn-buy">Mua ngay</button>
                 </div>
 
@@ -71,21 +73,26 @@
             <div class="right-column">
                 
                 <section class="info-block price-block">
-                    <h1 class="product-title">Harry Potter Và Hòn Đá Phù Thuỷ - Tập 1 (Tái Bản)</h1>
+                    <h1 id="detail-title" class="product-title">Đang tải...</h1>
+                    
                     <div class="product-meta">
-                        <span class="author">Tác giả: <a href="#">J.K. Rowling</a></span>
+                        <span class="author">Tác giả: <a href="#" id="detail-author">...</a></span>
                         <span class="separator">|</span>
-                        <span class="rating"><i class="fa-solid fa-star"></i> 4.8 (102 đánh giá)</span>
+                        <span class="rating">
+                            <i class="fa-solid fa-star" style="color: #ffc107;"></i> 
+                            <span id="detail-rating">0</span> 
+                            (<span id="detail-views">0</span> lượt xem)
+                        </span>
                     </div>
                     
                     <div class="price-row">
-                        <span class="current-price">127.500 đ</span>
-                        <span class="original-price">150.000 đ</span>
-                        <span class="discount-tag">-15%</span>
+                        <span id="detail-price" class="current-price">0 đ</span>
+                        <span id="detail-old-price" class="original-price">0 đ</span>
+                        <span class="discount-tag">-20%</span>
                     </div>
 
-                    <div class="stock-status">
-                        <i class="fa-solid fa-check-circle"></i> 108 nhà sách còn hàng
+                    <div id="detail-stock" class="stock-status">
+                        <i class="fa-solid fa-check-circle"></i> Đang kiểm tra...
                     </div>
                 </section>
 
@@ -94,32 +101,24 @@
                     <table class="details-table">
                         <tbody>
                             <tr>
-                                <td>Mã ISBN</td>
-                                <td>8934974179672</td>
+                                <td>Mã sách (ID)</td>
+                                <td id="info-id">...</td>
                             </tr>
                             <tr>
-                                <td>Nhà cung cấp</td>
-                                <td>NXB Trẻ</td>
+                                <td>Thể loại</td>
+                                <td id="info-genre">...</td>
                             </tr>
                             <tr>
                                 <td>Tác giả</td>
-                                <td>J.K.Rowling, Lý Lan (dịch)</td>
+                                <td id="info-author">...</td>
+                            </tr>
+                            <tr>
+                                <td>Nhà xuất bản</td>
+                                <td>NXB Hội Nhà Văn</td>
                             </tr>
                             <tr>
                                 <td>Năm xuất bản</td>
-                                <td>2022</td>
-                            </tr>
-                            <tr>
-                                <td>Trọng lượng</td>
-                                <td>300 gr</td>
-                            </tr>
-                            <tr>
-                                <td>Kích thước</td>
-                                <td>20 x 14 cm</td>
-                            </tr>
-                            <tr>
-                                <td>Số trang</td>
-                                <td>366</td>
+                                <td>2024</td>
                             </tr>
                             <tr>
                                 <td>Hình thức</td>
@@ -132,57 +131,21 @@
                 <section class="info-block desc-block">
                     <h2>Mô tả sản phẩm</h2>
                     <div class="desc-content">
-                        <p>Khi một lá thư được gởi đến cho cậu bé Harry Potter bình thường và bất hạnh, cậu khám phá ra một bí mật đã được che giấu suốt cả một thập kỉ. Cha mẹ cậu chính là phù thủy và cả hai đã bị lời nguyền của Chúa tể Hắc ám giết hại khi Harry mới chỉ là một đứa trẻ.</p>
-                        <br>
-                        <p>Thoát khỏi những người giám hộ Muggle không thể chịu đựng nổi để nhập học vào trường Hogwarts, một trường đào tạo phù thủy với những bóng ma và phép thuật, Harry tình cờ dấn thân vào một cuộc phiêu lưu đầy gai góc khi cậu phát hiện ra một con chó ba đầu đang canh giữ một căn phòng trên tầng ba.</p>
+                        <p id="detail-desc">...</p>
                     </div>
-                    <button class="btn-read-more">Xem thêm nội dung</button>
                 </section>
 
                 <section class="info-block review-block">
                     <h2>Đánh giá sản phẩm</h2>
                     <div class="review-container">
-                        
                         <div class="review-score">
-                            <span class="score-num">0/5</span>
+                            <span class="score-num" id="review-score-big">0/5</span>
                             <div class="stars-grey">
-                                <i class="fa-solid fa-star"></i>
-                                <i class="fa-solid fa-star"></i>
-                                <i class="fa-solid fa-star"></i>
-                                <i class="fa-solid fa-star"></i>
-                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
                             </div>
-                            <p class="count">(0 đánh giá)</p>
+                            <p class="count">Chưa có đánh giá</p>
                         </div>
-
-                        <div class="review-progress">
-                            <div class="progress-row">
-                                <span class="label">5 sao</span>
-                                <div class="bar-bg"><div class="bar-fill" style="width: 0%"></div></div>
-                                <span class="percent">0%</span>
-                            </div>
-                            <div class="progress-row">
-                                <span class="label">4 sao</span>
-                                <div class="bar-bg"><div class="bar-fill" style="width: 0%"></div></div>
-                                <span class="percent">0%</span>
-                            </div>
-                            <div class="progress-row">
-                                <span class="label">3 sao</span>
-                                <div class="bar-bg"><div class="bar-fill" style="width: 0%"></div></div>
-                                <span class="percent">0%</span>
-                            </div>
-                            <div class="progress-row">
-                                <span class="label">2 sao</span>
-                                <div class="bar-bg"><div class="bar-fill" style="width: 0%"></div></div>
-                                <span class="percent">0%</span>
-                            </div>
-                            <div class="progress-row">
-                                <span class="label">1 sao</span>
-                                <div class="bar-bg"><div class="bar-fill" style="width: 0%"></div></div>
-                                <span class="percent">0%</span>
-                            </div>
-                        </div>
-
                         <div class="review-btn-box">
                             <button class="btn-write-review">
                                 <i class="fa-solid fa-pen"></i> Viết đánh giá
@@ -192,5 +155,9 @@
                 </section>
             </div>
         </div>
+
+        <script src="../../script/BookData.js"></script>
+        
+        <script src="../../script/BookDetail.js"></script>
     </body>
 </html>

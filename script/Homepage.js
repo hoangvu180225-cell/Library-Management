@@ -1,71 +1,185 @@
 /* =========================================
-   SCRIPT QUẢN LÝ TRANG CHỦ (HOMEPAGE) - FILTER UPDATE
+   SCRIPT QUẢN LÝ TOÀN BỘ WEBSITE (ALL-IN-ONE)
    ========================================= */
 
-// --- CẤU HÌNH ---
-const ITEMS_PER_PAGE = 6; // Số sách hiển thị trên 1 trang
-let currentPage = 1;      // Trang hiện tại
-let currentCategory = 'Tất cả'; // Danh mục đang chọn (Mặc định lấy tất cả)
+// --- CẤU HÌNH CHUNG ---
+const ITEMS_PER_PAGE = 6;       // Số sách mỗi trang
+let currentPage = 1;            // Trang hiện tại
+let currentCategory = 'Tất cả'; // Danh mục đang chọn
 
 /* =========================================
-   1. KHỞI TẠO (ENTRY POINT)
+   1. ENTRY POINT (CHẠY KHI WEB TẢI XONG)
    ========================================= */
 document.addEventListener('DOMContentLoaded', () => {
-    setupModalLogin();
-    setupCategoryTabs();
-    setupLoginForm();
+    
+    // 1.1 KHỞI TẠO CÁC TÍNH NĂNG CHUNG (HEADER, LOGIN)
+    checkLoginStatus();    // Kiểm tra đã đăng nhập chưa
+    setupHeaderNav();      // Cài đặt chuyển trang trên menu
+    setupModalLogin();     // Cài đặt popup đăng nhập
+    setupLoginForm();      // Xử lý nút Submit đăng nhập
 
-    // Kiểm tra dữ liệu và render
-    if (typeof books !== 'undefined' && Array.isArray(books)) {
-        // 1. Load trang đầu tiên
-        loadPage(1);
+    // 1.2 KHỞI TẠO RIÊNG CHO TRANG CHỦ (Nếu tìm thấy chỗ hiện sách)
+    const bookContainer = document.getElementById('book-list-container');
+    if (bookContainer && typeof books !== 'undefined') {
+        setupCategoryTabs(); // Cài đặt nút lọc danh mục
+        loadPage(1);         // Load sách trang 1
+        renderRanking(books);// Load bảng xếp hạng
+    }
 
-        // 2. Render bảng xếp hạng (Luôn dùng toàn bộ sách, không phụ thuộc bộ lọc)
-        renderRanking(books);
-    } else {
-        console.error("LỖI: Không tìm thấy dữ liệu 'books'.");
-        const container = document.getElementById('book-list-container');
-        if(container) container.innerHTML = '<p style="text-align:center; color:red;">Lỗi dữ liệu!</p>';
+    // 1.3 KHỞI TẠO RIÊNG CHO TRANG LIÊN HỆ (Nếu tìm thấy form)
+    const contactForm = document.querySelector('.contact-form form');
+    if (contactForm) {
+        setupContactLogic(contactForm);
     }
 });
 
 /* =========================================
-   2. LOGIC LỌC, PHÂN TRANG & RENDER
+   2. LOGIC ĐĂNG NHẬP & TÀI KHOẢN (QUAN TRỌNG)
    ========================================= */
 
-// Hàm trung tâm: Lọc sách -> Phân trang -> Render
+// Kiểm tra trạng thái đăng nhập từ localStorage
+function checkLoginStatus() {
+    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    const guestNav = document.querySelector('.header-right.guest'); // Nút Đăng nhập/Đăng ký
+    const userNav = document.querySelector('.header-right.user');   // Avatar user
+
+    if (isLoggedIn) {
+        // Đã đăng nhập
+        if(guestNav) guestNav.style.display = 'none';
+        if(userNav) {
+            userNav.style.display = 'flex';
+            
+            // Tính năng Đăng xuất khi bấm vào Avatar
+            const avatar = userNav.querySelector('.user-avatar');
+            if(avatar) {
+                avatar.onclick = () => {
+                    if(confirm("Bạn muốn đăng xuất?")) {
+                        localStorage.setItem('isLoggedIn', 'false');
+                        window.location.reload(); // Tải lại trang để reset
+                    }
+                };
+                avatar.title = "Bấm để đăng xuất";
+            }
+        }
+    } else {
+        // Chưa đăng nhập
+        if(guestNav) guestNav.style.display = 'flex';
+        if(userNav) userNav.style.display = 'none';
+    }
+}
+
+// Cài đặt nút mở/đóng Modal
+function setupModalLogin() {
+    const loginBtn = document.getElementById('Login-Btn');
+    const modal = document.getElementById('loginModal');
+    const closeBtn = document.querySelector('.close-modal');
+
+    // Chỉ gán sự kiện nếu nút và modal CÓ tồn tại trên trang này
+    if (loginBtn && modal) {
+        loginBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            modal.style.display = 'block';
+        });
+    }
+
+    if (closeBtn && modal) {
+        closeBtn.addEventListener('click', () => modal.style.display = 'none');
+    }
+
+    // Đóng khi bấm ra ngoài
+    window.addEventListener('click', (e) => {
+        if (modal && e.target == modal) {
+            modal.style.display = 'none';
+        }
+    });
+}
+
+// Xử lý sự kiện Submit Form Đăng nhập
+function setupLoginForm() {
+    const loginForm = document.getElementById('login-form');
+    const modal = document.getElementById('loginModal');
+    
+    if (loginForm) {
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault(); // Chặn load lại trang
+            
+            // 1. Giả lập đăng nhập thành công
+            alert("Đăng nhập thành công! (Demo)");
+            
+            // 2. Lưu trạng thái
+            localStorage.setItem('isLoggedIn', 'true');
+            
+            // 3. Ẩn modal và cập nhật giao diện
+            if (modal) modal.style.display = 'none';
+            checkLoginStatus();
+        });
+    }
+}
+
+/* =========================================
+   3. LOGIC CHUYỂN TRANG (NAVIGATION)
+   ========================================= */
+function setupHeaderNav() {
+    // Map ID nút -> File HTML đích
+    const navLinks = {
+        'nav-home': 'HomePage.html',
+        'nav-policy': 'Policy.html',
+        'nav-contact': 'Contact.html',
+        'nav-notif': 'Notification.html',
+        'nav-books': 'MyBook.html' 
+    };
+
+    for (const [id, url] of Object.entries(navLinks)) {
+        const btn = document.getElementById(id);
+        if (btn) {
+            btn.addEventListener('click', () => {
+                if (url === '#') alert("Tính năng đang phát triển!");
+                else window.location.href = url;
+            });
+        }
+    }
+
+    // Click Logo về trang chủ
+    const logo = document.querySelector('.header-logo');
+    if(logo) {
+        logo.style.cursor = 'pointer';
+        logo.addEventListener('click', () => window.location.href = 'index.html');
+    }
+}
+
+/* =========================================
+   4. LOGIC HIỂN THỊ SÁCH (LỌC & PHÂN TRANG)
+   ========================================= */
+
+// Hàm điều phối chính
 function loadPage(page) {
     currentPage = page;
     
-    // BƯỚC 1: LỌC SÁCH THEO DANH MỤC
-    // Nếu chọn 'Tất cả' thì lấy full mảng, ngược lại filter theo genre
+    // 1. Lọc sách theo danh mục hiện tại
     const filteredBooks = (currentCategory === 'Tất cả') 
         ? books 
         : books.filter(book => book.genre === currentCategory);
 
-    // BƯỚC 2: TÍNH TOÁN PHÂN TRANG TRÊN DANH SÁCH ĐÃ LỌC
+    // 2. Tính toán phân trang
     const start = (page - 1) * ITEMS_PER_PAGE;
     const end = start + ITEMS_PER_PAGE;
-    
-    // Cắt mảng sách cho trang hiện tại
     const displayBooks = filteredBooks.slice(start, end);
     
-    // BƯỚC 3: RENDER
+    // 3. Render ra màn hình
     renderBooks(displayBooks);
-    // Truyền vào độ dài của danh sách ĐÃ LỌC để tính số trang
     renderPagination(filteredBooks.length, page);
 }
 
-// Render HTML từng thẻ sách
+// Render HTML sách
 function renderBooks(bookList) {
     const container = document.getElementById('book-list-container');
-    if (!container) return;
+    if (!container) return; // Bảo vệ: Nếu không có container thì dừng
     
-    container.innerHTML = ''; // Xóa nội dung cũ
+    container.innerHTML = ''; // Xóa cũ
 
     if(bookList.length === 0) {
-        container.innerHTML = `<p style="text-align:center; width:100%; color:#64748b; margin-top:40px;">
-            Không tìm thấy sách nào thuộc mục "<strong>${currentCategory}</strong>".
+        container.innerHTML = `<p style="text-align:center; width:100%; color:#64748b; margin-top:30px;">
+            Không có sách nào thuộc mục "${currentCategory}".
         </p>`;
         return;
     }
@@ -75,7 +189,9 @@ function renderBooks(bookList) {
             ? `<span class="badge in-stock">Còn ${book.stock}</span>` 
             : `<span class="badge out-stock">Hết hàng</span>`;
 
-        const bookHTML = `
+        // Format số tiền hoặc số liệu khác nếu cần
+        
+        const html = `
             <div class="book-card">
                 <div class="book-thumb">
                     ${stockBadge}
@@ -93,114 +209,58 @@ function renderBooks(bookList) {
                 <div class="book-actions">
                     <button class="btn-text" onclick="viewDetails('${book.id}')">Xem chi tiết</button>
                 </div>
-            </div>
-        `;
-        container.insertAdjacentHTML('beforeend', bookHTML);
+            </div>`;
+        container.insertAdjacentHTML('beforeend', html);
     });
 }
 
-// Render các nút phân trang
+// Render các nút số trang
 function renderPagination(totalItems, activePage) {
     const paginationContainer = document.getElementById('pagination');
     if (!paginationContainer) return;
     
     paginationContainer.innerHTML = ''; 
-    
     const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
 
-    // Nếu không có trang nào hoặc chỉ 1 trang thì ẩn phân trang
-    if (totalPages <= 1) return;
+    if (totalPages <= 1) return; // Ít sách quá thì ẩn phân trang
+
+    // Helper tạo nút
+    const createBtn = (content, targetPage, isActive = false) => {
+        const btn = document.createElement('button');
+        btn.innerHTML = content;
+        btn.className = `page-btn ${isActive ? 'active' : ''}`;
+        btn.onclick = () => loadPage(targetPage);
+        return btn;
+    };
 
     // Nút Previous
-    const prevBtn = document.createElement('button');
-    prevBtn.innerHTML = '<i class="fa-solid fa-chevron-left"></i>';
-    prevBtn.className = 'page-btn';
-    prevBtn.disabled = activePage === 1;
-    prevBtn.onclick = () => loadPage(activePage - 1);
-    paginationContainer.appendChild(prevBtn);
+    paginationContainer.appendChild(createBtn('<i class="fa-solid fa-chevron-left"></i>', activePage > 1 ? activePage - 1 : 1));
 
-    // Các nút số
+    // Nút số
     for (let i = 1; i <= totalPages; i++) {
-        const btn = document.createElement('button');
-        btn.innerText = i;
-        btn.className = `page-btn ${i === activePage ? 'active' : ''}`;
-        btn.onclick = () => loadPage(i);
-        paginationContainer.appendChild(btn);
+        paginationContainer.appendChild(createBtn(i, i, i === activePage));
     }
 
     // Nút Next
-    const nextBtn = document.createElement('button');
-    nextBtn.innerHTML = '<i class="fa-solid fa-chevron-right"></i>';
-    nextBtn.className = 'page-btn';
-    nextBtn.disabled = activePage === totalPages;
-    nextBtn.onclick = () => loadPage(activePage + 1);
-    paginationContainer.appendChild(nextBtn);
+    paginationContainer.appendChild(createBtn('<i class="fa-solid fa-chevron-right"></i>', activePage < totalPages ? activePage + 1 : totalPages));
 }
 
-/* =========================================
-   3. LOGIC BẢNG XẾP HẠNG (GIỮ NGUYÊN)
-   ========================================= */
-function renderRanking(bookList) {
-    const container = document.getElementById('rank-list-container');
-    if (!container) return;
-    
-    container.innerHTML = '';
-    const sortedBooks = [...bookList].sort((a, b) => (b.views || 0) - (a.views || 0));
-    const topBooks = sortedBooks.slice(0, 5); 
-
-    topBooks.forEach((book, index) => {
-        const rank = index + 1;
-        let rankClass = '';
-        if (rank === 1) rankClass = 'top-1';
-        else if (rank === 2) rankClass = 'top-2';
-        else if (rank === 3) rankClass = 'top-3';
-
-        const viewDisplay = (book.views || 0).toLocaleString();
-
-        const html = `
-            <div class="rank-item">
-                <div class="rank-num ${rankClass}">${rank}</div>
-                <img src="${book.image}" alt="${book.title}" onclick="viewDetails('${book.id}')" style="cursor:pointer">
-                <div class="rank-info">
-                    <h4 style="cursor: pointer;" class="btn-text" onclick="viewDetails('${book.id}')">
-                        ${book.title}
-                    </h4>
-                    <span class="views">${viewDisplay} lượt mượn</span>
-                </div>
-            </div>
-        `;
-        container.insertAdjacentHTML('beforeend', html);
-    });
-}
-
-/* =========================================
-   4. UTILS & EVENTS
-   ========================================= */
-
-function viewDetails(id) {
-    window.location.href = `BookDetail.html?id=${id}`;
-}
-
+// Xử lý nút Danh mục
 function setupCategoryTabs() {
     const catBtns = document.querySelectorAll('.cat-btn');
     catBtns.forEach(btn => {
         btn.addEventListener('click', function() {
-            // 1. Xử lý UI active
+            // Đổi màu nút active
             document.querySelector('.cat-btn.active')?.classList.remove('active');
             this.classList.add('active');
             
-            // 2. Lấy tên danh mục từ nút bấm
-            // .trim() để xóa khoảng trắng thừa nếu có
+            // Lấy tên danh mục và load lại
             currentCategory = this.innerText.trim();
-            
-            console.log("Đang lọc theo:", currentCategory);
-            
-            // 3. Reset về trang 1 và load lại sách
-            loadPage(1);
+            loadPage(1); // Về trang 1
         });
     });
-
-    // Phần Rank Time (Chưa có logic filter rank, chỉ làm UI)
+    
+    // Xử lý nút Rank Time (Chỉ UI)
     const rankTime = document.querySelectorAll('.ranktime');
     rankTime.forEach(btn => {
         btn.addEventListener('click', function() {
@@ -210,31 +270,44 @@ function setupCategoryTabs() {
     });
 }
 
-function setupModalLogin() {
-    const loginBtn = document.getElementById('Login-Btn');
-    const modal = document.getElementById('loginModal');
-    const closeBtn = document.querySelector('.close-modal');
+/* =========================================
+   5. LOGIC BẢNG XẾP HẠNG & LIÊN HỆ
+   ========================================= */
 
-    if (loginBtn && modal) loginBtn.addEventListener('click', () => modal.style.display = 'block');
-    if (closeBtn && modal) closeBtn.addEventListener('click', () => modal.style.display = 'none');
-    window.addEventListener('click', (e) => {
-        if (e.target == modal) modal.style.display = 'none';
+function renderRanking(bookList) {
+    const container = document.getElementById('rank-list-container');
+    if (!container) return;
+    
+    container.innerHTML = '';
+    // Sắp xếp theo views giảm dần, lấy top 5
+    const topBooks = [...bookList].sort((a, b) => (b.views || 0) - (a.views || 0)).slice(0, 5);
+
+    topBooks.forEach((book, index) => {
+        const html = `
+            <div class="rank-item">
+                <div class="rank-num top-${index + 1}">${index + 1}</div>
+                <img src="${book.image}" alt="${book.title}" onclick="viewDetails('${book.id}')" style="cursor:pointer">
+                <div class="rank-info">
+                    <h4 class="btn-text" onclick="viewDetails('${book.id}')" style="cursor:pointer">${book.title}</h4>
+                    <span class="views">${(book.views || 0).toLocaleString()} lượt mượn</span>
+                </div>
+            </div>`;
+        container.insertAdjacentHTML('beforeend', html);
     });
 }
 
-function setupLoginForm() {
-    const loginForm = document.getElementById('login-form');
-    const modal = document.getElementById('loginModal');
-    
-    if (loginForm) {
-        loginForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            alert("Đăng nhập thành công! (Phiên bản Demo)");
-            if (modal) modal.style.display = 'none';
-            const guestNav = document.querySelector('.header-right.guest');
-            const userNav = document.querySelector('.header-right.user');
-            if (guestNav) guestNav.style.display = 'none';
-            if (userNav) userNav.style.display = 'flex';
-        });
-    }
+function setupContactLogic(form) {
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        alert("Cảm ơn bạn! Chúng tôi đã nhận được tin nhắn.");
+        form.reset();
+    });
+}
+
+/* =========================================
+   6. HÀM HỖ TRỢ (UTILS)
+   ========================================= */
+function viewDetails(id) {
+    // Chuyển hướng sang trang chi tiết
+    window.location.href = `BookDetail.html?id=${id}`;
 }

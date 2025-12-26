@@ -798,3 +798,50 @@ body {
     cursor: not-allowed;
     border-color: #f1f5f9;
 }
+
+/* --- STYLE CHO CÁC TRANG CON (Policy, Contact, Notification) --- */
+.page-container {
+    padding: 40px 100px;
+    max-width: 1000px;
+    margin: 0 auto;
+    min-height: 60vh; /* Đẩy footer xuống dưới */
+}
+
+.page-title {
+    text-align: center;
+    color: var(--primary-color);
+    margin-bottom: 30px;
+    font-size: 2.2rem;
+}
+
+.content-box {
+    background: white;
+    padding: 40px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-card);
+}
+
+/* Trang Chính sách */
+.policy-item { margin-bottom: 25px; }
+.policy-item h3 { color: var(--accent-color); margin-bottom: 10px; }
+.policy-item p { line-height: 1.6; color: var(--text-main); }
+
+/* Trang Liên hệ */
+.contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+.contact-form textarea { width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 8px; resize: vertical; height: 120px; }
+
+/* Trang Thông báo */
+.notif-item {
+    padding: 20px;
+    border-bottom: 1px solid #f1f5f9;
+    transition: 0.2s;
+    position: relative;
+}
+.notif-item:hover { background: #f8fafc; }
+.notif-item:last-child { border-bottom: none; }
+.notif-date { font-size: 0.85rem; color: var(--text-light); margin-bottom: 5px; }
+.notif-title { font-size: 1.1rem; color: var(--text-dark); font-weight: 700; margin-bottom: 5px; }
+.badge-new { 
+    background: #ef4444; color: white; padding: 2px 8px; 
+    border-radius: 4px; font-size: 0.7rem; vertical-align: middle; margin-left: 10px;
+}

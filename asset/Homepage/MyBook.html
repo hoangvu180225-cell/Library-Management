@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sách của tôi - Thư viện Bách Khoa</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../style/HomePage/Homepage.css">
+    <link rel="stylesheet" href="../../style/HomePage/MyBook.css">
+</head>
+<body>
+
+    <header class="header"> 
+        <div class="header-logo">
+            <img src="../../icons/Logo HUST.png" alt="Logo HUST">
+        </div>
+        
+        <div class="header-middle">
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" placeholder="Tìm tên sách, tác giả, ISBN...">
+            </div>
+        </div>
+
+        <div class="header-right guest">
+            <button id="Login-Btn" class="btn btn-outline">Đăng nhập</button>
+            <button id="Register-Btn" class="btn btn-primary">Đăng ký</button>
+        </div>
+
+        <div class="header-right user" style="display: none;"> 
+            <button id="nav-home" class="nav-link">Trang Chủ</button>
+            <button id="nav-books" class="nav-link">Sách của tôi</button>
+            <button id="nav-policy" class="nav-link">Chính sách</button>
+            <button id="nav-contact" class="nav-link">Liên hệ</button>
+            <button id="nav-notif" class="nav-link">Thông báo</button>
+            <div class="user-avatar">
+                <img src="https://ui-avatars.com/api/?name=Phan+Vu&background=random" alt="Avatar">
+            </div>
+        </div>
+    </header>
+
+    <div class="page-container">
+        <div class="mybooks-header">
+            <h1 class="page-title">Tủ sách cá nhân</h1>
+            
+            <div class="status-tabs">
+                <button class="tab-btn active" data-status="all">Tất cả</button>
+                <button class="tab-btn" data-status="borrowed">Đang mượn</button>
+                <button class="tab-btn" data-status="bought">Đã mua</button>
+                <button class="tab-btn" data-status="wishlist">Đang quan tâm</button>
+            </div>
+        </div>
+
+        <div class="my-book-list" id="my-book-container">
+            </div>
+    </div>
+
+    <div id="loginModal" class="modal-overlay">
+        </div>
+
+    <footer class="footer">
+        <div class="footer-bottom">&copy; 2025 Library Management System</div>
+    </footer>
+
+    <script src="../../script/BookData.js"></script> 
+    <script src="../../data/User1Data.js"></script> 
+
+    <script src="../../script/Homepage.js"></script> 
+    <script src="../../script/MyBook.js"></script>
+</body>
+</html>
