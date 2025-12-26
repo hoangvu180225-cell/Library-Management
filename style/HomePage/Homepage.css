@@ -1,23 +1,25 @@
-/* --- CẤU HÌNH CHUNG & BẢNG MÀU --- */
+/* =========================================
+   1. CẤU HÌNH CHUNG & BIẾN (VARIABLES)
+   ========================================= */
 :root {
-    /* Primary: Xanh Navy đậm (Style Bách Khoa/Doanh nghiệp) */
-    --primary-color: #0f172a; 
+    /* Primary Colors: Xanh Navy đậm (Style Bách Khoa/Doanh nghiệp) */
+    --primary-color: #0f172a;
     --primary-light: #1e293b;
     --accent-color: #2563EB; /* Xanh dương sáng cho nút bấm */
-    
+
     /* Backgrounds */
     --bg-body: #f1f5f9;
     --bg-white: #ffffff;
-    
-    /* Gradient Banner: Từ Đen Xanh sang Xanh Dương Đậm */
+
+    /* Gradient Banner */
     --gradient-banner: linear-gradient(135deg, #020617 0%, #1e3a8a 100%);
-    
+
     /* Text Colors */
     --text-main: #334155;
     --text-dark: #0f172a;
     --text-light: #94a3b8;
-    
-    /* Effects */
+
+    /* Effects & Shadows */
     --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     --shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
     --radius: 12px;
@@ -35,7 +37,9 @@ body {
     color: var(--text-main);
 }
 
-/* --- HEADER --- */
+/* =========================================
+   2. HEADER & NAVIGATION
+   ========================================= */
 .header {
     background: var(--bg-white);
     height: 70px;
@@ -46,7 +50,7 @@ body {
     position: sticky;
     top: 0;
     z-index: 100;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .header-logo img {
@@ -59,6 +63,7 @@ body {
     justify-content: center;
 }
 
+/* Search Box */
 .search-box {
     position: relative;
     width: 500px;
@@ -88,6 +93,7 @@ body {
     color: var(--text-light);
 }
 
+/* Header Right Actions */
 .header-right {
     display: flex;
     gap: 15px;
@@ -95,34 +101,33 @@ body {
 }
 
 .header-right.user {
-    display: flex; /* Xếp hàng ngang */
-    align-items: center; /* Căn giữa theo chiều dọc */
-    gap: 20px; /* Khoảng cách giữa các nút */
+    display: flex;
+    align-items: center;
+    gap: 20px;
 }
 
-/* 2. Style cho nút "Danh mục", "Sách của tôi" */
 .nav-link {
-    background: transparent; /* Nền trong suốt */
-    border: none; /* Bỏ viền đen xấu */
+    background: transparent;
+    border: none;
     font-size: 15px;
     font-weight: 600;
-    color: var(--text-dark); /* Màu chữ đen/xám đậm */
+    color: var(--text-dark);
     cursor: pointer;
     transition: 0.2s;
     padding: 5px 0;
 }
 
 .nav-link:hover {
-    color: var(--accent-color); /* Hover đổi màu xanh */
+    color: var(--accent-color);
 }
 
-/* 3. Style cho Avatar tròn */
+/* User Avatar */
 .user-avatar {
-    width: 40px;  /* Chiều rộng cố định */
-    height: 40px; /* Chiều cao cố định */
-    border-radius: 50%; /* Bo tròn 100% */
-    overflow: hidden; /* Cắt phần thừa của ảnh vuông */
-    border: 2px solid #e2e8f0; /* Viền mỏng xung quanh avatar */
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid #e2e8f0;
     cursor: pointer;
     display: flex;
     justify-content: center;
@@ -132,9 +137,10 @@ body {
 .user-avatar img {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Đảm bảo ảnh không bị méo */
+    object-fit: cover;
 }
 
+/* Buttons Global */
 .btn {
     padding: 8px 20px;
     border-radius: 6px;
@@ -165,7 +171,9 @@ body {
     background: #1d4ed8;
 }
 
-/* --- INTRO BANNER --- */
+/* =========================================
+   3. INTRO BANNER
+   ========================================= */
 .intro {
     height: 380px;
     background: var(--gradient-banner);
@@ -184,7 +192,7 @@ body {
     position: absolute;
     width: 400px;
     height: 400px;
-    background: rgba(255,255,255,0.05);
+    background: rgba(255, 255, 255, 0.05);
     border-radius: 50%;
     top: -100px;
     right: -50px;
@@ -217,10 +225,12 @@ body {
 
 .intro-image img {
     max-height: 300px;
-    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
+    filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.3));
 }
 
-/* --- CATEGORY --- */
+/* =========================================
+   4. CATEGORY SECTION
+   ========================================= */
 .category-section {
     padding: 30px 100px 10px;
 }
@@ -252,20 +262,25 @@ body {
     transition: 0.2s;
 }
 
-.cat-btn:hover, .cat-btn.active {
+.cat-btn:hover,
+.cat-btn.active {
     background: var(--primary-light);
     color: white;
     border-color: var(--primary-light);
 }
 
-/* --- MAIN CONTAINER --- */
+/* =========================================
+   5. MAIN LAYOUT
+   ========================================= */
 .main-container {
     display: flex;
     padding: 30px 100px 60px;
     gap: 40px;
 }
 
-/* --- BOOK GRID --- */
+/* =========================================
+   6. BOOK GRID & CARDS
+   ========================================= */
 .book-grid {
     flex: 3;
     display: grid;
@@ -304,6 +319,7 @@ body {
     object-fit: cover;
 }
 
+/* Status Badge */
 .badge {
     position: absolute;
     top: 10px;
@@ -316,9 +332,15 @@ body {
     text-transform: uppercase;
 }
 
-.in-stock { background: #10b981; }
-.out-stock { background: #ef4444; }
+.in-stock {
+    background: #10b981;
+}
 
+.out-stock {
+    background: #ef4444;
+}
+
+/* Book Content */
 .book-details {
     flex: 1;
 }
@@ -353,7 +375,9 @@ body {
     border-radius: 4px;
 }
 
-.rating { color: #f59e0b; }
+.rating {
+    color: #f59e0b;
+}
 
 .book-desc {
     font-size: 13px;
@@ -365,6 +389,7 @@ body {
     overflow: hidden;
 }
 
+/* Actions */
 .book-actions {
     margin-top: 15px;
     padding-top: 15px;
@@ -383,9 +408,14 @@ body {
     font-size: 13px;
 }
 
-.btn-text:hover { text-decoration: underline; }
+.btn-text:hover {
+    text-decoration: underline;
+}
 
-.action-icons { display: flex; gap: 8px; }
+.action-icons {
+    display: flex;
+    gap: 8px;
+}
 
 .icon-btn {
     width: 30px;
@@ -398,10 +428,19 @@ body {
     transition: 0.2s;
 }
 
-.icon-btn:hover { background: #e2e8f0; color: var(--text-dark); }
-.icon-btn.delete:hover { background: #fee2e2; color: #ef4444; }
+.icon-btn:hover {
+    background: #e2e8f0;
+    color: var(--text-dark);
+}
 
-/* --- SIDEBAR RANK --- */
+.icon-btn.delete:hover {
+    background: #fee2e2;
+    color: #ef4444;
+}
+
+/* =========================================
+   7. SIDEBAR RANKING
+   ========================================= */
 .sidebar-rank {
     flex: 1;
     background: white;
@@ -445,7 +484,9 @@ body {
     border-bottom: 1px solid #f1f5f9;
 }
 
-.rank-item:last-child { border-bottom: none; }
+.rank-item:last-child {
+    border-bottom: none;
+}
 
 .rank-num {
     font-size: 20px;
@@ -477,13 +518,17 @@ body {
     color: var(--text-light);
 }
 
-/* --- MODAL --- */
+/* =========================================
+   8. MODAL (POPUP)
+   ========================================= */
 .modal-overlay {
     display: none;
     position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0,0,0,0.5);
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
     z-index: 200;
     backdrop-filter: blur(3px);
 }
@@ -506,25 +551,55 @@ body {
 
 .close-modal {
     position: absolute;
-    top: 15px; right: 20px;
+    top: 15px;
+    right: 20px;
     font-size: 28px;
     cursor: pointer;
     color: #94a3b8;
 }
 
-.modal-header { text-align: center; margin-bottom: 25px; }
-.modal-header h2 { color: var(--primary-color); }
-.modal-header p { color: var(--text-light); font-size: 14px; }
-
-.input-group { margin-bottom: 15px; }
-.input-group label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 8px; }
-.input-group input { 
-    width: 100%; padding: 12px; 
-    border: 1px solid #e2e8f0; border-radius: 8px; 
+.modal-header {
+    text-align: center;
+    margin-bottom: 25px;
 }
 
-.form-footer { text-align: right; margin-bottom: 20px; font-size: 13px; }
-.form-footer a { color: var(--accent-color); text-decoration: none; }
+.modal-header h2 {
+    color: var(--primary-color);
+}
+
+.modal-header p {
+    color: var(--text-light);
+    font-size: 14px;
+}
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+.input-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+}
+
+.form-footer {
+    text-align: right;
+    margin-bottom: 20px;
+    font-size: 13px;
+}
+
+.form-footer a {
+    color: var(--accent-color);
+    text-decoration: none;
+}
 
 .btn-submit {
     width: 100%;
@@ -536,4 +611,190 @@ body {
     font-weight: 700;
     cursor: pointer;
 }
-.btn-submit:hover { background: #0f172a; }
+
+.btn-submit:hover {
+    background: #0f172a;
+}
+
+/* =========================================
+   9. FOOTER
+   ========================================= */
+.footer {
+    background-color: #2c3e50; /* Xanh đen */
+    color: #ecf0f1;
+    padding-top: 40px;
+    margin-top: 50px;
+    font-family: 'Nunito', sans-serif;
+}
+
+.footer-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px 40px;
+}
+
+.footer-section {
+    flex: 1;
+    padding: 0 20px;
+    min-width: 250px;
+}
+
+/* Cột 1: Giới thiệu */
+.footer-section.about h3 {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 10px;
+    font-size: 1.4rem;
+}
+
+.footer-section.about p {
+    color: #bdc3c7;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    font-size: 0.95rem;
+}
+
+.footer-section.about .socials a {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    background-color: #34495e;
+    color: #ffffff;
+    text-align: center;
+    line-height: 40px;
+    border-radius: 5px;
+    margin-right: 10px;
+    transition: all 0.3s ease;
+    font-size: 1.1rem;
+}
+
+.footer-section.about .socials a:hover {
+    background-color: #b71c1c; /* Đỏ HUST */
+    transform: translateY(-3px);
+}
+
+/* Cột 2: Link nhanh */
+.footer-section.links h3,
+.footer-section.contact h3 {
+    margin-bottom: 20px;
+    font-size: 1.2rem;
+    position: relative;
+    padding-bottom: 10px;
+}
+
+.footer-section.links h3::after,
+.footer-section.contact h3::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 50px;
+    height: 2px;
+    background-color: #e74c3c;
+}
+
+.footer-section.links ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-section.links ul li {
+    margin-bottom: 12px;
+}
+
+.footer-section.links ul li a {
+    color: #bdc3c7;
+    text-decoration: none;
+    transition: 0.3s;
+    display: block;
+}
+
+.footer-section.links ul li a:hover {
+    color: #fff;
+    padding-left: 8px;
+}
+
+/* Cột 3: Liên hệ */
+.footer-section.contact .contact-info p {
+    margin-bottom: 15px;
+    color: #bdc3c7;
+    display: flex;
+    align-items: center;
+    font-size: 0.95rem;
+}
+
+.footer-section.contact .contact-info i {
+    margin-right: 15px;
+    color: #e74c3c;
+    width: 20px;
+    text-align: center;
+}
+
+/* Footer Bottom */
+.footer-bottom {
+    background-color: #1a252f;
+    text-align: center;
+    padding: 20px 0;
+    color: #7f8c8d;
+    font-size: 0.9rem;
+    border-top: 1px solid #34495e;
+}
+
+/* Responsive Mobile */
+@media screen and (max-width: 768px) {
+    .footer-content {
+        flex-direction: column;
+    }
+    
+    .footer-section {
+        margin-bottom: 30px;
+        padding: 0;
+    }
+}
+
+/* --- PAGINATION (PHÂN TRANG) --- */
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 30px;
+    padding-top: 20px;
+}
+
+.page-btn {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #e2e8f0;
+    background: white;
+    border-radius: 8px;
+    color: var(--text-dark);
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex; /* Căn giữa số trong ô */
+    align-items: center;
+    justify-content: center;
+}
+
+.page-btn:hover {
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+    background: #eff6ff;
+}
+
+.page-btn.active {
+    background: var(--accent-color);
+    color: white;
+    border-color: var(--accent-color);
+    box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.3);
+}
+
+.page-btn:disabled {
+    background: #f1f5f9;
+    color: #cbd5e1;
+    cursor: not-allowed;
+    border-color: #f1f5f9;
+}
