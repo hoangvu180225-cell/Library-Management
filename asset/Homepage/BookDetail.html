@@ -13,27 +13,33 @@
     <body>
         
         <header class="header"> 
-            <div class="header-logo">
-                <a href="index.html"><img src="../../icons/Logo HUST.png" alt="Logo HUST"></a>
+        <div class="header-logo">
+            <img src="../../icons/Logo HUST.png" alt="Logo HUST">
+        </div>
+        
+        <div class="header-middle">
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" placeholder="Tìm tên sách, tác giả, ISBN...">
             </div>
-            
-            <div class="header-middle">
-                <div class="search-box">
-                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                    <input type="text" placeholder="Tìm tên sách, tác giả, ISBN...">
-                </div>
+        </div>
+
+        <div class="header-right guest">
+            <button id="Login-Btn" class="btn btn-outline">Đăng nhập</button>
+            <button id="Register-Btn" class="btn btn-primary">Đăng ký</button>
+        </div>
+
+        <div class="header-right user" style="display: none;"> 
+            <button id="nav-home" class="nav-link">Trang Chủ</button>
+            <button id="nav-books" class="nav-link">Sách của tôi</button>
+            <button id="nav-policy" class="nav-link">Chính sách</button>
+            <button id="nav-contact" class="nav-link">Liên hệ</button>
+            <button id="nav-notif" class="nav-link">Thông báo</button>
+            <div class="user-avatar">
+                <img src="https://ui-avatars.com/api/?name=Phan+Vu&background=random" alt="Avatar">
             </div>
-    
-            <div class="header-right user"> 
-                <button class="nav-link">Tìm sách</button>
-                <button class="nav-link">Sách của tôi</button>
-                <button class="nav-link">Thông báo</button>
-                <button class="nav-link">Giới thiệu</button>
-                <div class="user-avatar">
-                    <img src="https://ui-avatars.com/api/?name=Phan+Vu&background=random" alt="Avatar">
-                </div>
-            </div>
-        </header>
+        </div>
+    </header>
 
         <div class="breadcrumb">
             <a href="index.html">Trang chủ</a> / 
@@ -155,9 +161,36 @@
                 </section>
             </div>
         </div>
+        <footer class="footer"><div class="footer-bottom">&copy; 2025 Library Management System</div></footer>
+
+        <div id="loginModal" class="modal-overlay">
+            <div class="modal-box">
+                <span class="close-modal">&times;</span>
+                <div class="modal-header">
+                    <h2>Đăng nhập</h2>
+                    <p>Chào mừng bạn quay trở lại!</p>
+                </div>
+                <form id="login-form">
+                    <div class="input-group">
+                        <label>Tên đăng nhập</label>
+                        <input type="text" placeholder="Nhập tên đăng nhập" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Mật khẩu</label>
+                        <input type="password" placeholder="Nhập mật khẩu" required>
+                    </div>
+                    <div class="form-footer">
+                        <a href="#">Quên mật khẩu?</a>
+                    </div>
+                    <button type="submit" class="btn-submit">Đăng nhập</button>
+                </form>
+            </div>
+        </div>
 
         <script src="../../script/BookData.js"></script>
         
         <script src="../../script/BookDetail.js"></script>
+
+        <script src="../../script/Homepage.js"></script>
     </body>
 </html>
