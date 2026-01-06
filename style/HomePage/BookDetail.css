@@ -388,3 +388,34 @@ body {
         justify-content: center;
     }
 }
+
+/* Style cho nút Mượn ngay */
+.btn-borrow {
+    background-color: #27ae60; /* Màu xanh lá dịu */
+    color: white;
+    border: 1px solid #27ae60;
+    margin-right: 10px; /* Tạo khoảng cách với nút bên cạnh */
+}
+
+.btn-borrow:hover {
+    background-color: #219150;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+/* Đảm bảo khung chứa các nút dàn hàng ngang đẹp mắt */
+.action-buttons {
+    display: flex;
+    flex-wrap: wrap; /* Xuống dòng nếu màn hình nhỏ */
+    gap: 10px; /* Khoảng cách giữa các nút */
+    margin-bottom: 20px;
+}
+
+.action-buttons .btn {
+    flex: 1; /* Chia đều chiều rộng hoặc bỏ dòng này nếu muốn nút co theo nội dung */
+    padding: 12px 15px;
+    font-weight: 700;
+    cursor: pointer;
+    border-radius: 8px; /* Bo tròn góc */
+    transition: all 0.3s ease;
+}

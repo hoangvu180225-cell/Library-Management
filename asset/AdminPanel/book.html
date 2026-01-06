@@ -23,7 +23,7 @@
         <header class="top-bar">
             <div class="search-box">
                 <i class="fas fa-search"></i>
-                <input type="text" placeholder="Tìm tên sách, tác giả, ISBN...">
+                <input type="text" id="searchInput" placeholder="Tìm tên sách, tác giả...">
             </div>
             <div class="user-actions">
                 <button class="btn-add"><i class="fas fa-plus"></i> Nhập sách mới</button>
@@ -46,10 +46,10 @@
                 </div>
                 <div class="modal-body">
                     <form id="addBookForm">
-                        <div class="form-row">
+                        <input type="hidden" id="bookId"> <div class="form-row">
                             <div class="form-group" style="flex: 1;">
-                                <label>Mã ISBN</label>
-                                <input type="text" id="bookISBN" placeholder="978-..." required>
+                                <label>Mã ISBN (ID)</label>
+                                <input type="text" id="bookISBN" placeholder="Mã sách..." required>
                             </div>
                             <div class="form-group" style="flex: 1;">
                                 <label>Tên sách</label>
@@ -63,63 +63,32 @@
                                 <input type="text" id="bookAuthor" placeholder="Tên tác giả..." required>
                             </div>
                             <div class="form-group">
-                                <label>Nhà Cung Cấp</label>
-                                <input type="text" id="bookSupplier" placeholder="VD: NXB Trẻ, Fahasa...">
+                                <label>Mô tả ngắn</label>
+                                <input type="text" id="bookDesc" placeholder="Mô tả...">
                             </div>
                         </div>
-                    
+
                         <div class="form-row cols-3">
-                            <div class="form-group">
-                                <label>NXB</label>
-                                <input type="text" id="bookPublisher" placeholder="Nhà xuất bản">
-                            </div>
-                            <div class="form-group">
-                                <label>Năm XB</label>
-                                <input type="number" id="bookYear" placeholder="2024">
-                            </div>
-                            <div class="form-group">
-                                <label>Hình thức</label>
-                                <select id="bookFormat">
-                                    <option value="mem">Bìa mềm</option>
-                                    <option value="cung">Bìa cứng</option>
-                                    <option value="ebook">Ebook</option>
-                                </select>
-                            </div>
-                        </div>
-                    
-                        <div class="form-row cols-3">
-                            <div class="form-group">
-                                <label>Số trang</label>
-                                <input type="number" id="bookPages" placeholder="VD: 366">
-                            </div>
-                            <div class="form-group">
-                                <label>Kích thước</label>
-                                <input type="text" id="bookSize" placeholder="20 x 14 cm">
-                            </div>
-                            <div class="form-group">
-                                <label>Trọng lượng</label>
-                                <div class="input-suffix">
-                                    <input type="number" id="bookWeight" placeholder="300">
-                                    <span>gr</span>
-                                </div>
-                            </div>
-                        </div>
-                    
-                        <hr style="border: 0; border-top: 1px dashed #ddd; margin: 10px 0 20px;">
-                        
-                        <div class="form-row">
                             <div class="form-group">
                                 <label>Thể loại</label>
                                 <select id="bookCategory">
                                     <option value="">Chọn thể loại...</option>
-                                    <option value="vh">Văn học</option>
-                                    <option value="kt">Kinh tế</option>
-                                    <option value="cntt">CNTT & Công nghệ</option>
+                                    <option value="Hành động">Hành động</option>
+                                    <option value="Khoa học viễn tưởng">Khoa học viễn tưởng</option>
+                                    <option value="Lãng mạn">Lãng mạn</option>
+                                    <option value="Lịch sử">Lịch sử</option>
+                                    <option value="Tiểu thuyết">Tiểu thuyết</option>
+                                    <option value="Thiếu nhi">Thiếu nhi</option>
+                                    <option value="Văn học">Văn học</option>
                                 </select>
                             </div>
                             <div class="form-group">
+                                <label>Đánh giá</label>
+                                <input type="number" id="bookRating" step="0.1" placeholder="4.5">
+                            </div>
+                            <div class="form-group">
                                 <label>Số lượng</label>
-                                <input type="number" id="bookQuantity" min="1" value="10">
+                                <input type="number" id="bookQuantity" min="0">
                             </div>
                         </div>
                     
@@ -127,7 +96,7 @@
                             <label>Ảnh bìa sách</label>
                             <div class="upload-box">
                                 <i class="fas fa-cloud-upload-alt"></i>
-                                <p>Kéo thả ảnh hoặc nhấn để tải lên</p>
+                                <p id="fileNameDisplay">Kéo thả ảnh hoặc nhấn để tải lên</p>
                                 <input type="file" hidden id="bookCoverInput">
                             </div>
                         </div>
@@ -145,16 +114,15 @@
                 <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
                     <h3 style="margin:0; color: #333; font-size: 1.5rem;">Tủ Sách</h3>
                     <div class="filter-group">
-                        <select class="filter-select">
-                            <option>Thể loại: Tất cả</option>
-                            <option>Văn học</option>
-                            <option>Kinh tế</option>
-                            <option>CNTT & Công nghệ</option>
-                        </select>
-                        <select class="filter-select">
-                            <option>Trạng thái: Tất cả</option>
-                            <option>Còn hàng</option>
-                            <option>Hết hàng</option>
+                        <select class="filter-select" id="filterGenre">
+                            <option value="all">Thể loại: Tất cả</option>
+                            <option value="Hành động">Hành động</option>
+                            <option value="Khoa học viễn tưởng">Khoa học viễn tưởng</option>
+                            <option value="Lãng mạn">Lãng mạn</option>
+                            <option value="Lịch sử">Lịch sử</option>
+                            <option value="Tiểu thuyết">Tiểu thuyết</option>
+                            <option value="Thiếu nhi">Thiếu nhi</option>
+                            <option value="Văn học">Văn học</option>
                         </select>
                     </div>
                 </div>
@@ -164,49 +132,7 @@
                 </div>
             </div>
 
-            <div class="book-grid" id="bookGrid">
-                <div class="book-card">
-                    <div class="book-cover-container">
-                        <img src="/images/HP1.jpg" alt="Book" class="book-cover-img">
-                        <span class="book-status-badge status-available">Còn 15</span>
-                    </div>
-                    <div class="book-info">
-                        <h4 class="book-title">Harry Potter và Hòn đá Phù thủy</h4>
-                        <span class="book-author">J.K. Rowling</span>
-                        <div class="book-meta">
-                            <span class="meta-item"><i class="fas fa-bookmark"></i> Văn học</span>
-                        </div>
-                    </div>
-                    <div class="book-actions">
-                        <button class="btn-card-action btn-view-detail"><i class="fas fa-eye"></i> Chi tiết</button>
-                        <div class="action-group">
-                            <button class="btn-card-action"><i class="fas fa-pen"></i></button>
-                            <button class="btn-card-action btn-delete-card"><i class="fas fa-trash"></i></button>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="book-card">
-                    <div class="book-cover-container">
-                        <img src="/images/HP2.jpg" alt="Book" class="book-cover-img" style="opacity:0.6; filter:grayscale(50%);">
-                        <span class="book-status-badge status-out">Hết hàng</span>
-                    </div>
-                    <div class="book-info">
-                        <h4 class="book-title">Harry Potter và Tên tù nhân ngục Azkaban</h4>
-                        <span class="book-author">J.K. Rowling</span>
-                        <div class="book-meta">
-                            <span class="meta-item"><i class="fas fa-bookmark"></i> Văn học</span>
-                        </div>
-                    </div>
-                    <div class="book-actions">
-                        <button class="btn-card-action btn-view-detail"><i class="fas fa-eye"></i> Chi tiết</button>
-                        <div class="action-group">
-                            <button class="btn-card-action"><i class="fas fa-pen"></i></button>
-                            <button class="btn-card-action btn-delete-card"><i class="fas fa-trash"></i></button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <div class="book-grid" id="bookGrid"></div>
 
             <div class="table-card book-list-view" id="bookList">
                 <table>
@@ -214,49 +140,14 @@
                         <tr>
                             <th width="40%">Thông tin sách</th>
                             <th>Thể loại</th>
+                            <th>Đánh giá</th>
                             <th>Số lượng</th>
                             <th>Trạng thái</th>
                             <th style="text-align:center;">Thao tác</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <div style="display:flex; gap:15px; align-items:center;">
-                                    <img src="../../images/HP1.jpg" class="list-cover">
-                                    <div>
-                                        <h4 style="margin:0; color:#333;">Harry Potter và Hòn đá Phù thủy</h4>
-                                        <span style="font-size:0.8rem; color:#888;">TG: J.K. Rowling</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td><span class="tier-badge tier-platinum">Văn học</span></td>
-                            <td style="font-weight:600;">15</td>
-                            <td><span class="st-active"><span class="status-dot"></span>Còn hàng</span></td>
-                            <td style="text-align:center;">
-                                <button class="action-btn btn-edit"><i class="fas fa-pen"></i></button>
-                                <button class="action-btn btn-delete"><i class="fas fa-trash"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div style="display:flex; gap:15px; align-items:center;">
-                                    <img src="../../images/HP2.jpg" class="list-cover">
-                                    <div>
-                                        <h4 style="margin:0; color:#333;">Harry Potter và Tên Tù Nhân Ngục Azkaban </h4>
-                                        <span style="font-size:0.8rem; color:#888;">TG: J.K. Rowling</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td><span class="tier-badge tier-platinum">Văn học</span></td>
-                            <td style="font-weight:600;">0</td>
-                            <td><span class="st-locked"><span class="status-dot"></span>Hết hàng</span></td>
-                            <td style="text-align:center;">
-                                <button class="action-btn btn-edit"><i class="fas fa-pen"></i></button>
-                                <button class="action-btn btn-delete"><i class="fas fa-trash"></i></button>
-                            </td>
-                        </tr>
-                    </tbody>
+                    <tbody id="bookListBody">
+                        </tbody>
                 </table>
             </div>
 
@@ -264,7 +155,127 @@
     </main>
 
     <script>
-        // 1. Chuyển đổi View (Lưới / Danh sách)
+        // --- 1. DỮ LIỆU SÁCH (BookData) ---
+        // Trong thực tế, bạn có thể import từ file script/booksData.js
+        const booksData = [
+            { id: "ACT1", title: "Đấu trường sinh tử (The Hunger Games)", author: "Suzanne Collins", image: "../../images/action_1.jpg", genre: "Hành động", rating: 4.8, stock: 20, desc: "Trong một tương lai đen tối...", views: 12547 },
+            { id: "ACT2", title: "Dị biệt (Divergent)", author: "Veronica Roth", image: "../../images/action_2.webp", genre: "Hành động", rating: 4.5, stock: 15, desc: "Xã hội được chia thành 5 môn phái...", views: 8923 },
+            { id: "ACT3", title: "Giải mã mê cung (The Maze Runner)", author: "James Dashner", image: "../../images/action_3.webp", genre: "Hành động", rating: 4.6, stock: 10, desc: "Thomas tỉnh dậy trong một thang máy...", views: 9215 },
+            { id: "ACT5", title: "Mật mã Da Vinci", author: "Dan Brown", image: "../../images/action_5.webp", genre: "Hành động", rating: 4.6, stock: 8, desc: "Một vụ án mạng tại bảo tàng Louvre...", views: 11203 },
+            { id: "ACT6", title: "Sherlock Holmes Toàn Tập", author: "Arthur Conan Doyle", image: "../../images/action_6.webp", genre: "Hành động", rating: 4.9, stock: 30, desc: "Tuyển tập những vụ án ly kỳ...", views: 22011 },
+            
+            { id: "SCI1", title: "Xứ Cát (Dune)", author: "Frank Herbert", image: "../../images/scifi_1.webp", genre: "Khoa học viễn tưởng", rating: 4.9, stock: 12, desc: "Câu chuyện về Paul Atreides...", views: 14567 },
+            { id: "SCI3", title: "Tam Thể", author: "Lưu Từ Hân", image: "../../images/scifi_3.webp", genre: "Khoa học viễn tưởng", rating: 4.7, stock: 0, desc: "Tiếp xúc đầu tiên...", views: 9833 }, // Mock hết hàng
+            { id: "SCI4", title: "451 Độ F", author: "Ray Bradbury", image: "../../images/scifi_4.jpg", genre: "Khoa học viễn tưởng", rating: 4.5, stock: 22, desc: "Trong một tương lai nơi sách bị cấm...", views: 7549 },
+            
+            { id: "ROM1", title: "Kiêu hãnh và Định kiến", author: "Jane Austen", image: "../../images/romance_1.webp", genre: "Lãng mạn", rating: 4.9, stock: 30, desc: "Câu chuyện tình yêu kinh điển...", views: 28451 },
+            { id: "HIS1", title: "Sapiens: Lược sử loài người", author: "Yuval Noah Harari", image: "../../images/history_1.webp", genre: "Lịch sử", rating: 4.9, stock: 50, desc: "Lịch sử tiến hóa của loài người...", views: 45129 },
+            { id: "NOV2", title: "Bố già (The Godfather)", author: "Mario Puzo", image: "../../images/novel_2.webp", genre: "Tiểu thuyết", rating: 4.9, stock: 18, desc: "Câu chuyện kinh điển về Mafia...", views: 19563 },
+            { id: "KID1", title: "Hoàng tử bé", author: "Antoine de Saint-Exupéry", image: "../../images/children_1.jpg", genre: "Thiếu nhi", rating: 5.0, stock: 40, desc: "Câu chuyện thơ mộng...", views: 35121 },
+            { id: "LIT3", title: "Tắt đèn", author: "Ngô Tất Tố", image: "../../images/lit_3.webp", genre: "Văn học", rating: 4.9, stock: 20, desc: "Bức tranh chân thực...", views: 12103 }
+        ];
+
+        // --- 2. LOGIC RENDER ---
+
+        const gridContainer = document.getElementById('bookGrid');
+        const listContainer = document.getElementById('bookListBody');
+        const filterGenreSelect = document.getElementById('filterGenre');
+        const searchInput = document.getElementById('searchInput');
+
+        // Hàm sinh HTML trạng thái (Còn hàng/Hết hàng)
+        function getStatusBadge(stock) {
+            if (stock > 0) {
+                return {
+                    badge: `<span class="book-status-badge status-available">Còn ${stock}</span>`, // Cho Grid
+                    html: `<span class="st-active"><span class="status-dot"></span>Còn hàng</span>` // Cho List
+                };
+            } else {
+                return {
+                    badge: `<span class="book-status-badge status-out">Hết hàng</span>`,
+                    html: `<span class="st-locked"><span class="status-dot"></span>Hết hàng</span>`
+                };
+            }
+        }
+
+        // Hàm render chính
+        function renderBooks(data) {
+            gridContainer.innerHTML = '';
+            listContainer.innerHTML = '';
+
+            data.forEach(book => {
+                const status = getStatusBadge(book.stock);
+
+                // --- Render Grid View ---
+                const cardHTML = `
+                    <div class="book-card" data-id="${book.id}">
+                        <div class="book-cover-container">
+                            <img src="${book.image}" alt="${book.title}" class="book-cover-img" onerror="this.src='../../images/placeholder.jpg'">
+                            ${status.badge}
+                        </div>
+                        <div class="book-info">
+                            <h4 class="book-title" title="${book.title}">${book.title}</h4>
+                            <span class="book-author">${book.author}</span>
+                            <div class="book-meta">
+                                <span class="meta-item"><i class="fas fa-bookmark"></i> ${book.genre}</span>
+                                <span class="meta-item"><i class="fas fa-star" style="color:gold"></i> ${book.rating}</span>
+                            </div>
+                        </div>
+                        <div class="book-actions">
+                            <button class="btn-card-action btn-view-detail"><i class="fas fa-eye"></i></button>
+                            <div class="action-group">
+                                <button class="btn-card-action btn-edit-item"><i class="fas fa-pen"></i></button>
+                                <button class="btn-card-action btn-delete-item"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                gridContainer.insertAdjacentHTML('beforeend', cardHTML);
+
+                // --- Render List View ---
+                const rowHTML = `
+                    <tr data-id="${book.id}">
+                        <td>
+                            <div style="display:flex; gap:15px; align-items:center;">
+                                <img src="${book.image}" class="list-cover" onerror="this.src='../../images/placeholder.jpg'">
+                                <div>
+                                    <h4 style="margin:0; color:#333;">${book.title}</h4>
+                                    <span style="font-size:0.8rem; color:#888;">TG: ${book.author}</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td><span class="tier-badge tier-platinum">${book.genre}</span></td>
+                        <td><i class="fas fa-star" style="color:gold; font-size:0.8rem"></i> ${book.rating}</td>
+                        <td style="font-weight:600;">${book.stock}</td>
+                        <td>${status.html}</td>
+                        <td style="text-align:center;">
+                            <button class="action-btn btn-edit-item"><i class="fas fa-pen"></i></button>
+                            <button class="action-btn btn-delete-item"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `;
+                listContainer.insertAdjacentHTML('beforeend', rowHTML);
+            });
+        }
+
+        // --- 3. FILTER & SEARCH LOGIC ---
+        function filterBooks() {
+            const genre = filterGenreSelect.value;
+            const term = searchInput.value.toLowerCase();
+
+            const filtered = booksData.filter(book => {
+                const matchGenre = genre === 'all' || book.genre === genre;
+                const matchSearch = book.title.toLowerCase().includes(term) || 
+                                    book.author.toLowerCase().includes(term) ||
+                                    book.id.toLowerCase().includes(term);
+                return matchGenre && matchSearch;
+            });
+            renderBooks(filtered);
+        }
+
+        filterGenreSelect.addEventListener('change', filterBooks);
+        searchInput.addEventListener('input', filterBooks);
+
+        // --- 4. VIEW SWITCHER (Lưới / Danh sách) ---
         const btnGrid = document.getElementById('btnGridView');
         const btnList = document.getElementById('btnListView');
         const contentWrapper = document.querySelector('.content-wrapper');
@@ -281,7 +292,7 @@
             contentWrapper.classList.add('list-mode');
         });
 
-        // 2. Logic Modal
+        // --- 5. MODAL LOGIC (THÊM / SỬA) ---
         const modal = document.getElementById('addBookModal');
         const btnAdd = document.querySelector('.btn-add'); 
         const closeBtns = document.querySelectorAll('.btn-close-modal');
@@ -289,85 +300,99 @@
         const modalTitle = document.getElementById('modalTitle');
         const btnSaveBook = document.getElementById('btnSaveBook');
         const bookForm = document.getElementById('addBookForm');
-        // Lấy nút edit ở cả 2 view (nút có chứa icon .fa-pen)
-        const editBtns = document.querySelectorAll('.fa-pen');
-
+        
+        // Helper mở/đóng modal
         const openModal = () => modal.classList.add('active');
         const closeModal = () => modal.classList.remove('active');
 
-        // Nút Thêm mới
+        // Nút Thêm mới (Reset form)
         btnAdd.addEventListener('click', () => {
-            bookForm.reset(); // Xóa trắng form cũ
+            bookForm.reset();
+            document.getElementById('bookId').value = ""; // Xóa ID ẩn
             modalTitle.innerText = "Thêm sách mới";
             btnSaveBook.innerText = "Lưu sách";
             openModal();
         });
 
-        // Nút Sửa (Edit)
-        editBtns.forEach(btn => {
-            // Tìm thẻ button cha gần nhất của icon cây bút
-            btn.closest('button').addEventListener('click', (e) => {
-                e.stopPropagation(); // Ngăn sự kiện nổi bọt
-
-                modalTitle.innerText = "Cập nhật thông tin sách";
-                btnSaveBook.innerText = "Lưu thay đổi";
-
-                // --- MOCK DATA: Điền dữ liệu giả định ---
-                document.getElementById('bookISBN').value = "8934974179672";
-                document.getElementById('bookName').value = "Harry Potter và Hòn đá Phù thủy";
-                document.getElementById('bookAuthor').value = "J.K. Rowling";
-                document.getElementById('bookSupplier').value = "NXB Trẻ";
-                document.getElementById('bookPublisher').value = "Trẻ";
-                document.getElementById('bookYear').value = "2002";
-                document.getElementById('bookFormat').value = "mem"; 
-                
-                document.getElementById('bookPages').value = "366";
-                document.getElementById('bookSize').value = "20 x 14 cm";
-                document.getElementById('bookWeight').value = "300";
-                
-                document.getElementById('bookCategory').value = "vh";
-                document.getElementById('bookQuantity').value = "15";
-
-                openModal();
-            });
-        });
-
-        // Đóng Modal
+        // Đóng modal
         closeBtns.forEach(btn => btn.addEventListener('click', closeModal));
         overlay.addEventListener('click', closeModal);
 
-        // Upload Ảnh
+        // Upload ảnh (Giả lập hiển thị tên file)
         const uploadBox = document.querySelector('.upload-box');
         const fileInput = document.getElementById('bookCoverInput');
-        
         uploadBox.addEventListener('click', () => fileInput.click());
         fileInput.addEventListener('change', (e) => {
             if(e.target.files.length > 0) {
-                uploadBox.innerHTML = `<p style="color:#333; font-weight:600;">${e.target.files[0].name}</p>`;
+                document.getElementById('fileNameDisplay').innerText = e.target.files[0].name;
             }
         });
 
-        const deleteBtns = document.querySelectorAll('.btn-delete, .btn-delete-card');
+        // --- 6. EVENT DELEGATION (Xử lý sự kiện cho phần tử động) ---
+        // Vì các nút Edit/Delete được sinh ra bằng JS sau khi trang load, 
+        // ta không thể gán sự kiện trực tiếp mà phải bắt qua cha (gridContainer/listContainer)
 
-        deleteBtns.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                // Ngăn sự kiện nổi bọt (để không bị kích hoạt sự kiện click vào thẻ sách/dòng)
+        function handleActionClick(e) {
+            const target = e.target;
+            
+            // Xử lý nút Xóa
+            const deleteBtn = target.closest('.btn-delete-item');
+            if (deleteBtn) {
                 e.stopPropagation();
-
                 if(confirm('Bạn có chắc chắn muốn xóa sách này không?')) {
-                    // Tìm phần tử cha là Thẻ sách (Grid) hoặc Dòng bảng (List)
-                    const card = btn.closest('.book-card');
-                    const row = btn.closest('tr');
-
-                    // Xóa phần tử tìm thấy
-                    if(card) card.remove();
-                    if(row) row.remove();
+                    // Tìm phần tử cha (Card hoặc Row) để xóa khỏi DOM
+                    const itemContainer = deleteBtn.closest('.book-card') || deleteBtn.closest('tr');
+                    const id = itemContainer.getAttribute('data-id');
                     
-                    // (Optional) Sau này chỗ này sẽ là gọi API xóa: 
-                    // fetch('/api/books/' + id, { method: 'DELETE' })...
+                    // Trong thực tế: Gọi API xóa (fetch DELETE /api/books/id)
+                    console.log("Đang xóa sách ID:", id);
+                    
+                    // Xóa trên giao diện
+                    itemContainer.remove();
+                    
+                    // (Optional) Xóa trong mảng dữ liệu booksData nếu cần đồng bộ
                 }
-            });
-        });
+                return;
+            }
+
+            // Xử lý nút Sửa
+            const editBtn = target.closest('.btn-edit-item');
+            if (editBtn) {
+                e.stopPropagation();
+                
+                // Lấy ID từ attribute data-id
+                const itemContainer = editBtn.closest('.book-card') || editBtn.closest('tr');
+                const id = itemContainer.getAttribute('data-id');
+                
+                // Tìm sách trong mảng dữ liệu
+                const book = booksData.find(b => b.id === id);
+
+                if (book) {
+                    modalTitle.innerText = "Cập nhật thông tin sách";
+                    btnSaveBook.innerText = "Lưu thay đổi";
+
+                    // Điền dữ liệu vào form
+                    document.getElementById('bookId').value = book.id;
+                    document.getElementById('bookISBN').value = book.id;
+                    document.getElementById('bookName').value = book.title;
+                    document.getElementById('bookAuthor').value = book.author;
+                    document.getElementById('bookDesc').value = book.desc || "";
+                    document.getElementById('bookCategory').value = book.genre;
+                    document.getElementById('bookRating').value = book.rating;
+                    document.getElementById('bookQuantity').value = book.stock;
+                    
+                    openModal();
+                }
+            }
+        }
+
+        // Gán sự kiện click cho container cha
+        gridContainer.addEventListener('click', handleActionClick);
+        listContainer.addEventListener('click', handleActionClick);
+
+        // --- 7. KHỞI CHẠY LẦN ĐẦU ---
+        renderBooks(booksData);
+
     </script>
 </body>
 </html>
