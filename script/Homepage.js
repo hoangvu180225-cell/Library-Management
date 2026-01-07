@@ -1,59 +1,94 @@
 /* =========================================
-   SCRIPT QUẢN LÝ TOÀN BỘ WEBSITE
+   SCRIPT QUẢN LÝ TOÀN BỘ WEBSITE (Đã tích hợp API)
    ========================================= */
+import authApi from '../api/authAPI.js';
+import bookApi from '../api/bookAPI.js'; 
 
 // --- CẤU HÌNH CHUNG ---
 const ITEMS_PER_PAGE = 6;       // Số sách mỗi trang
 let currentPage = 1;            // Trang hiện tại
 let currentCategory = 'Tất cả'; // Danh mục đang chọn
+let globalBookList = [];        // Biến lưu trữ danh sách sách lấy từ API
 
 /* =========================================
    1. ENTRY POINT (CHẠY KHI WEB TẢI XONG)
    ========================================= */
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     
-    // 1.1 KHỞI TẠO CÁC TÍNH NĂNG CHUNG
-    checkLoginStatus();    // Kiểm tra đã đăng nhập chưa
-    setupHeaderNav();      // Cài đặt chuyển trang trên menu
-    setupAuthModals();     // Cài đặt Popup Đăng nhập & Đăng ký
+    // 1.1 KHỞI TẠO CÁC TÍNH NĂNG UI CƠ BẢN
+    checkLoginStatus();    
+    setupHeaderNav();      
+    setupAuthModals();     
 
-    // 1.2 KHỞI TẠO RIÊNG CHO TRANG CHỦ (Nếu tìm thấy chỗ hiện sách)
+    // 1.2 GỌI API LẤY DANH SÁCH SÁCH (Thay thế cho BookData.js)
     const bookContainer = document.getElementById('book-list-container');
-    if (bookContainer && typeof books !== 'undefined') {
+    if (bookContainer) {
         setupCategoryTabs(); // Cài đặt nút lọc danh mục
-        loadPage(1);         // Load sách trang 1
-        renderRanking(books);// Load bảng xếp hạng
+        await fetchAndRenderBooks(); // Gọi API lấy sách
     }
 
-    // 1.3 KHỞI TẠO RIÊNG CHO TRANG LIÊN HỆ
+    // 1.3 KHỞI TẠO TRANG LIÊN HỆ
     const contactForm = document.querySelector('.contact-form form');
-    if (contactForm) {
-        setupContactLogic(contactForm);
-    }
+    if (contactForm) setupContactLogic(contactForm);
 });
 
 /* =========================================
-   2. LOGIC ĐĂNG NHẬP, ĐĂNG KÝ & TÀI KHOẢN
+   2. LOGIC TƯƠNG TÁC API DỮ LIỆU SÁCH
    ========================================= */
+async function fetchAndRenderBooks() {
+    try {
+        // Gọi API lấy tất cả sách (Giả sử BE trả về mảng sách)
+        // Nếu bạn chưa làm API sách, đoạn này sẽ lỗi -> Nhớ làm file bookApi.js
+        const response = await bookApi.getAll(); 
+        
+        // Lưu dữ liệu vào biến toàn cục để dùng cho lọc/phân trang client-side
+        globalBookList = response.data || response; // Tùy cấu trúc trả về của BE
+        
+        // Render lần đầu
+        loadPage(1);
+        renderRanking(globalBookList);
 
+    } catch (error) {
+        console.error("Lỗi lấy dữ liệu sách:", error);
+        document.getElementById('book-list-container').innerHTML = 
+            `<p style="text-align:center; color:red;">Không thể kết nối đến máy chủ dữ liệu.</p>`;
+    }
+}
+
+/* =========================================
+   3. LOGIC ĐĂNG NHẬP, ĐĂNG KÝ & TÀI KHOẢN (Đã chuẩn hóa)
+   ========================================= */
 function checkLoginStatus() {
-    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    const token = localStorage.getItem('accessToken');
+    // Parse an toàn để tránh lỗi nếu JSON hỏng
+    let userInfo = {};
+    try {
+        userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
+    } catch (e) { userInfo = {}; }
+    
     const guestNav = document.querySelector('.header-right.guest');
     const userNav = document.querySelector('.header-right.user');
 
-    if (isLoggedIn) {
+    if (token) {
         if(guestNav) guestNav.style.display = 'none';
         if(userNav) {
             userNav.style.display = 'flex';
-            const avatar = userNav.querySelector('.user-avatar');
-            if(avatar) {
-                avatar.onclick = () => {
+            
+            // Hiển thị Avatar User
+            const avatarImg = userNav.querySelector('.user-avatar img');
+            if(avatarImg && userInfo.name) {
+                avatarImg.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(userInfo.name)}&background=random`;
+            }
+
+            // Xử lý Đăng xuất
+            const avatarDiv = userNav.querySelector('.user-avatar');
+            if(avatarDiv) {
+                avatarDiv.onclick = () => {
                     if(confirm("Bạn muốn đăng xuất?")) {
-                        localStorage.setItem('isLoggedIn', 'false');
+                        localStorage.clear();
                         window.location.reload();
                     }
                 };
-                avatar.title = "Bấm để đăng xuất";
             }
         }
     } else {
@@ -62,50 +97,35 @@ function checkLoginStatus() {
     }
 }
 
-// Hàm quản lý Modal: Mở, Đóng, Chuyển đổi Login <-> Register
 function setupAuthModals() {
     const loginModal = document.getElementById('loginModal');
     const registerModal = document.getElementById('registerModal');
-
     const loginBtn = document.getElementById('Login-Btn');
     const registerBtn = document.getElementById('Register-Btn');
-
     const closeBtns = document.querySelectorAll('.close-modal');
-    
-    // Link chuyển đổi
     const switchToRegister = document.getElementById('switch-to-register');
     const switchToLogin = document.getElementById('switch-to-login');
 
-    // 1. Mở Modal từ Header
-    if (loginBtn && loginModal) {
-        loginBtn.onclick = () => {
-            loginModal.style.display = 'block';
-            registerModal.style.display = 'none';
-        };
-    }
-    if (registerBtn && registerModal) {
-        registerBtn.onclick = () => {
-            registerModal.style.display = 'block';
-            loginModal.style.display = 'none';
-        };
-    }
+    // Mở Modal (Gán sự kiện bằng JS thay vì HTML onclick)
+    if (loginBtn) loginBtn.onclick = () => { loginModal.style.display = 'block'; };
+    if (registerBtn) registerBtn.onclick = () => { registerModal.style.display = 'block'; };
 
-    // 2. Đóng Modal (Dấu X)
+    // Đóng Modal
     closeBtns.forEach(btn => {
         btn.onclick = () => {
-            if(loginModal) loginModal.style.display = 'none';
-            if(registerModal) registerModal.style.display = 'none';
+            loginModal.style.display = 'none';
+            registerModal.style.display = 'none';
         };
     });
 
-    // 3. Đóng khi click ra ngoài (Overlay)
+    // Click ra ngoài để đóng
     window.onclick = (event) => {
-        if (loginModal && event.target === loginModal) loginModal.style.display = 'none';
-        if (registerModal && event.target === registerModal) registerModal.style.display = 'none';
+        if (event.target === loginModal) loginModal.style.display = 'none';
+        if (event.target === registerModal) registerModal.style.display = 'none';
     };
 
-    // 4. Chuyển đổi Login <-> Register
-    if (switchToRegister && registerModal && loginModal) {
+    // Chuyển đổi qua lại
+    if (switchToRegister) {
         switchToRegister.onclick = (e) => {
             e.preventDefault();
             loginModal.style.display = 'none';
@@ -113,61 +133,80 @@ function setupAuthModals() {
         };
     }
 
-    if (switchToLogin && loginModal && registerModal) {
+    if (switchToLogin) {
         switchToLogin.onclick = (e) => {
             e.preventDefault();
             registerModal.style.display = 'none';
             loginModal.style.display = 'block';
         };
     }
-
-    // 5. Gọi hàm xử lý Submit
+    
     handleAuthSubmit();
 }
 
 function handleAuthSubmit() {
-    // --- Xử lý Đăng Nhập ---
+    // --- XỬ LÝ ĐĂNG NHẬP ---
     const loginForm = document.getElementById('login-form');
     if (loginForm) {
-        loginForm.onsubmit = (e) => {
+        loginForm.onsubmit = async (e) => {
             e.preventDefault();
-            alert("Đăng nhập thành công! (Demo)");
-            localStorage.setItem('isLoggedIn', 'true');
-            document.getElementById('loginModal').style.display = 'none';
-            checkLoginStatus(); // Cập nhật lại Header ngay lập tức
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                // GỌI API LOGIN
+                const response = await authApi.login({ email, password });
+                
+                // Lưu Token & Info
+                localStorage.setItem('accessToken', response.token);
+                localStorage.setItem('userInfo', JSON.stringify(response.userInfo));
+                
+                alert("Đăng nhập thành công!");
+                window.location.reload(); // Load lại để cập nhật Header
+            } catch (error) {
+                console.error(error);
+                alert(error.response?.data?.message || "Sai tài khoản hoặc mật khẩu!");
+            }
         };
     }
 
-    // --- Xử lý Đăng Ký ---
+    // --- XỬ LÝ ĐĂNG KÝ ---
     const registerForm = document.getElementById('register-form');
     if (registerForm) {
-        registerForm.onsubmit = (e) => {
+        registerForm.onsubmit = async (e) => {
             e.preventDefault();
-            
-            // Lấy dữ liệu (Demo check pass)
             const inputs = registerForm.querySelectorAll('input');
-            const password = inputs[3].value;       // Input thứ 4 là Pass
-            const confirmPass = inputs[4].value;    // Input thứ 5 là Confirm Pass
+            // Mapping theo thứ tự input trong HTML của bạn
+            // 0: Họ tên, 1: Username, 2: Email, 3: Pass, 4: Confirm Pass
+            const name = inputs[0].value;
+            const username = inputs[1].value;
+            const email = inputs[2].value;
+            const password = inputs[3].value;
+            const confirmPass = inputs[4].value;
 
             if (password !== confirmPass) {
                 alert("Mật khẩu xác nhận không khớp!");
                 return;
             }
 
-            alert("Đăng ký thành công! Hãy đăng nhập ngay.");
-            
-            // Chuyển sang màn hình đăng nhập
-            document.getElementById('registerModal').style.display = 'none';
-            document.getElementById('loginModal').style.display = 'block';
-            
-            // Reset form
-            registerForm.reset();
+            try {
+                // GỌI API REGISTER
+                await authApi.register({ name, username, email, password });
+                alert("Đăng ký thành công! Vui lòng đăng nhập.");
+                
+                // Chuyển sang Modal Login
+                document.getElementById('registerModal').style.display = 'none';
+                document.getElementById('loginModal').style.display = 'block';
+            } catch (error) {
+                console.error(error);
+                alert(error.response?.data?.message || "Lỗi đăng ký! Có thể Email đã tồn tại.");
+            }
         };
     }
 }
 
 /* =========================================
-   3. LOGIC CHUYỂN TRANG (NAVIGATION)
+   4. LOGIC CHUYỂN TRANG (NAVIGATION)
    ========================================= */
 function setupHeaderNav() {
     const navLinks = {
@@ -187,7 +226,8 @@ function setupHeaderNav() {
             });
         }
     }
-
+    
+    // Logo về trang chủ
     const logo = document.querySelector('.header-logo');
     if(logo) {
         logo.style.cursor = 'pointer';
@@ -196,15 +236,17 @@ function setupHeaderNav() {
 }
 
 /* =========================================
-   4. LOGIC HIỂN THỊ SÁCH (LỌC & PHÂN TRANG)
+   5. LOGIC HIỂN THỊ SÁCH (LỌC & PHÂN TRANG)
    ========================================= */
 function loadPage(page) {
     currentPage = page;
     
+    // Lọc dữ liệu từ biến globalBookList
     const filteredBooks = (currentCategory === 'Tất cả') 
-        ? books 
-        : books.filter(book => book.genre === currentCategory);
+        ? globalBookList 
+        : globalBookList.filter(book => book.genre === currentCategory);
 
+    // Tính toán phân trang
     const start = (page - 1) * ITEMS_PER_PAGE;
     const end = start + ITEMS_PER_PAGE;
     const displayBooks = filteredBooks.slice(start, end);
@@ -231,6 +273,7 @@ function renderBooks(bookList) {
             ? `<span class="badge in-stock">Còn ${book.stock}</span>` 
             : `<span class="badge out-stock">Hết hàng</span>`;
         
+        // Lưu ý: Đảm bảo trường dữ liệu từ API khớp (title, author, image, genre...)
         const html = `
             <div class="book-card">
                 <div class="book-thumb">
@@ -242,9 +285,9 @@ function renderBooks(bookList) {
                     <p class="book-author">${book.author}</p>
                     <div class="book-meta">
                         <span class="genre">${book.genre}</span>
-                        <span class="rating"><i class="fa-solid fa-star"></i> ${book.rating}</span>
+                        <span class="rating"><i class="fa-solid fa-star"></i> ${book.rating || 5.0}</span>
                     </div>
-                    <p class="book-desc">${book.desc}</p>
+                    <p class="book-desc">${book.desc || 'Chưa có mô tả'}</p>
                 </div>
                 <div class="book-actions">
                     <button class="btn-text" onclick="viewDetails('${book.id}')">Xem chi tiết</button>
@@ -271,12 +314,15 @@ function renderPagination(totalItems, activePage) {
         return btn;
     };
 
+    // Nút Previous
     paginationContainer.appendChild(createBtn('<i class="fa-solid fa-chevron-left"></i>', activePage > 1 ? activePage - 1 : 1));
 
+    // Nút số trang
     for (let i = 1; i <= totalPages; i++) {
         paginationContainer.appendChild(createBtn(i, i, i === activePage));
     }
 
+    // Nút Next
     paginationContainer.appendChild(createBtn('<i class="fa-solid fa-chevron-right"></i>', activePage < totalPages ? activePage + 1 : totalPages));
 }
 
@@ -288,7 +334,7 @@ function setupCategoryTabs() {
             this.classList.add('active');
             
             currentCategory = this.innerText.trim();
-            loadPage(1);
+            loadPage(1); // Về trang 1 khi lọc
         });
     });
     
@@ -302,13 +348,14 @@ function setupCategoryTabs() {
 }
 
 /* =========================================
-   5. LOGIC BẢNG XẾP HẠNG & LIÊN HỆ
+   6. LOGIC BẢNG XẾP HẠNG & LIÊN HỆ
    ========================================= */
 function renderRanking(bookList) {
     const container = document.getElementById('rank-list-container');
     if (!container) return;
     
     container.innerHTML = '';
+    // Sắp xếp theo views (Giả sử API trả về trường views)
     const topBooks = [...bookList].sort((a, b) => (b.views || 0) - (a.views || 0)).slice(0, 5);
 
     topBooks.forEach((book, index) => {
@@ -334,8 +381,9 @@ function setupContactLogic(form) {
 }
 
 /* =========================================
-   6. HÀM HỖ TRỢ (UTILS)
+   7. HÀM HỖ TRỢ (UTILS)
    ========================================= */
-function viewDetails(id) {
+// QUAN TRỌNG: Gán vào window để HTML onclick gọi được khi dùng module
+window.viewDetails = function(id) {
     window.location.href = `BookDetail.html?id=${id}`;
-}
+};
