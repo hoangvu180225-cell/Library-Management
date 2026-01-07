@@ -1,17 +1,42 @@
 import axiosClient from './axiosClient.js';
 
 const bookApi = {
+    // 1. Danh sách sách
     getAll(params) {
-        return axiosClient.get('/books', { params }); // params là object {page: 1, limit: 10...}
+        const url = '/api/books';
+        return axiosClient.get(url, { params });
     },
-    get(id) {
-        return axiosClient.get(`/books/${id}`);
+
+    // 2. Chi tiết sách
+    getById(id) {
+        const url = `/api/books/${id}`;
+        return axiosClient.get(url);
     },
-    add(data) {
-        return axiosClient.post('/books', data);
+
+    // 3.Bảng xếp hạng
+    getRanking(type = 'week') {
+        const url = '/api/books/ranking';
+        return axiosClient.get(url, { 
+            params: { type } 
+        });
     },
-    borrow(data) {
-        return axiosClient.post('/loans', data);
+
+    // 4. Thêm sách
+    create(bookInfo) {
+        const url = '/api/books';
+        return axiosClient.post(url, bookInfo);
+    },
+
+    // 5. Sửa sách
+    update(id, bookInfo) {
+        const url = `/api/books/${id}`;
+        return axiosClient.put(url, bookInfo);
+    },
+
+    //6. Xóa sách
+    delete(id) {
+        const url = `/api/books/${id}`;
+        return axiosClient.delete(url);
     }
 };
 

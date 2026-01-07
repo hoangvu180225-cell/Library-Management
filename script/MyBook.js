@@ -1,61 +1,64 @@
 /* =========================================
-   SCRIPT QUẢN LÝ GIAO DIỆN TỦ SÁCH
-   (Logic hiển thị & Xử lý sự kiện)
+   SCRIPT QUẢN LÝ GIAO DIỆN TỦ SÁCH 
+   (Sử dụng API từ bookApi)
    ========================================= */
 
-document.addEventListener('DOMContentLoaded', () => {
-    // 1. Kiểm tra Dữ liệu đầu vào
-    if (typeof books === 'undefined') {
-        showError("Lỗi: Không tìm thấy dữ liệu gốc (BookData.js)");
-        return;
-    }
-    if (typeof myCollection === 'undefined') {
-        showError("Lỗi: Không tìm thấy dữ liệu người dùng (UserData.js)");
-        return;
-    }
+// Import service (đảm bảo đường dẫn đúng với file bookApi bạn đã tạo)
+import bookApi from '../api/bookAPI'; 
 
-    // 2. Khởi tạo
-    renderMyBooks('all');
+document.addEventListener('DOMContentLoaded', () => {
+    // Khởi tạo ban đầu với tab 'all'
+    initMyLibrary();
     setupFilterTabs();
 });
 
-// --- HÀM HIỂN THỊ LỖI ---
-function showError(msg) {
-    const container = document.getElementById('my-book-container');
-    if(container) container.innerHTML = `<p style="color:red; text-align:center; margin-top:20px;">${msg}</p>`;
-    console.error(msg);
+// Hàm khởi tạo chính
+async function initMyLibrary() {
+    // Mặc định ban đầu hiển thị tất cả
+    await loadAndRenderBooks('all');
 }
 
-// --- HÀM RENDER CHÍNH ---
-function renderMyBooks(filterStatus) {
+// --- HÀM LOAD VÀ RENDER TỪ API ---
+async function loadAndRenderBooks(filterStatus) {
     const container = document.getElementById('my-book-container');
     if (!container) return;
-    container.innerHTML = ''; 
 
-    // Lọc dữ liệu từ UserData
-    const filteredCollection = (filterStatus === 'all')
-        ? myCollection
-        : myCollection.filter(item => item.status === filterStatus);
+    // Hiển thị trạng thái đang tải
+    container.innerHTML = '<p style="text-align:center; margin-top:20px;">Đang tải dữ liệu...</p>';
 
-    if (filteredCollection.length === 0) {
-        container.innerHTML = `<p style="text-align:center; color:#64748b; margin-top:30px;">Danh sách trống.</p>`;
-        return;
-    }
+    try {
+        /**
+         * Giả định: 
+         * Endpoint getAll() sẽ trả về danh sách sách của cá nhân người dùng đó.
+         * Nếu API yêu cầu truyền filter, ta truyền vào params.
+         */
+        const response = await bookApi.getAll({ status: filterStatus });
+        const myCollection = response.data; // Giả định server trả về array sách
 
-    // Duyệt và hiển thị
-    filteredCollection.forEach(userBook => {
-        // Lấy thông tin chi tiết từ BookData
-        const bookInfo = books.find(b => b.id === userBook.bookId);
+        container.innerHTML = ''; 
 
-        if (bookInfo) {
-            const html = createBookItemHTML(bookInfo, userBook);
-            container.insertAdjacentHTML('beforeend', html);
+        if (!myCollection || myCollection.length === 0) {
+            container.innerHTML = `<p style="text-align:center; color:#64748b; margin-top:30px;">Danh sách trống.</p>`;
+            return;
         }
-    });
+
+        // Render dữ liệu nhận được
+        myCollection.forEach(userBook => {
+            // Với API chuẩn, thường server sẽ join sẵn thông tin sách vào collection
+            const html = createBookItemHTML(userBook); 
+            container.insertAdjacentHTML('beforeend', html);
+        });
+
+    } catch (error) {
+        showError("Không thể kết nối đến máy chủ. Vui lòng thử lại sau.");
+        console.error("API Error:", error);
+    }
 }
 
-// --- HÀM TẠO HTML CHO TỪNG ITEM (ĐÃ CHỈNH SỬA) ---
-function createBookItemHTML(bookInfo, userBook) {
+// --- HÀM TẠO HTML (Dữ liệu từ API) ---
+function createBookItemHTML(userBook) {
+    // Giả định API trả về object lồng nhau: { status: '...', bookInfo: { title: '...', image: '...' } }
+    const info = userBook.bookInfo;
     let statusLabel = '', statusClass = '', dateInfo = '', actionBtn = '';
 
     switch (userBook.status) {
@@ -64,37 +67,33 @@ function createBookItemHTML(bookInfo, userBook) {
             statusLabel = 'Đang mượn';
             dateInfo = `<p><i class="fa-regular fa-calendar"></i> Mượn: ${userBook.dateAdded}</p>
                         <p class="due-date"><i class="fa-solid fa-triangle-exclamation"></i> Hạn: ${userBook.dueDate}</p>`;
-            // Đã xóa nút Trả sách theo yêu cầu
-            actionBtn = ''; 
             break;
 
         case 'bought':
             statusClass = 'bought';
             statusLabel = 'Đã mua';
             dateInfo = `<p><i class="fa-solid fa-bag-shopping"></i> Mua: ${userBook.dateAdded}</p>`;
-            // Đã xóa nút Đọc ngay theo yêu cầu
-            actionBtn = '';
             break;
 
         case 'wishlist':
             statusClass = 'wishlist';
             statusLabel = 'Quan tâm';
             dateInfo = `<p><i class="fa-regular fa-clock"></i> Lưu: ${userBook.dateAdded}</p>`;
-            // Cập nhật nút Mượn sách, Thêm nút Mua sách
+            // Gọi các hàm xử lý mới bằng ID thay vì Title để chính xác
             actionBtn = `
-                <button class="btn-action read" onclick="borrowBook('${bookInfo.title}')">Mượn sách</button>
-                <button class="btn-action bought" onclick="buyBook('${bookInfo.title}')">Mua sách</button>
-                <button class="btn-action remove" onclick="removeFromList(this)">Xóa</button>
+                <button class="btn-action read" onclick="handleBorrow('${info.id}', '${info.title}')">Mượn sách</button>
+                <button class="btn-action bought" onclick="handleBuy('${info.id}', '${info.title}')">Mua sách</button>
+                <button class="btn-action remove" onclick="handleDelete('${userBook.id}')">Xóa</button>
             `;
             break;
     }
 
     return `
-        <div class="my-book-item">
-            <img src="${bookInfo.image}" alt="${bookInfo.title}" onerror="this.src='../../images/default.jpg'">
+        <div class="my-book-item" id="book-item-${userBook.id}">
+            <img src="${info.image}" alt="${info.title}" onerror="this.src='../../images/default.jpg'">
             <div class="item-info">
-                <h3>${bookInfo.title}</h3>
-                <p class="author">${bookInfo.author}</p>
+                <h3>${info.title}</h3>
+                <p class="author">${info.author}</p>
                 <div class="item-meta">${dateInfo}</div>
             </div>
             <div class="item-actions">
@@ -105,32 +104,48 @@ function createBookItemHTML(bookInfo, userBook) {
     `;
 }
 
-// --- CÁC HÀM SỰ KIỆN (ĐÃ CẬP NHẬT) ---
+// --- XỬ LÝ SỰ KIỆN TABS ---
 function setupFilterTabs() {
     const tabs = document.querySelectorAll('.tab-btn');
     tabs.forEach(tab => {
-        tab.addEventListener('click', function() {
+        tab.addEventListener('click', async function() {
             document.querySelector('.tab-btn.active')?.classList.remove('active');
             this.classList.add('active');
-            renderMyBooks(this.getAttribute('data-status'));
+            
+            const status = this.getAttribute('data-status');
+            await loadAndRenderBooks(status);
         });
     });
 }
 
-// Hàm xử lý Mượn sách mới
-function borrowBook(title) { 
-    alert(`Đã tạo phiếu mượn cho sách: ${title}. Vui lòng kiểm tra email.`); 
-}
+// --- CÁC HÀM GỌI API THAY ĐỔI DỮ LIỆU ---
 
-// Hàm xử lý Mua sách mới
-function buyBook(title) { 
-    alert(`Mua thành công sách: ${title}. Cảm ơn bạn đã ủng hộ!`); 
-}
-
-function removeFromList(btn) {
-    if(confirm('Xóa sách này khỏi danh sách quan tâm?')) {
-        const item = btn.closest('.my-book-item');
-        item.style.opacity = '0';
-        setTimeout(() => item.remove(), 300);
+// Xử lý mượn sách
+window.handleBorrow = async (id, title) => {
+    try {
+        // Giả sử API tạo phiếu mượn là một endpoint POST
+        await bookApi.create({ bookId: id, type: 'borrow' });
+        alert(`Đã gửi yêu cầu mượn: ${title}.`);
+    } catch (error) {
+        alert("Lỗi: Không thể thực hiện yêu cầu mượn.");
     }
+};
+
+// Xử lý xóa khỏi danh sách (Dùng endpoint DELETE)
+window.handleDelete = async (userBookId) => {
+    if(confirm('Xóa sách này khỏi danh sách quan tâm?')) {
+        try {
+            await bookApi.delete(userBookId);
+            const item = document.getElementById(`book-item-${userBookId}`);
+            item.style.opacity = '0';
+            setTimeout(() => item.remove(), 300);
+        } catch (error) {
+            alert("Lỗi: Không thể xóa sách.");
+        }
+    }
+};
+
+function showError(msg) {
+    const container = document.getElementById('my-book-container');
+    if(container) container.innerHTML = `<p style="color:red; text-align:center; margin-top:20px;">${msg}</p>`;
 }

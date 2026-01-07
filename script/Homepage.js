@@ -37,8 +37,6 @@ document.addEventListener('DOMContentLoaded', async () => {
    ========================================= */
 async function fetchAndRenderBooks() {
     try {
-        // Gọi API lấy tất cả sách (Giả sử BE trả về mảng sách)
-        // Nếu bạn chưa làm API sách, đoạn này sẽ lỗi -> Nhớ làm file bookApi.js
         const response = await bookApi.getAll(); 
         
         // Lưu dữ liệu vào biến toàn cục để dùng cho lọc/phân trang client-side
@@ -177,12 +175,11 @@ function handleAuthSubmit() {
             e.preventDefault();
             const inputs = registerForm.querySelectorAll('input');
             // Mapping theo thứ tự input trong HTML của bạn
-            // 0: Họ tên, 1: Username, 2: Email, 3: Pass, 4: Confirm Pass
+            // 0: Họ tên, 1: Email, 2: Pass, 3: Confirm Pass
             const name = inputs[0].value;
-            const username = inputs[1].value;
-            const email = inputs[2].value;
-            const password = inputs[3].value;
-            const confirmPass = inputs[4].value;
+            const email = inputs[1].value;
+            const password = inputs[2].value;
+            const confirmPass = inputs[3].value;
 
             if (password !== confirmPass) {
                 alert("Mật khẩu xác nhận không khớp!");
@@ -191,7 +188,7 @@ function handleAuthSubmit() {
 
             try {
                 // GỌI API REGISTER
-                await authApi.register({ name, username, email, password });
+                await authApi.register({ name, email, password });
                 alert("Đăng ký thành công! Vui lòng đăng nhập.");
                 
                 // Chuyển sang Modal Login
