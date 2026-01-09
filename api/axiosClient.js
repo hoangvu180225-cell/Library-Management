@@ -2,7 +2,7 @@
 import axios from 'https://cdn.jsdelivr.net/npm/axios@1.6.2/+esm';
 
 const axiosClient = axios.create({
-    baseURL: 'http://localhost:3000/api', // Chỉ cần sửa 1 chỗ này nếu Server đổi địa chỉ
+    baseURL: 'http://localhost:3000/api',
     headers: {
         'Content-Type': 'application/json',
     },
@@ -34,6 +34,4 @@ axiosClient.interceptors.response.use(
     }
 );
 
-// Export ra để dùng (nếu dùng module) hoặc gán vào window (nếu dùng HTML thuần)
-// window.axiosClient = axiosClient; 
 export default axiosClient;
