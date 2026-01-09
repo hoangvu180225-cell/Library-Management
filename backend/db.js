@@ -4,7 +4,7 @@ const pool = mysql.createPool({
     host: 'localhost',
     user: 'root',
     password: '123456',
-    database: 'library_db',
+    database: 'librarymanagement',
     multipleStatements: true // Quan trọng để chạy các script dài
 });
 
