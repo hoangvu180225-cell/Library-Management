@@ -3,11 +3,7 @@ const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const multer = require('multer');
 require('dotenv').config();
 
-// Kiểm tra xem đã lấy được key chưa (để debug)
-if (!process.env.CLOUDINARY_CLOUD_NAME) {
-    console.error("LỖI: Chưa cấu hình file .env hoặc tên biến sai!");
-}
-
+// Cấu hình Cloudinary
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_KEY,
@@ -17,10 +13,9 @@ cloudinary.config({
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
-    folder: 'Project1',
-    allowed_formats: ['jpg', 'png', 'jpeg'], 
-    // Mẹo: Thêm dòng này để xử lý file không phải ảnh (nếu cần)
-    resource_type: 'auto', 
+    folder: 'book_store',      // Tên thư mục trên Cloudinary
+    resource_type: 'auto',     // Tự động nhận diện ảnh/video/raw
+    // allowed_formats: ['jpg', 'png', 'jpeg', 'webp'], // Tạm bỏ comment dòng này nếu muốn lọc kỹ
   },
 });
 

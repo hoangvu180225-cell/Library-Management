@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="vi">
+<body>
+    <h2>Test Upload Ảnh</h2>
+    <form action="http://localhost:3000/api/books/create" method="POST" enctype="multipart/form-data">
+        <label>Tiêu đề sách:</label><br>
+        <input type="text" name="title" value="Sách Test HTML"><br><br>
+        
+        <label>Tác giả:</label><br>
+        <input type="text" name="author" value="Người Test"><br><br>
+        
+        <label>Giá:</label><br>
+        <input type="text" name="price" value="100000"><br><br>
+
+        <label>Chọn ảnh (QUAN TRỌNG):</label><br>
+        <input type="file" name="image"><br><br>
+        
+        <button type="submit">Upload Ngay</button>
+    </form>
+</body>
+</html>

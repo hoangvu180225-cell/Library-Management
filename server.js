@@ -7,13 +7,14 @@ const app = express();
 // --- 1. Middleware hệ thống ---
 app.use(cors()); // Cho phép Front-end (React/Axios) truy cập
 app.use(express.json()); // Cho phép đọc dữ liệu JSON từ request body
+app.use(express.urlencoded({ extended: true })); // Thêm dòng này
 
 // --- 2. Import Routes ---
-const authRoutes = require('./routes/authRoutes');
-const bookRoutes = require('./routes/bookRoutes');
-const adminRoutes = require('./routes/adminRoutes');
-const transactionRoutes = require('./routes/transactionRoutes');
-const reviewRoutes = require('./routes/reviewRoutes');
+const authRoutes = require('./backend/routes/authRoutes');
+const bookRoutes = require('./backend/routes/bookRoutes');
+const adminRoutes = require('./backend/routes/adminRoutes');
+const transactionRoutes = require('./backend/routes/transactionRoutes');
+const reviewRoutes = require('./backend/routes/reviewRoutes');
 
 // --- 3. Đăng ký Routes (Khớp với các bảng API của bạn) ---
 
