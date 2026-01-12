@@ -5,7 +5,7 @@ exports.register = async (req, res) => {
     const { name, email, password, phone } = req.body;
     try {
         await db.query(
-            'INSERT INTO users (username, email, password, phone) VALUES (?, ?, ?, ?)',
+            'INSERT INTO users (full_name, email, password, phone) VALUES (?, ?, ?, ?)',
             [name, email, password, phone]
         );
         res.json({ message: "Đăng ký thành công!" });

@@ -180,6 +180,7 @@ function handleAuthSubmit() {
             const email = inputs[1].value;
             const password = inputs[2].value;
             const confirmPass = inputs[3].value;
+            const phone = inputs[4].value;
 
             if (password !== confirmPass) {
                 alert("Mật khẩu xác nhận không khớp!");
@@ -188,7 +189,7 @@ function handleAuthSubmit() {
 
             try {
                 // GỌI API REGISTER
-                await authApi.register({ name, email, password });
+                await authApi.register({ name, email, password, phone });
                 alert("Đăng ký thành công! Vui lòng đăng nhập.");
                 
                 // Chuyển sang Modal Login
