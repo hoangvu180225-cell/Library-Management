@@ -175,12 +175,19 @@ function handleAuthSubmit() {
             e.preventDefault();
             const inputs = registerForm.querySelectorAll('input');
             // Mapping theo thứ tự input trong HTML của bạn
-            // 0: Họ tên, 1: Email, 2: Pass, 3: Confirm Pass
+            // 0: Họ tên, 1: Email, 2: Pass, 3: Confirm Pass, 4: Phone
             const name = inputs[0].value;
             const email = inputs[1].value;
             const password = inputs[2].value;
             const confirmPass = inputs[3].value;
             const phone = inputs[4].value;
+
+            console.log(name, email, password, phone);
+            // --- BỔ SUNG: CHECK ĐỘ DÀI PASSWORD ---
+            if (password.length < 6) {
+                alert("Mật khẩu phải có ít nhất 6 ký tự!");
+                return;
+            }
 
             if (password !== confirmPass) {
                 alert("Mật khẩu xác nhận không khớp!");

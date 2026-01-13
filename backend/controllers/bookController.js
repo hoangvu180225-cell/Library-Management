@@ -17,12 +17,32 @@ exports.getRanking = async (req, res) => {
     } catch (error) { res.status(500).json({ message: error.message }); }
 };
 
-exports.getDetail = async (req, res) => {
+exports.getBookById = async (req, res) => {
     try {
-        const [rows] = await db.query('SELECT * FROM books WHERE id = ?', [req.params.id]);
-        if (rows.length === 0) return res.status(404).json({ message: "Không tìm thấy sách" });
+        const bookId = req.params.id; // Lấy ID từ URL (VD: /books/1)
+
+        // Query Database (Có thể JOIN thêm bảng Categories để lấy tên thể loại)
+        const sql = `
+            SELECT b.*, c.name as category_name 
+            FROM Books b 
+            LEFT JOIN Categories c ON b.category_id = c.category_id
+            WHERE b.book_id = ?
+        `;
+        
+        const [rows] = await db.execute(sql, [bookId]);
+
+        // Nếu không tìm thấy sách
+        if (rows.length === 0) {
+            return res.status(404).json({ message: "Không tìm thấy sách" });
+        }
+
+        // Trả về object sách đầu tiên tìm thấy
         res.json(rows[0]);
-    } catch (error) { res.status(500).json({ message: error.message }); }
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Lỗi Server" });
+    }
 };
 
 exports.updateBook = async (req, res) => {

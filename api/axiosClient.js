@@ -2,7 +2,7 @@
 import axios from 'https://cdn.jsdelivr.net/npm/axios@1.6.2/+esm';
 
 const axiosClient = axios.create({
-    baseURL: 'http://localhost:3000',
+    baseURL: 'http://localhost:3000/api',
     headers: {
         'Content-Type': 'application/json',
     },

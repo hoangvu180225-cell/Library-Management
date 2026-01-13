@@ -19,6 +19,6 @@ router.post('/create', uploadCloud.single('image'), (req, res) => {
 });
 router.put('/:id', bookCtrl.updateBook);
 router.delete('/:id', bookCtrl.deleteBook);
-router.get('/:id', bookCtrl.getDetail);
+router.get('/:id', bookCtrl.getBookById);
 
 module.exports = router;
