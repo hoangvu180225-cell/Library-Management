@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const bookContainer = document.getElementById('book-list-container');
     if (bookContainer) {
         setupCategoryTabs(); // Cài đặt nút lọc danh mục
-        await fetchAndRenderBooks(); // Gọi API lấy sách
+        await fetchAndRenderBooks();
     }
 
     // 1.3 KHỞI TẠO TRANG LIÊN HỆ
@@ -41,6 +41,11 @@ async function fetchAndRenderBooks() {
         
         // Lưu dữ liệu vào biến toàn cục để dùng cho lọc/phân trang client-side
         globalBookList = response.data || response; // Tùy cấu trúc trả về của BE
+
+        console.log("Dữ liệu sách lấy về:", globalBookList); 
+        if (globalBookList.length > 0) {
+            console.log("Cấu trúc 1 quyển sách:", globalBookList[0]);
+        }
         
         // Render lần đầu
         loadPage(1);
@@ -243,13 +248,25 @@ function setupHeaderNav() {
 /* =========================================
    5. LOGIC HIỂN THỊ SÁCH (LỌC & PHÂN TRANG)
    ========================================= */
+   const CATEGORY_MAP = {
+    1: 'Khoa học Viễn tưởng',
+    2: 'Văn học & Lãng mạn',
+    3: 'Trinh thám & Ly kỳ',
+    4: 'Sách Thiếu nhi',
+    5: 'Lịch sử & Tri thức'
+};
+
 function loadPage(page) {
     currentPage = page;
     
-    // Lọc dữ liệu từ biến globalBookList
+    // Lọc dữ liệu
     const filteredBooks = (currentCategory === 'Tất cả') 
         ? globalBookList 
-        : globalBookList.filter(book => book.genre === currentCategory);
+        : globalBookList.filter(book => {
+            // Lấy tên thể loại từ ID để so sánh với cái Tab đang chọn
+            const catName = CATEGORY_MAP[book.category_id]; 
+            return catName === currentCategory;
+        });
 
     // Tính toán phân trang
     const start = (page - 1) * ITEMS_PER_PAGE;
@@ -274,11 +291,23 @@ function renderBooks(bookList) {
     }
 
     bookList.forEach(book => {
+        // --- XỬ LÝ LOGIC HIỂN THỊ ---
+        
+        // 1. Xử lý tồn kho
         let stockBadge = book.stock > 0 
             ? `<span class="badge in-stock">Còn ${book.stock}</span>` 
             : `<span class="badge out-stock">Hết hàng</span>`;
         
-        // Lưu ý: Đảm bảo trường dữ liệu từ API khớp (title, author, image, genre...)
+        // 2. Xử lý Thể loại: Nếu backend trả về tên thì dùng, nếu trả về ID thì map sang tên
+        let categoryName = book.genre || CATEGORY_MAP[book.category_id] || 'Đang cập nhật';
+
+        // 3. Xử lý Mô tả: Cắt ngắn nếu quá dài (cho đỡ vỡ giao diện)
+        // Lấy field 'description' từ DB (Code cũ là 'desc' -> Sai)
+        let rawDesc = book.description || 'Chưa có mô tả cho cuốn sách này.';
+        let shortDesc = rawDesc.length > 80 ? rawDesc.substring(0, 80) + '...' : rawDesc;
+
+        // --- RENDER HTML ---
+        // Lưu ý: Đã thay book.id bằng book.book_id
         const html = `
             <div class="book-card">
                 <div class="book-thumb">
@@ -288,14 +317,20 @@ function renderBooks(bookList) {
                 <div class="book-details">
                     <h3 class="book-title" title="${book.title}">${book.title}</h3>
                     <p class="book-author">${book.author}</p>
+                    
                     <div class="book-meta">
-                        <span class="genre">${book.genre}</span>
+                        <span class="genre">${categoryName}</span>
                         <span class="rating"><i class="fa-solid fa-star"></i> ${book.rating || 5.0}</span>
                     </div>
-                    <p class="book-desc">${book.desc || 'Chưa có mô tả'}</p>
+
+                    <p class="book-desc" title="${rawDesc}">${shortDesc}</p>
+                    
+                    <p class="book-price" style="color: #d9534f; font-weight: bold; margin-top: 5px;">
+                        ${new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(book.price || 0)}
+                    </p>
                 </div>
                 <div class="book-actions">
-                    <button class="btn-text" onclick="viewDetails('${book.id}')">Xem chi tiết</button>
+                    <button class="btn-text" onclick="viewDetails('${book.book_id}')">Xem chi tiết</button>
                 </div>
             </div>`;
         container.insertAdjacentHTML('beforeend', html);
@@ -367,9 +402,9 @@ function renderRanking(bookList) {
         const html = `
             <div class="rank-item">
                 <div class="rank-num top-${index + 1}">${index + 1}</div>
-                <img src="${book.image}" alt="${book.title}" onclick="viewDetails('${book.id}')" style="cursor:pointer">
+                <img src="${book.image}" alt="${book.title}" onclick="viewDetails('${book.book_id}')" style="cursor:pointer">
                 <div class="rank-info">
-                    <h4 class="btn-text" onclick="viewDetails('${book.id}')" style="cursor:pointer">${book.title}</h4>
+                    <h4 class="btn-text" onclick="viewDetails('${book.book_id}')" style="cursor:pointer">${book.title}</h4>
                     <span class="views">${(book.views || 0).toLocaleString()} lượt mượn</span>
                 </div>
             </div>`;

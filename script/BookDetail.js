@@ -1,5 +1,5 @@
 // File: detail.js (hoặc script trong file html)
-import bookApi from '../api/bookAPI';
+import bookApi from '../api/bookAPI.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     const params = new URLSearchParams(window.location.search);
