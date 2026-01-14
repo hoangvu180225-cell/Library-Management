@@ -1,115 +1,189 @@
-// File: detail.js (hoặc script trong file html)
+// File: detail.js
 import bookApi from '../api/bookAPI.js';
+import transactionApi from '../api/transactionAPI.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     const params = new URLSearchParams(window.location.search);
     const bookId = params.get('id');
 
-    // Nếu không có ID trên URL thì đá về trang chủ
+    // 1. Kiểm tra ID sách
     if (!bookId) {
         window.location.href = '/asset/Homepage/HomePage.html';
         return;
     }
 
-    const container = document.querySelector('.book-container');
-    
+    // 2. Gọi API lấy dữ liệu và Render
     try {
-        // Gọi API lấy dữ liệu thật
         const response = await bookApi.getById(bookId);
-        
-        // Tùy cấu trúc trả về của axios/backend mà lấy data cho đúng
-        // Nếu backend trả về trực tiếp object: const book = response.data;
         const book = response.data || response; 
 
         if (book) {
             renderBookInfo(book);
+            // Gán sự kiện cho các nút bấm sau khi đã có bookId
+            setupActionButtons(bookId);
         }
     } catch (error) {
         console.error("Lỗi:", error);
-        // Giao diện lỗi khi không tìm thấy sách
         document.querySelector('main').innerHTML = `
             <div style="text-align: center; padding: 100px 20px;">
                 <h2 style="color: #d9534f;">Không tìm thấy sách!</h2>
                 <p>Sách bạn tìm kiếm không tồn tại hoặc đã bị xóa.</p>
-                <a href="index.html" class="btn btn-primary">Về trang chủ</a>
+                <a href="/asset/Homepage/HomePage.html" class="btn btn-primary">Về trang chủ</a>
             </div>
         `;
     }
 });
 
-function renderBookInfo(book) {
-    // 1. Cập nhật Tiêu đề trang web
-    document.title = `${book.title} - Thư viện Online`;
-
-    // 2. Mapping Ảnh & Thông tin cơ bản
-    // Lưu ý: Kiểm tra nếu ảnh null thì dùng ảnh mặc định
-    const imageUrl = book.image ? book.image : 'assets/images/default-book.png';
-    document.getElementById('detail-image').src = imageUrl;
-    
-    document.getElementById('detail-title').textContent = book.title;
-    document.getElementById('detail-author').textContent = book.author;
-    
-    // Hiển thị thể loại (Nếu backend có join bảng Categories)
-    const categoryName = book.category_name || "Đang cập nhật";
-    const catEl = document.getElementById('detail-category');
-    if(catEl) catEl.textContent = categoryName;
-
-    // 3. Xử lý GIÁ TIỀN (Format sang VND: 50000 -> 50.000 đ)
-    const priceFormatted = new Intl.NumberFormat('vi-VN', { 
-        style: 'currency', 
-        currency: 'VND' 
-    }).format(book.price);
-    
-    document.getElementById('detail-price').textContent = priceFormatted;
-
-    // 4. Xử lý MÔ TẢ (Cho phép xuống dòng nếu có thẻ <br> hoặc \n)
-    const descEl = document.getElementById('detail-desc');
-    // Nếu trong DB lưu \n thì convert sang <br> để hiển thị đẹp
-    descEl.innerHTML = book.description ? book.description.replace(/\n/g, '<br>') : "Chưa có mô tả cho sách này.";
-
-    // 5. Render SAO ĐÁNH GIÁ (Rating)
-    // Ví dụ: rating = 4 -> Hiện 4 sao vàng, 1 sao xám
-    renderStars(book.rating || 0);
-
-    // 6. Xử lý TỒN KHO (Logic cũ của bạn)
-    const stockEl = document.getElementById('detail-stock');
-    const btnGroups = document.querySelectorAll('.btn-add-cart, .btn-buy-now'); // Class nút mua của bạn
-
-    if (book.stock > 0) {
-        stockEl.innerHTML = `<i class="fa-solid fa-check-circle" style="color: green;"></i> Còn hàng (Sl: ${book.stock})`;
-        btnGroups.forEach(btn => {
-            btn.disabled = false;
-            btn.style.opacity = '1';
-            btn.style.cursor = 'pointer';
+// --- HÀM GÁN SỰ KIỆN CHO NÚT BẤM (Đã đồng bộ) ---
+function setupActionButtons(bookId) {
+    // Nút Mượn
+    const btnBorrow = document.getElementById('btn-borrow');
+    if (btnBorrow) {
+        btnBorrow.addEventListener('click', async () => {
+            try {
+                await transactionApi.borrowBook(bookId);
+                alert("Đã gửi yêu cầu mượn thành công!");
+                location.reload(); 
+            } catch (error) {
+                alert(error.response?.data?.message || "Lỗi mượn sách");
+            }
         });
-    } else {
-        stockEl.innerHTML = `<i class="fa-solid fa-circle-xmark" style="color: red;"></i> Hết hàng`;
-        btnGroups.forEach(btn => {
-            btn.disabled = true;
-            btn.style.opacity = '0.5';
-            btn.style.cursor = 'not-allowed';
+    }
+
+    // Nút Mua
+    const btnBuy = document.getElementById('btn-buy');
+    if (btnBuy) {
+        btnBuy.addEventListener('click', async () => {
+            if (confirm("Bạn muốn mua cuốn sách này?")) {
+                try {
+                    await transactionApi.buyBook(bookId);
+                    alert("Mua thành công! Kiểm tra trong tủ sách của bạn.");
+                    window.location.href = 'MyBook.html';
+                } catch (error) {
+                    // SỬA: Log toàn bộ lỗi để debug
+                    console.error("Lỗi mua sách:", error); 
+                    
+                    // Hiển thị thông báo
+                    const msg = error.response?.data?.message || error.message || "Giao dịch thất bại.";
+                    alert(msg);
+                }
+            }
+        });
+    }
+
+    // Nút Thêm vào tủ (Quan tâm)
+    const btnCart = document.getElementById('btn-cart');
+    if (btnCart) {
+        btnCart.addEventListener('click', async () => {
+            try {
+                await transactionApi.addToLibrary(bookId);
+                alert("Đã thêm vào danh sách quan tâm!");
+            } catch (error) {
+                alert("Không thể thêm vào tủ sách.");
+            }
         });
     }
 }
 
-// Hàm phụ trợ: Render Sao (Star Rating)
-function renderStars(rating) {
-    const starContainer = document.getElementById('detail-rating'); // Cần có thẻ div id="detail-rating" trong HTML
-    if (!starContainer) return;
+// --- HÀM RENDER CHI TIẾT SÁCH ---
+function renderBookInfo(book) {
+    document.title = `${book.title} - Thư viện Online`;
+    const imgElement = document.getElementById('detail-image');
+    if (imgElement) imgElement.src = book.image || 'assets/images/default-book.png';
 
-    let html = '';
-    // Làm tròn số sao (VD: 4.8 -> 5, 4.2 -> 4) hoặc lấy phần nguyên
-    const stars = Math.round(rating); 
+    setText('detail-title', book.title);
+    setText('detail-author', book.author);
+    setText('detail-views', book.views || 0);
 
-    for (let i = 1; i <= 5; i++) {
-        if (i <= stars) {
-            html += '<i class="fa-solid fa-star" style="color: #FFD43B;"></i>'; // Sao vàng
+    renderStars(book.rating || 0);
+
+    // Xử lý Giá tiền
+    const priceFormatted = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(book.price);
+    setText('detail-price', priceFormatted);
+    
+    const fakeOldPrice = book.price * 1.25; 
+    const oldPriceEl = document.getElementById('detail-old-price');
+    const discountEl = document.getElementById('detail-discount');
+    
+    if (oldPriceEl && discountEl && book.price > 0) {
+        oldPriceEl.textContent = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(fakeOldPrice);
+        oldPriceEl.style.display = 'inline-block';
+        discountEl.style.display = 'inline-block';
+        discountEl.textContent = '-20%';
+    } else {
+        if(oldPriceEl) oldPriceEl.style.display = 'none';
+        if(discountEl) discountEl.style.display = 'none';
+    }
+
+    // Thông tin chi tiết
+    setText('info-id', book.book_id || book.id); 
+    setText('info-isbn', book.isbn || "Chưa có ISBN");
+    setText('info-genre', book.category_name || "Đang cập nhật");
+    setText('info-author', book.author); 
+    setText('info-author-table', book.author); 
+    setText('info-publisher', book.publisher || "Đang cập nhật"); 
+    setText('info-year', book.publication_year || "---");
+    setText('info-format', book.book_format || "Bìa mềm");
+
+    // Mô tả
+    const descEl = document.getElementById('detail-desc');
+    if (descEl) {
+        descEl.innerHTML = book.description 
+            ? book.description.replace(/\n/g, '<br>') 
+            : "<em>Chưa có mô tả chi tiết.</em>";
+    }
+
+    // Tồn kho và Trạng thái nút
+    const stockEl = document.getElementById('detail-stock');
+    const btnIds = ['btn-borrow', 'btn-buy', 'btn-cart'];
+
+    if (stockEl) {
+        if (book.stock > 0) {
+            stockEl.innerHTML = `<i class="fa-solid fa-check-circle" style="color: #28a745;"></i> Còn hàng (Kho: ${book.stock})`;
+            stockEl.style.color = "#28a745";
+            btnIds.forEach(id => {
+                const btn = document.getElementById(id);
+                if(btn) {
+                    btn.disabled = false;
+                    btn.style.opacity = '1';
+                    btn.style.cursor = 'pointer';
+                }
+            });
         } else {
-            html += '<i class="fa-regular fa-star" style="color: #ccc;"></i>';   // Sao xám
+            stockEl.innerHTML = `<i class="fa-solid fa-circle-xmark" style="color: #dc3545;"></i> Hết hàng`;
+            stockEl.style.color = "#dc3545";
+            btnIds.forEach(id => {
+                const btn = document.getElementById(id);
+                if(btn) {
+                    btn.disabled = true;
+                    btn.style.opacity = '0.5';
+                    btn.style.cursor = 'not-allowed';
+                }
+            });
         }
     }
-    // Thêm số điểm bên cạnh (VD: 4.5/5)
-    html += ` <span style="color: #666; font-size: 0.9em;">(${rating}/5)</span>`;
-    
-    starContainer.innerHTML = html;
+}
+
+function renderStars(rating) {
+    setText('detail-rating', rating); 
+    setText('review-score-big', `${rating}/5`); 
+
+    let starsHtml = '';
+    const roundedRating = Math.round(rating);
+    for (let i = 1; i <= 5; i++) {
+        starsHtml += i <= roundedRating 
+            ? '<i class="fa-solid fa-star" style="color: #FFD43B;"></i>' 
+            : '<i class="fa-solid fa-star" style="color: #ccc;"></i>';
+    }
+
+    const headerStars = document.getElementById('header-stars');
+    if (headerStars) headerStars.innerHTML = starsHtml;
+
+    const reviewStars = document.getElementById('review-stars');
+    if (reviewStars) reviewStars.innerHTML = starsHtml;
+}
+
+function setText(id, text) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = text;
 }

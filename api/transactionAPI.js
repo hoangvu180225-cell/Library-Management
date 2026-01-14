@@ -1,35 +1,38 @@
 import axiosClient from './axiosClient.js';
 
 const transactionApi = {
-    // 1. Thêm vào Tủ sách cá nhân
-    addToLibrary(bookID) {
-        const url = '/api/transaction/add';
-        return axiosClient.post(url, { bookID });
+    // 1. Thêm vào Tủ sách (Wishlist)
+    addToLibrary(bookId) {
+        const url = '/transaction/add';
+        // SỬA: bookId (tham số) -> gán cho bookID (backend cần)
+        return axiosClient.post(url, { bookID: bookId }); 
     },
 
-    // 2. Mở tủ sách (Lấy danh sách sách cá nhân)
+    // 2. Lấy danh sách
     getLibrary() {
-        const url = '/api/transaction';
+        const url = '/transaction';
         return axiosClient.get(url);
     },
 
     // 3. Mượn sách
-    borrowBook(bookID) {
-        const url = '/api/transaction/loans';
-        return axiosClient.post(url, { bookID });
+    borrowBook(bookId) {
+        const url = '/transaction/loans';
+        // SỬA:
+        return axiosClient.post(url, { bookID: bookId });
     },
 
-    // 4. Mua sách
-    buyBook(bookID) {
-        const url = '/api/transaction/buy';
-        return axiosClient.post(url, { bookID });
+    // 4. Mua sách (LỖI CỦA BẠN NẰM Ở ĐÂY)
+    buyBook(bookId) {
+        const url = '/transaction/buy';
+        // SỬA: Truyền object tường minh { key_backend: value_frontend }
+        return axiosClient.post(url, { bookID: bookId });
     },
 
-    // 5. Xóa sách khỏi tủ sách/giao dịch
+    // 5. Xóa
     deleteTransaction(id) {
-        const url = `/api/transaction/${id}`;
+        const url = `/transaction/${id}`;
         return axiosClient.delete(url);
     }
 };
 
-export default transactionApi;
+export default transactionApi;  

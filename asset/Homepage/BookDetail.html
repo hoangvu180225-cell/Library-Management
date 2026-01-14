@@ -55,11 +55,16 @@
                 </div>
 
                 <div class="action-buttons">
-                    <button class="btn btn-borrow" onclick="borrowBook()">
+                    <button class="btn btn-borrow" id="btn-borrow">
                         <i class="fa-solid fa-book-bookmark"></i> Mượn ngay
                     </button>
-                    <button class="btn btn-buy">Mua ngay</button>
-                    <button class="btn btn-cart" onclick="addToCart()">
+                    <button class="btn btn-buy" id="btn-buy">
+                        <i class="fa-solid fa-cart-shopping"></i> Mua ngay
+                    </button>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-cart" id="btn-cart">
                         <i class="fa-solid fa-bookmark"></i> Thêm vào tủ sách
                     </button>
                 </div>
@@ -90,20 +95,22 @@
                         <span class="author">Tác giả: <a href="#" id="detail-author">...</a></span>
                         <span class="separator">|</span>
                         <span class="rating">
-                            <i class="fa-solid fa-star" style="color: #ffc107;"></i> 
-                            <span id="detail-rating">0</span> 
+                            <span id="header-stars"></span> 
+                            
+                            <span id="detail-rating" style="font-weight:bold; margin-left:5px">0</span>/5
                             (<span id="detail-views">0</span> lượt xem)
                         </span>
                     </div>
                     
                     <div class="price-row">
                         <span id="detail-price" class="current-price">0 đ</span>
-                        <span id="detail-old-price" class="original-price">0 đ</span>
-                        <span class="discount-tag">-20%</span>
+                        
+                        <span id="detail-old-price" class="original-price" style="display:none;">0 đ</span>
+                        <span id="detail-discount" class="discount-tag" style="display:none;">-0%</span>
                     </div>
 
                     <div id="detail-stock" class="stock-status">
-                        <i class="fa-solid fa-check-circle"></i> Đang kiểm tra...
+                        <i class="fa-solid fa-spinner fa-spin"></i> Đang kiểm tra...
                     </div>
                 </section>
 
@@ -112,8 +119,7 @@
                     <table class="details-table">
                         <tbody>
                             <tr>
-                                <td>Mã sách (ID)</td>
-                                <td id="info-id">...</td>
+                                <td>ISBN</td> <td id="info-isbn">...</td>
                             </tr>
                             <tr>
                                 <td>Thể loại</td>
@@ -121,19 +127,19 @@
                             </tr>
                             <tr>
                                 <td>Tác giả</td>
-                                <td id="info-author">...</td>
+                                <td id="info-author-table">...</td>
                             </tr>
                             <tr>
                                 <td>Nhà xuất bản</td>
-                                <td>NXB Hội Nhà Văn</td>
+                                <td id="info-publisher">...</td> 
                             </tr>
                             <tr>
                                 <td>Năm xuất bản</td>
-                                <td>2024</td>
+                                <td id="info-year">...</td>      
                             </tr>
                             <tr>
                                 <td>Hình thức</td>
-                                <td>Bìa mềm</td>
+                                <td id="info-format">...</td>    
                             </tr>
                         </tbody>
                     </table>
@@ -151,11 +157,9 @@
                     <div class="review-container">
                         <div class="review-score">
                             <span class="score-num" id="review-score-big">0/5</span>
-                            <div class="stars-grey">
-                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
-                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
-                            </div>
-                            <p class="count">Chưa có đánh giá</p>
+                            <div class="stars-grey" id="review-stars"> 
+                                </div>
+                            <p class="count">Đánh giá từ thành viên</p>
                         </div>
                         <div class="review-btn-box">
                             <button class="btn-write-review">

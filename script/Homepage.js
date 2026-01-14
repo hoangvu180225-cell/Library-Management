@@ -249,11 +249,13 @@ function setupHeaderNav() {
    5. LOGIC HIỂN THỊ SÁCH (LỌC & PHÂN TRANG)
    ========================================= */
    const CATEGORY_MAP = {
-    1: 'Khoa học Viễn tưởng',
-    2: 'Văn học & Lãng mạn',
-    3: 'Trinh thám & Ly kỳ',
-    4: 'Sách Thiếu nhi',
-    5: 'Lịch sử & Tri thức'
+    1: 'Hành động',
+    2: 'Khoa học viễn tưởng',
+    3: 'Lãng mạn',
+    4: 'Lịch sử',
+    5: 'Tiểu thuyết',
+    6: 'Thiếu nhi',
+    7: 'Trinh thám'
 };
 
 function loadPage(page) {

@@ -1,3 +1,4 @@
+DROP DATABASE IF EXISTS LibraryManagement;
 CREATE DATABASE LibraryManagement;
 USE LibraryManagement;
 
@@ -16,26 +17,27 @@ CREATE TABLE Users (
     password VARCHAR(255) NOT NULL,     
     phone VARCHAR(20),
     avatar VARCHAR(255),                
-    
     role ENUM('ADMIN', 'LIBRARIAN', 'STOCK_MANAGER', 'MEMBER') DEFAULT 'MEMBER',
-    
     points INT DEFAULT 0,               
     tier ENUM('BRONZE', 'SILVER', 'GOLD', 'PLATINUM', 'DIAMOND') DEFAULT 'BRONZE',
-    
     status ENUM('ACTIVE', 'RESTRICTED', 'BANNED') DEFAULT 'ACTIVE', 
-    
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
--- 3. Bảng Sách (Đã sửa)
+-- 3. Bảng Sách (Đã bổ sung Publisher, Year, Format)
 CREATE TABLE Books (
-    book_id INT AUTO_INCREMENT PRIMARY KEY, -- SỬA: Tự tăng ID
+    book_id INT AUTO_INCREMENT PRIMARY KEY,
+    isbn VARCHAR(20) UNIQUE,                
     title VARCHAR(255) NOT NULL,       
     author VARCHAR(100) NOT NULL,      
     category_id INT,
     
-    price DECIMAL(10, 2) DEFAULT 0,         -- THÊM: Giá sách (hỗ trợ cả lẻ nếu cần)
+    publisher VARCHAR(100) DEFAULT NULL,        -- MỚI: Nhà xuất bản
+    publication_year INT DEFAULT NULL,          -- MỚI: Năm xuất bản
+    book_format VARCHAR(50) DEFAULT 'Bìa mềm',  -- MỚI: Hình thức
+    
+    price DECIMAL(10, 2) DEFAULT 0,         
     image VARCHAR(255),                 
     description TEXT,
     
@@ -50,22 +52,17 @@ CREATE TABLE Books (
     FOREIGN KEY (category_id) REFERENCES Categories(category_id) ON DELETE SET NULL
 );
 
--- 4. Bảng Mượn Trả / Giao dịch
+-- 4. Bảng Mượn Trả
 CREATE TABLE Transactions (
     trans_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
-    book_id INT NOT NULL, -- SỬA: Đổi sang INT để khớp với Books
-    
+    book_id INT NOT NULL, 
     type ENUM('BORROW', 'BUY') DEFAULT 'BORROW', 
-    
     start_date DATETIME DEFAULT CURRENT_TIMESTAMP, 
-    due_date DATETIME,                             
-    return_date DATETIME,                          
-    
-    status ENUM('PENDING', 'BORROWING', 'RETURNED', 'OVERDUE', 'COMPLETED', 'CANCELLED') DEFAULT 'PENDING',
-    
+    due_date DATETIME,                                     
+    return_date DATETIME,                                  
+    status ENUM('PENDING', 'BORROWING', 'RETURNED', 'OVERDUE', 'COMPLETED', 'CANCELLED', 'WISHLIST') DEFAULT 'PENDING',
     note TEXT, 
-    
     FOREIGN KEY (user_id) REFERENCES Users(user_id),
     FOREIGN KEY (book_id) REFERENCES Books(book_id)
 );
@@ -74,11 +71,10 @@ CREATE TABLE Transactions (
 CREATE TABLE Reviews (
     review_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
-    book_id INT, -- SỬA: Đổi sang INT để khớp với Books
+    book_id INT, 
     rating INT CHECK (rating >= 1 AND rating <= 5),
     comment TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    
     FOREIGN KEY (user_id) REFERENCES Users(user_id),
     FOREIGN KEY (book_id) REFERENCES Books(book_id)
 );
