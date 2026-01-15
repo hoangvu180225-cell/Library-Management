@@ -1,28 +1,31 @@
 const db = require('../db');
 
-// 1. MƯỢN SÁCH
+// 1. MƯỢN SÁCH (Có trừ kho)
 exports.borrowBook = async (req, res) => {
     const { bookID } = req.body;
-    
-    // Validate
-    if (!req.user || !req.user.id) {
-        return res.status(401).json({ message: "Vui lòng đăng nhập!" });
-    }
-
     const userId = req.user.id; 
 
     try {
+        // Kiểm tra xem sách còn trong kho không
+        const [book] = await db.query('SELECT stock FROM Books WHERE book_id = ?', [bookID]);
+        if (!book.length || book[0].stock <= 0) {
+            return res.status(400).json({ message: "Sách đã hết trong kho!" });
+        }
+
         const dueDate = new Date();
-        dueDate.setDate(dueDate.getDate() + 14); // Hạn trả 14 ngày
-        
-        // STATUS: 'BORROWING' (Khớp Schema)
+        dueDate.setDate(dueDate.getDate() + 14);
+
+        // Nên dùng Transaction ở đây nếu làm hệ thống lớn
         await db.query(
             'INSERT INTO transactions (user_id, book_id, type, status, due_date) VALUES (?, ?, "BORROW", "BORROWING", ?)', 
             [userId, bookID, dueDate]
         );
+
+        // Cập nhật giảm kho
+        await db.query('UPDATE Books SET stock = stock - 1, borrow_count = borrow_count + 1 WHERE book_id = ?', [bookID]);
+
         res.json({ message: "Mượn sách thành công", hanTra: dueDate });
     } catch (error) { 
-        console.error("Lỗi Mượn:", error);
         res.status(500).json({ message: "Lỗi server: " + error.message }); 
     }
 };
@@ -79,19 +82,43 @@ exports.getLibrary = async (req, res) => {
 // 3. MUA SÁCH
 exports.buyBook = async (req, res) => {
     const { bookID } = req.body;
-    
-    if (!req.user || !req.user.id) return res.status(401).json({ message: "Chưa đăng nhập" });
+    const userId = req.user.id;
+
+    if (!userId) return res.status(401).json({ message: "Chưa đăng nhập" });
 
     try {
-        // STATUS: 'COMPLETED' (Khớp Schema)
+        // 1. Kiểm tra tồn kho và lấy giá sách
+        const [book] = await db.query('SELECT stock, price FROM Books WHERE book_id = ?', [bookID]);
+        
+        if (book.length === 0) return res.status(404).json({ message: "Sách không tồn tại" });
+        if (book[0].stock <= 0) return res.status(400).json({ message: "Sách đã hết hàng" });
+
+        // 2. Thực hiện giao dịch (Nên dùng TRANSACTION trong SQL để đảm bảo an toàn dữ liệu)
+        // Ở đây mình viết dạng tuần tự cho dễ hiểu:
+        
+        // A. Tạo bản ghi giao dịch
         await db.query(
             'INSERT INTO transactions (user_id, book_id, type, status) VALUES (?, ?, "BUY", "COMPLETED")', 
-            [req.user.id, bookID]
+            [userId, bookID]
         );
-        res.json({ message: "Mua sách thành công!" });
+
+        // B. Giảm số lượng trong kho
+        await db.query('UPDATE Books SET stock = stock - 1 WHERE book_id = ?', [bookID]);
+
+        // C. Cộng điểm tích lũy cho User (Ví dụ: 1/1000 giá trị sách quy ra điểm)
+        const earnedPoints = Math.floor(book[0].price / 1000);
+        if (earnedPoints > 0) {
+            await db.query('UPDATE Users SET points = points + ? WHERE user_id = ?', [earnedPoints, userId]);
+        }
+
+        res.json({ 
+            message: "Mua sách thành công!", 
+            pointsEarned: earnedPoints 
+        });
+
     } catch (error) { 
         console.error("Lỗi Mua:", error);
-        res.status(500).json({ message: "Lỗi mua sách: " + error.message }); 
+        res.status(500).json({ message: "Lỗi hệ thống: " + error.message }); 
     }
 };
 
@@ -130,22 +157,28 @@ exports.deleteTransaction = async (req, res) => {
     }
 };
 
-// 6. CẬP NHẬT TRẠNG THÁI (TRẢ SÁCH) - BỔ SUNG MỚI
+// 6. CẬP NHẬT TRẠNG THÁI (TRẢ SÁCH)
 exports.updateStatus = async (req, res) => {
     const transId = req.params.id;
-    const { status } = req.body; // Frontend gửi { status: 'RETURNED', }
-
-    if (!req.user || !req.user.id) return res.status(401).json({ message: "Chưa đăng nhập" });
+    const { status } = req.body; 
 
     try {  
-        await db.query(
-            'UPDATE transactions SET status = ?, return_date = NOW() WHERE trans_id = ? AND user_id = ?', 
-            [status, return_date, transId, req.user.id]
-        );
+        // 1. Lấy thông tin giao dịch cũ để xem book_id là gì
+        const [trans] = await db.query('SELECT book_id, status FROM transactions WHERE trans_id = ?', [transId]);
+        
+        if (trans.length > 0 && status === 'RETURNED' && trans[0].status !== 'RETURNED') {
+            // 2. Cập nhật trạng thái và cộng lại kho
+            await db.query(
+                'UPDATE transactions SET status = ?, return_date = NOW() WHERE trans_id = ?', 
+                [status, transId]
+            );
+            await db.query('UPDATE Books SET stock = stock + 1 WHERE book_id = ?', [trans[0].book_id]);
+        } else {
+            await db.query('UPDATE transactions SET status = ? WHERE trans_id = ?', [status, transId]);
+        }
 
-        res.json({ message: "Cập nhật trạng thái thành công" });
+        res.json({ message: "Cập nhật thành công" });
     } catch (error) {
-        console.error("Lỗi Update:", error);
         res.status(500).json({ message: error.message });
     }
 };

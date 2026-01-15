@@ -380,11 +380,20 @@ function setupCategoryTabs() {
         });
     });
     
-    const rankTime = document.querySelectorAll('.ranktime');
-    rankTime.forEach(btn => {
+    const rankTimeBtns = document.querySelectorAll('.ranktime');
+    rankTimeBtns.forEach(btn => {
         btn.addEventListener('click', function() {
+            // Xử lý UI active
             document.querySelector('.ranktime.active')?.classList.remove('active');
             this.classList.add('active');
+
+            // Lấy text để quyết định tiêu chí
+            const type = this.innerText.trim();
+            if (type === "Top Reading") {
+                renderRanking(globalBookList, 'reading');
+            } else if (type === "Trending") {
+                renderRanking(globalBookList, 'trending');
+            }
         });
     });
 }
@@ -392,22 +401,39 @@ function setupCategoryTabs() {
 /* =========================================
    6. LOGIC BẢNG XẾP HẠNG & LIÊN HỆ
    ========================================= */
-function renderRanking(bookList) {
+function renderRanking(bookList, criteria = 'reading') {
     const container = document.getElementById('rank-list-container');
     if (!container) return;
     
     container.innerHTML = '';
-    // Sắp xếp theo views (Giả sử API trả về trường views)
-    const topBooks = [...bookList].sort((a, b) => (b.views || 0) - (a.views || 0)).slice(0, 5);
+
+    // Tạo bản sao để tránh làm thay đổi mảng gốc
+    let sortedBooks = [...bookList];
+
+    if (criteria === 'reading') {
+        // Sắp xếp theo Top Reading (borrow_count)
+        sortedBooks.sort((a, b) => (b.borrow_count || 0) - (a.borrow_count || 0));
+    } else {
+        // Sắp xếp theo Trending (views)
+        sortedBooks.sort((a, b) => (b.views || 0) - (a.views || 0));
+    }
+
+    // Lấy Top 5
+    const topBooks = sortedBooks.slice(0, 5);
 
     topBooks.forEach((book, index) => {
+        // Xác định nhãn hiển thị dựa trên tiêu chí
+        const statsLabel = criteria === 'reading' 
+            ? `${(book.borrow_count || 0).toLocaleString()} lượt mượn`
+            : `${(book.views || 0).toLocaleString()} lượt xem`;
+
         const html = `
             <div class="rank-item">
                 <div class="rank-num top-${index + 1}">${index + 1}</div>
                 <img src="${book.image}" alt="${book.title}" onclick="viewDetails('${book.book_id}')" style="cursor:pointer">
                 <div class="rank-info">
                     <h4 class="btn-text" onclick="viewDetails('${book.book_id}')" style="cursor:pointer">${book.title}</h4>
-                    <span class="views">${(book.views || 0).toLocaleString()} lượt mượn</span>
+                    <span class="views">${statsLabel}</span>
                 </div>
             </div>`;
         container.insertAdjacentHTML('beforeend', html);
