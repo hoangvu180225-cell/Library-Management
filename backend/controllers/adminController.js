@@ -207,3 +207,67 @@ exports.deleteUser = async (req, res) => {
         res.status(500).json({ message: "Lỗi Server: " + error.message });
     }
 };
+
+// --- C. QUẢN LÝ GIAO DỊCH MƯỢN TRẢ SÁCH ---
+
+// 1. GET ALL (Giữ nguyên để hiển thị list)
+exports.getAllTransactions = async (req, res) => {
+    try {
+        const query = `
+            SELECT t.*, u.full_name, u.email, b.title, b.image 
+            FROM Transactions t
+            JOIN Users u ON t.user_id = u.user_id
+            JOIN Books b ON t.book_id = b.book_id
+            ORDER BY FIELD(t.status, 'PENDING', 'BORROWING', 'OVERDUE', 'RETURNED', 'COMPLETED', 'CANCELLED'), t.trans_id DESC
+        `; 
+        // Mẹo: ORDER BY FIELD để đưa đơn PENDING (Chờ duyệt) lên đầu cho Admin dễ thấy
+        const [rows] = await db.query(query);
+        res.json(rows);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// 2. UPDATE STATUS (Hàm quan trọng nhất: Xử lý nút Confirm)
+exports.updateTransaction = async (req, res) => {
+    const { id } = req.params; 
+    const { status } = req.body; // Frontend chỉ cần gửi status mới lên
+
+    try {
+        let query = "";
+        let params = [];
+
+        // LOGIC TỰ ĐỘNG CẬP NHẬT NGÀY
+        if (status === 'BORROWING') {
+            // Admin duyệt mượn -> Set ngày bắt đầu là hôm nay, ngày trả là +14 ngày
+            query = `UPDATE Transactions SET status = ?, start_date = NOW(), due_date = DATE_ADD(NOW(), INTERVAL 14 DAY) WHERE trans_id = ?`;
+            params = [status, id];
+
+        } else if (status === 'RETURNED' || status === 'COMPLETED') {
+            // Khách trả sách hoặc Đã giao hàng -> Set ngày thực trả là hôm nay
+            query = `UPDATE Transactions SET status = ?, return_date = NOW() WHERE trans_id = ?`;
+            params = [status, id];
+
+        } else {
+            // Các trạng thái khác (CANCELLED...)
+            query = `UPDATE Transactions SET status = ? WHERE trans_id = ?`;
+            params = [status, id];
+        }
+
+        await db.query(query, params);
+        res.json({ message: "Cập nhật trạng thái thành công" });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// 3. DELETE (Giữ lại để xóa đơn rác nếu cần)
+exports.deleteTransaction = async (req, res) => {
+    const { id } = req.params;
+    try {
+        await db.query('DELETE FROM Transactions WHERE trans_id = ?', [id]);
+        res.json({ message: "Đã xóa giao dịch" });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};

@@ -1,13 +1,14 @@
 import axiosClient from './axiosClient.js';
 
 const adminApi = {
-    // --- USER ---
+    // ==============================
+    // 1. QUẢN LÝ NGƯỜI DÙNG (USER)
+    // ==============================
     getAllUsers() {
         return axiosClient.get('/admin/users');
     },
 
     createUser(data) {
-        // Bỏ FormData, gửi JSON object
         return axiosClient.post('/admin/users', data); 
     },
 
@@ -19,13 +20,14 @@ const adminApi = {
         return axiosClient.delete(`/admin/users/${id}`);
     },
 
-    // --- STAFF ---
+    // ==============================
+    // 2. QUẢN LÝ NHÂN VIÊN (STAFF)
+    // ==============================
     getAllStaffs() {
         return axiosClient.get('/admin/staffs');
     },
 
     createStaff(data) {
-        // Bỏ FormData, gửi JSON object
         return axiosClient.post('/admin/staffs', data);
     },
 
@@ -35,6 +37,24 @@ const adminApi = {
 
     deleteStaff(id) {
         return axiosClient.delete(`/admin/staffs/${id}`);
+    },
+
+    // ==============================
+    // 3. QUẢN LÝ GIAO DỊCH (TRANSACTION) - BỔ SUNG PHẦN NÀY
+    // ==============================
+    // Lấy tất cả đơn hàng để Admin duyệt
+    getAllTransactions() {
+        return axiosClient.get('/admin/transactions');
+    },
+
+    // Cập nhật trạng thái (Duyệt mượn / Đã trả / Đã giao)
+    updateTransaction(id, data) {
+        return axiosClient.put(`/admin/transactions/${id}`, data);
+    },
+
+    // Xóa đơn hàng (nếu cần)
+    deleteTransaction(id) {
+        return axiosClient.delete(`/admin/transactions/${id}`);
     }
 };
 

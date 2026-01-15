@@ -2,24 +2,27 @@ const express = require('express');
 const router = express.Router();
 const adminController = require('../controllers/adminController');
 
-// Lưu ý: Đã xóa dòng require upload vì bạn không dùng tính năng up ảnh nữa
-
 // ==============================
-// 1. ROUTES QUẢN LÝ NHÂN VIÊN (STAFF)
+// 1. QUẢN LÝ NHÂN VIÊN (STAFF)
 // ==============================
 router.get('/staffs', adminController.getAllStaffs);
-router.post('/staffs', adminController.createStaff); // Đã bỏ middleware upload
+router.post('/staffs', adminController.createStaff);
 router.put('/staffs/:id', adminController.updateStaff);
 router.delete('/staffs/:id', adminController.deleteStaff);
 
 // ==============================
-// 2. ROUTES QUẢN LÝ NGƯỜI DÙNG (USER)
+// 2. QUẢN LÝ NGƯỜI DÙNG (USER)
 // ==============================
 router.get('/users', adminController.getAllUsers);
-
-// --- BẠN ĐANG THIẾU 3 DÒNG DƯỚI ĐÂY ---
-router.post('/users', adminController.createUser);       // Thêm mới User
-router.put('/users/:id', adminController.updateUser);    // Cập nhật User
+router.post('/users', adminController.createUser);       // Thêm User
+router.put('/users/:id', adminController.updateUser);    // Sửa User
 router.delete('/users/:id', adminController.deleteUser); // Xóa User
+
+// ==============================
+// 3. QUẢN LÝ GIAO DỊCH (TRANSACTIONS) - MỚI BỔ SUNG
+// ==============================
+router.get('/transactions', adminController.getAllTransactions);
+router.put('/transactions/:id', adminController.updateTransaction);
+router.delete('/transactions/:id', adminController.deleteTransaction);
 
 module.exports = router;
