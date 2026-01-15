@@ -1,258 +1,75 @@
-/* --- 1. Toolbar (Thanh công cụ & Bộ lọc) --- */
-.toolbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 25px;
-    flex-wrap: wrap;
-    gap: 15px;
-}
+/* RESET & BASIC */
+:root { --primary: #4361ee; --secondary: #e9ecef; --text: #2b2d42; --sidebar-w: 250px; }
+body { font-family: 'Segoe UI', sans-serif; display: flex; background: #f8f9fa; margin: 0; }
+a { text-decoration: none; color: inherit; }
 
-.filter-group {
-    display: flex;
-    gap: 10px;
-}
+/* SIDEBAR */
+.sidebar { width: var(--sidebar-w); background: white; border-right: 1px solid #ddd; height: 100vh; position: fixed; padding: 20px; }
+.brand { font-size: 1.5rem; font-weight: bold; color: var(--primary); margin-bottom: 30px; }
+.menu-item { display: block; padding: 12px; margin-bottom: 5px; color: #555; border-radius: 8px; font-weight: 500; }
+.menu-item.active, .menu-item:hover { background: #eef2ff; color: var(--primary); }
 
-.filter-select {
-    padding: 8px 12px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    outline: none;
-    color: #555;
-    background: white;
-}
+/* MAIN CONTENT */
+.main-content { margin-left: var(--sidebar-w); width: calc(100% - var(--sidebar-w)); padding: 20px 40px; }
 
-/* Nút chuyển chế độ xem */
-.view-switcher .btn-view {
-    padding: 8px 12px;
-    border: 1px solid #ddd;
-    background: white;
-    cursor: pointer;
-    color: #666;
-    transition: all 0.2s;
-}
-.view-switcher .btn-view:first-child { border-top-left-radius: 6px; border-bottom-left-radius: 6px; }
-.view-switcher .btn-view:last-child { border-top-right-radius: 6px; border-bottom-right-radius: 6px; border-left: none; }
+/* TOP BAR */
+.top-bar { display: flex; justify-content: space-between; margin-bottom: 20px; align-items: center; }
+.search-box { position: relative; width: 350px; }
+.search-box input { width: 100%; padding: 10px 15px 10px 40px; border-radius: 20px; border: 1px solid #ddd; outline: none; margin-left: 50px;}
+.search-box i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #888; margin-left: 50px;}
 
-.view-switcher .btn-view.active {
-    background: var(--primary-blue);
-    color: white;
-    border-color: var(--primary-blue);
-}
+.user-actions { display: flex; align-items: center; gap: 20px; }
+.btn-add { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+.admin-profile { display: flex; align-items: center; gap: 10px; }
+.avatar-circle { width: 40px; height: 40px; background: #eee; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #555; }
 
-/* --- 2. Grid Layout --- */
-.book-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 25px;
-}
+/* TOOLBAR & FILTER */
+.toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.filter-select { padding: 8px; border: 1px solid #ddd; border-radius: 5px; outline: none; }
+.view-switcher .btn-view { background: white; border: 1px solid #ddd; padding: 8px 15px; cursor: pointer; }
+.view-switcher .btn-view.active { background: var(--primary); color: white; border-color: var(--primary); }
 
-/* --- 3. Book Card --- */
-.book-card {
-    background: white;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-    transition: transform 0.3s, box-shadow 0.3s;
-    display: flex;
-    flex-direction: column;
-}
+/* GRID VIEW */
+.book-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+.book-card { background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05); transition: 0.3s; position: relative; }
+.book-card:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+.book-cover-container { position: relative; width: 100%; height: 280px; }
+.book-cover-img { width: 100%; height: 100%; object-fit: cover; }
+.book-status-badge { position: absolute; top: 10px; right: 10px; padding: 4px 8px; border-radius: 4px; color: white; font-size: 0.75rem; font-weight: bold; }
+.status-available { background: rgba(39, 174, 96, 0.9); }
+.status-out { background: rgba(231, 76, 60, 0.9); }
 
-.book-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-}
+.book-info { padding: 15px; }
+.book-title { margin: 0 0 5px; font-size: 1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.book-author { font-size: 0.85rem; color: #666; display: block; margin-bottom: 10px; }
+.book-meta { display: flex; justify-content: space-between; font-size: 0.8rem; color: #888; }
 
-.book-cover-container {
-    position: relative;
-    height: 300px;
-    overflow: hidden;
-    background: #f8f9fa;
-    display: flex; align-items: center; justify-content: center;
-}
+.book-actions { padding: 10px; border-top: 1px solid #eee; display: flex; justify-content:flex-end; align-items: center; }
+.btn-card-action { border: none; background: none; cursor: pointer; color: #555; transition: 0.2s; margin-right: 10px;}
+.btn-card-action:hover { color: var(--primary); }
 
-.book-cover-img {
-    width: 100%; height: 100%; object-fit: cover;
-    transition: transform 0.3s;
-}
-.book-card:hover .book-cover-img { transform: scale(1.05); }
+/* LIST VIEW (TABLE) */
+.table-card { background: white; border-radius: 10px; padding: 0; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; }
+th { background: #f8f9fa; font-weight: 600; color: #555; }
+.list-cover { width: 50px; height: 75px; object-fit: cover; border-radius: 4px; }
+.status-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; }
+.st-active { color: #27ae60; font-weight: 600; } .st-active .status-dot { background: #27ae60; }
+.st-locked { color: #c0392b; font-weight: 600; } .st-locked .status-dot { background: #c0392b; }
+.tier-badge { padding: 3px 8px; border-radius: 12px; font-size: 0.8rem; background: #eee; }
 
-/* Badge trạng thái */
-.book-status-badge {
-    position: absolute;
-    top: 15px; right: 15px;
-    padding: 5px 12px;
-    border-radius: 20px;
-    font-size: 0.75rem; font-weight: 700; color: white;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    z-index: 2;
-}
-.status-available { background: var(--success-text); }
-.status-out { background: var(--danger-text); }
-
-/* Thông tin sách */
-.book-info {
-    padding: 15px;
-    flex: 1;
-    display: flex; flex-direction: column;
-}
-
-.book-title {
-    font-size: 1.1rem; font-weight: 600; color: #333; margin: 0 0 5px 0;
-    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
-}
-.book-author { font-size: 0.9rem; color: #666; margin-bottom: 15px; }
-
-.book-meta {
-    display: flex; justify-content: space-between;
-    font-size: 0.8rem; color: #888; margin-top: auto;
-}
-.meta-item { display: flex; align-items: center; gap: 5px; }
-.meta-item i { color: var(--primary-blue); opacity: 0.7; }
-
-/* Actions Footer */
-.book-actions {
-    padding: 12px 15px;
-    border-top: 1px solid #f0f0f0;
-    display: flex; justify-content: space-between;
-    background: #fcfcfc;
-}
-
-.btn-card-action {
-    padding: 6px 12px;
-    border-radius: 6px; border: 1px solid #ddd;
-    background: white; cursor: pointer; color: #555;
-    font-size: 0.85rem; transition: all 0.2s;
-    display: flex; align-items: center; gap: 6px;
-}
-.btn-card-action:hover { background: #f0f0f0; color: #333; border-color: #ccc; }
-
-.btn-view-detail { color: var(--primary-blue); border-color: var(--primary-blue); font-weight: 500; }
-.btn-view-detail:hover { background: var(--primary-blue); color: white; }
-
-.action-group { display: flex; }
-.action-group .btn-card-action { border-radius: 0; }
-.action-group .btn-card-action:first-child { border-top-left-radius: 6px; border-bottom-left-radius: 6px; }
-.action-group .btn-card-action:last-child { border-top-right-radius: 6px; border-bottom-right-radius: 6px; border-left: none; }
-.btn-delete-card:hover { background: var(--danger-bg); color: var(--danger-text); border-color: var(--danger-bg); }
-
-/* --- 4. List View Styles --- */
-.book-list-view { display: none; }
-
-.list-mode .book-grid { display: none; }
-.list-mode .book-list-view { display: block; }
-.list-cover { width: 45px; height: 65px; object-fit: cover; border-radius: 4px; border: 1px solid #eee; }
-
-/* --- 5. MODAL STYLES (Phần quan trọng) --- */
-.modal {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    z-index: 1000;
-    display: flex; align-items: center; justify-content: center;
-    opacity: 0; visibility: hidden;
-    transition: all 0.3s ease;
-}
-
-.modal.active { opacity: 1; visibility: visible; }
-
-.modal-overlay {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(2px);
-}
-
-.modal-content {
-    background: white;
-    width: 600px; /* Tăng độ rộng */
-    max-width: 90%;
-    border-radius: 12px;
-    position: relative;
-    z-index: 2;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.2);
-    transform: translateY(20px);
-    transition: transform 0.3s ease;
-    display: flex; flex-direction: column;
-}
-
-.modal.active .modal-content { transform: translateY(0); }
-
-/* Header, Body, Footer Modal */
-.modal-header {
-    padding: 20px 25px;
-    border-bottom: 1px solid #eee;
-    display: flex; justify-content: space-between; align-items: center;
-}
-.modal-header h3 { margin: 0; color: #333; }
-.btn-close-modal { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #888; }
-.btn-close-modal:hover { color: #333; }
-
-.modal-body { padding: 25px; max-height: 70vh; overflow-y: auto; }
-
-.modal-footer {
-    padding: 15px 25px;
-    border-top: 1px solid #eee;
-    background: #f9f9f9;
-    border-bottom-left-radius: 12px; border-bottom-right-radius: 12px;
-    display: flex; justify-content: flex-end; gap: 10px;
-}
-
-/* --- 6. FORM STYLES --- */
-.form-group { margin-bottom: 15px; }
-.form-group label { display: block; margin-bottom: 8px; font-weight: 500; color: #555; font-size: 0.9rem; }
-.form-group input, .form-group select {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    font-size: 0.95rem;
-    box-sizing: border-box; 
-}
-.form-group input:focus, .form-group select:focus {
-    border-color: var(--primary-blue);
-    outline: none;
-}
-
-.form-row { display: flex; gap: 15px; }
-.form-row .form-group { flex: 1; }
-
-/* Chia 3 cột */
-.form-row.cols-3 .form-group {
-    flex: 0 0 32%;
-    min-width: 0;
-}
-
-/* Input có đơn vị (gr) */
-.input-suffix {
-    position: relative;
-    display: flex; align-items: center;
-}
-.input-suffix input { padding-right: 35px; }
-.input-suffix span {
-    position: absolute; right: 10px;
-    color: #888; font-size: 0.85rem; pointer-events: none;
-}
-
-/* Upload Box */
-.upload-box {
-    border: 2px dashed #ddd;
-    padding: 20px; text-align: center;
-    border-radius: 8px; cursor: pointer; color: #888;
-    transition: all 0.2s;
-}
-.upload-box:hover { border-color: var(--primary-blue); color: var(--primary-blue); background: #f0f7ff; }
-.upload-box i { font-size: 2rem; margin-bottom: 10px; }
-
-/* Buttons Modal */
-.btn-primary {
-    background: var(--primary-blue); color: white;
-    padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: 500;
-}
-.btn-secondary {
-    background: white; color: #555; border: 1px solid #ddd;
-    padding: 10px 20px; border-radius: 6px; cursor: pointer;
-}
-.btn-secondary:hover { background: #eee; }
-.btn-primary:hover { opacity: 0.9; }
+/* MODAL */
+.modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000; }
+.modal.active { display: flex; align-items: center; justify-content: center; }
+.modal-overlay { position: absolute; width: 100%; height: 100%; background: rgba(0,0,0,0.5); }
+.modal-content { background: white; width: 700px; max-width: 95%; border-radius: 10px; padding: 25px; position: relative; z-index: 1001; }
+.modal-header { display: flex; justify-content: space-between; margin-bottom: 20px; }
+.form-row { display: flex; gap: 15px; margin-bottom: 15px; }
+.form-group { flex: 1; display: flex; flex-direction: column; gap: 5px; }
+.form-group input, select { padding: 10px; border: 1px solid #ddd; border-radius: 5px; outline: none; }
+.upload-box { border: 2px dashed #ddd; border-radius: 5px; padding: 20px; text-align: center; color: #888; cursor: pointer; transition: 0.3s; }
+.upload-box:hover { border-color: var(--primary); color: var(--primary); }
+.modal-footer { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+.btn-primary { background: var(--primary); color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; }
+.btn-secondary { background: #eee; color: #333; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; }

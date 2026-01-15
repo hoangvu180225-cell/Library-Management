@@ -46,39 +46,130 @@ exports.getBookById = async (req, res) => {
 };
 
 exports.updateBook = async (req, res) => {
-    const { title, author, price } = req.body;
+    // 1. Lấy ID sách từ URL (VD: /api/books/10)
+    const bookId = req.params.id; 
+
+    // 2. Lấy toàn bộ dữ liệu từ Frontend gửi lên (req.body)
+    const { 
+        isbn, 
+        title, 
+        author, 
+        description, 
+        publisher, 
+        publication_year, 
+        book_format, 
+        category_id, 
+        stock, 
+        price, 
+        image // Đây là link ảnh (chuỗi text)
+    } = req.body;
+
     try {
-        await db.query('UPDATE books SET title=?, author=?, price=? WHERE id=?', [title, author, price, req.params.id]);
-        res.json({ message: "Cập nhật thành công" });
-    } catch (error) { res.status(500).json({ message: error.message }); }
+        // 3. Câu lệnh SQL Update đầy đủ
+        // Lưu ý: Thứ tự dấu ? phải khớp chính xác với thứ tự biến trong mảng params bên dưới
+        const sql = `
+            UPDATE Books 
+            SET 
+                isbn = ?, 
+                title = ?, 
+                author = ?, 
+                description = ?, 
+                publisher = ?, 
+                publication_year = ?, 
+                book_format = ?, 
+                category_id = ?, 
+                stock = ?, 
+                price = ?, 
+                image = ? 
+            WHERE book_id = ?
+        `;
+
+        // 4. Mảng tham số (Mapping 1-1 với dấu ?)
+        const params = [
+            isbn, 
+            title, 
+            author, 
+            description, 
+            publisher, 
+            publication_year, 
+            book_format, 
+            category_id, 
+            stock, 
+            price, 
+            image, 
+            bookId // Tham số cuối cùng cho điều kiện WHERE book_id = ?
+        ];
+
+        // 5. Thực thi câu lệnh
+        const [result] = await db.query(sql, params);
+
+        // Kiểm tra xem có sách nào được update không (phòng trường hợp ID sai)
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: "Không tìm thấy sách có ID: " + bookId });
+        }
+
+        res.json({ message: "Cập nhật thông tin sách thành công!" });
+
+    } catch (error) { 
+        console.error("Lỗi Update:", error);
+        res.status(500).json({ message: "Lỗi server: " + error.message }); 
+    }
 };
 
 exports.deleteBook = async (req, res) => {
     try {
-        await db.query('DELETE FROM books WHERE id = ?', [req.params.id]);
+        await db.query('DELETE FROM books WHERE book_id = ?', [req.params.id]);
         res.json({ message: "Xóa sách thành công" });
     } catch (error) { res.status(500).json({ message: error.message }); }
 };
 
 exports.createBook = async (req, res) => {
     try {
-        const { title, author, price } = req.body;
+        // Log ra để kiểm tra chắc chắn data đã vào
+        console.log("Body:", req.body); 
         
-        // Cloudinary trả về link ảnh ở thuộc tính .path
-        const imageUrl = req.file ? req.file.path : null; 
-
-        console.log("Link ảnh Cloudinary:", imageUrl); // Log ra để kiểm tra
-
-        const sql = 'INSERT INTO books (title, author, price, image) VALUES (?, ?, ?, ?)';
-        await db.query(sql, [title, author, price, imageUrl]);
+        const { 
+            isbn, title, author, description, publisher, 
+            publication_year, book_format, category_id, stock, price 
+        } = req.body;
         
-        res.json({ 
+        // --- LOGIC NHẬN ẢNH ĐÃ SỬA ---
+        let finalImage = ''; 
+
+        if (req.file && req.file.path) {
+            // Trường hợp 1: Có file upload (Key 'image') -> Lấy path từ Cloudinary
+            finalImage = req.file.path;
+        } else if (req.body.image_link) { 
+            // Trường hợp 2: Có link text (Key 'image_link') -> Lấy từ body
+            // (Lưu ý: phải khớp tên với Frontend vừa sửa)
+            finalImage = req.body.image_link;
+        }
+
+        // Kiểm tra lần cuối
+        console.log("Ảnh sẽ lưu vào DB:", finalImage);
+
+        // --- CÂU SQL (Giữ nguyên chuẩn 11 biến) ---
+        const sql = `
+            INSERT INTO Books 
+            (isbn, title, author, description, publisher, publication_year, book_format, category_id, total_stock, price, image) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `;
+
+        const params = [
+            isbn, title, author, description, publisher, 
+            publication_year, book_format, category_id, stock, price, 
+            finalImage // Giờ nó sẽ là đường dẫn link ông nhập, không bị undefined nữa
+        ];
+
+        const [result] = await db.query(sql, params);
+        
+        res.status(201).json({ 
             message: "Tạo sách thành công!",
-            data: { title, author, price, image: imageUrl }
+            bookId: result.insertId
         });
 
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: error.message });
+        console.error("Lỗi:", error);
+        res.status(500).json({ message: "Lỗi server: " + error.message });
     }
 };
