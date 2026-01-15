@@ -9,9 +9,10 @@ const transactionApi = {
     },
 
     // 2. Lấy danh sách
-    getLibrary() {
+    getLibrary(params) { 
         const url = '/transaction';
-        return axiosClient.get(url);
+        // Truyền object params vào axios để backend nhận được req.query
+        return axiosClient.get(url, { params: params });
     },
 
     // 3. Mượn sách
@@ -32,6 +33,14 @@ const transactionApi = {
     deleteTransaction(id) {
         const url = `/transaction/${id}`;
         return axiosClient.delete(url);
+    },
+
+    // 6. Cập nhật trạng thái (Dùng để TRẢ SÁCH)
+    // Script gọi: updateStatus(id, { status: 'RETURNED', return_date: ... })
+    updateStatus(id, data) {
+        const url = `/transaction/${id}`;
+        // Dùng PUT hoặc PATCH tùy backend qui định cho việc update
+        return axiosClient.put(url, data); 
     }
 };
 

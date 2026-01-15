@@ -1,156 +1,273 @@
-/* --- CẤU HÌNH TRANG --- */
+/* =========================================
+   1. HEADER & TABS (LÀM ĐẸP THANH LỌC)
+   ========================================= */
 .mybooks-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     margin-bottom: 30px;
-    flex-wrap: wrap;
-    gap: 20px;
+    text-align: center; /* Căn giữa tiêu đề */
 }
 
-.page-title {
-    margin-bottom: 0; /* Override style cũ */
-    text-align: left;
+.mybooks-header h2 {
+    font-size: 2rem;
+    color: #1e293b;
+    margin-bottom: 25px;
+    font-weight: 800;
 }
 
-/* --- TABS BỘ LỌC --- */
+/* Container của các nút tab */
 .status-tabs {
-    display: flex;
-    background: white;
-    padding: 5px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    display: inline-flex; /* Co lại theo nội dung để căn giữa */
+    background: #f1f5f9;
+    padding: 6px;
+    border-radius: 12px;
+    gap: 5px;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
 }
 
+/* Style cho từng nút tab */
 .tab-btn {
     border: none;
     background: transparent;
-    padding: 8px 20px;
-    border-radius: 6px;
+    padding: 10px 24px;
+    border-radius: 8px;
     font-weight: 600;
-    color: var(--text-light);
+    color: #64748b;
     cursor: pointer;
-    transition: 0.2s;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
 }
 
-.tab-btn:hover { color: var(--primary-color); background: #f1f5f9; }
-.tab-btn.active { background: var(--primary-light); color: white; }
+.tab-btn:hover {
+    color: #334155;
+    background: rgba(255, 255, 255, 0.5);
+}
 
-/* --- DANH SÁCH SÁCH (GRID 1 CỘT) --- */
+/* Khi tab được chọn (Active) */
+.tab-btn.active {
+    background: white;
+    color: #0f172a;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    font-weight: 700;
+}
+
+
+/* =========================================
+   2. DANH SÁCH SÁCH (GRID & ITEM)
+   ========================================= */
 .my-book-list {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 24px;
+    max-width: 900px; /* Giới hạn chiều rộng để không bị bè ra quá */
+    margin: 0 auto;   /* Căn giữa danh sách */
 }
 
-/* --- THẺ SÁCH (ITEM) --- */
 .my-book-item {
     display: flex;
     background: white;
-    border-radius: 12px;
+    border-radius: 16px; /* Bo tròn mềm mại hơn */
     padding: 20px;
-    box-shadow: var(--shadow-card);
-    transition: 0.3s;
-    align-items: center;
-    border: 1px solid transparent;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+    border: 1px solid #f1f5f9;
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+    overflow: hidden; /* Để cắt góc badge nếu cần */
 }
 
 .my-book-item:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-hover);
+    transform: translateY(-4px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
     border-color: #cbd5e1;
 }
 
-.my-book-item img {
-    width: 80px;
-    height: 120px;
-    object-fit: cover;
-    border-radius: 6px;
+/* =========================================
+   3. ẢNH BÌA & BADGE TRẠNG THÁI (SỬA LẠI ĐẸP HƠN)
+   ========================================= */
+.book-cover {
+    position: relative;
     margin-right: 25px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    flex-shrink: 0;
 }
 
+.book-cover img {
+    width: 110px;      /* Tăng kích thước chút cho rõ */
+    height: 165px;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+    display: block;
+}
+
+/* Badge trạng thái - Style Glassmorphism (Kính mờ) */
+.status-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    z-index: 2;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    backdrop-filter: blur(8px); /* Tạo hiệu ứng mờ nền */
+    -webkit-backdrop-filter: blur(8px);
+}
+
+/* Màu sắc badge tinh chỉnh lại cho dịu mắt */
+.status-borrowing { 
+    background: rgba(255, 251, 235, 0.9); color: #b45309; border: 1px solid #fcd34d; 
+} 
+.status-returned { 
+    background: rgba(248, 250, 252, 0.9); color: #475569; border: 1px solid #cbd5e1; 
+} 
+.status-overdue { 
+    background: rgba(254, 242, 242, 0.9); color: #b91c1c; border: 1px solid #fca5a5; 
+} 
+.status-bought { 
+    background: rgba(240, 253, 244, 0.9); color: #15803d; border: 1px solid #86efac; 
+} 
+.status-wishlist { 
+    background: rgba(250, 245, 255, 0.9); color: #7e22ce; border: 1px solid #d8b4fe; 
+}
+
+/* =========================================
+   4. THÔNG TIN SÁCH & NÚT BẤM
+   ========================================= */
 .item-info {
-    flex: 1; /* Chiếm hết khoảng trống ở giữa */
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 .item-info h3 {
-    font-size: 1.2rem;
-    color: var(--text-dark);
-    margin-bottom: 5px;
+    font-size: 1.25rem;
+    color: #1e293b;
+    margin: 5px 0 5px 0;
+    font-weight: 700;
+    line-height: 1.4;
 }
 
 .item-info .author {
-    color: var(--text-light);
-    margin-bottom: 12px;
-    font-style: italic;
+    color: #64748b;
+    font-size: 0.95rem;
+    margin-bottom: auto; /* Đẩy nội dung dưới xuống đáy */
+}
+
+.item-meta {
+    margin: 15px 0;
+    padding: 10px;
+    background: #f8fafc;
+    border-radius: 8px;
+    border: 1px solid #f1f5f9;
 }
 
 .item-meta p {
     font-size: 0.9rem;
-    color: var(--text-main);
-    margin-bottom: 4px;
+    color: #475569;
+    margin: 4px 0;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
 }
 
-.item-meta i { width: 16px; text-align: center; color: var(--text-light); }
-.due-date { color: #e11d48 !important; font-weight: 600; } /* Màu đỏ cho hạn trả */
-
-/* --- PHẦN BÊN PHẢI (TRẠNG THÁI & NÚT) --- */
-.item-actions {
+/* Footer chứa ISBN và nút bấm */
+.item-footer {
     display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 15px;
-    min-width: 150px;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
 }
 
-/* Badge trạng thái */
-.status-badge {
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+.isbn {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    font-family: monospace;
+    background: #f1f5f9;
+    padding: 2px 6px;
+    border-radius: 4px;
 }
 
-.status-badge.borrowed { background: #fef3c7; color: #d97706; } /* Vàng cam */
-.status-badge.bought { background: #dcfce7; color: #16a34a; }   /* Xanh lá */
-.status-badge.wishlist { background: #f1f5f9; color: #64748b; } /* Xám */
+.action-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
 
-/* Nút bấm hành động */
+/* Nút bấm được tinh chỉnh lại gọn hơn */
 .btn-action {
     padding: 8px 16px;
-    border-radius: 6px;
-    border: 1px solid;
+    border-radius: 8px;
+    border: none;
     cursor: pointer;
     font-weight: 600;
     font-size: 0.9rem;
-    background: transparent;
-    transition: 0.2s;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
-.btn-action.return {
-    border-color: #d97706; color: #d97706;
+.btn-action:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px -1px rgba(0, 0, 0, 0.15);
 }
-.btn-action.return:hover { background: #d97706; color: white; }
 
-.btn-action.read {
-    border-color: #16a34a; color: #16a34a;
-}
-.btn-action.read:hover { background: #16a34a; color: white; }
+.btn-action.borrow { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+.btn-action.buy    { background: linear-gradient(135deg, #10b981, #059669); }
+.btn-action.return { background: white; color: #d97706; border: 1px solid #d97706; box-shadow: none; }
+.btn-action.return:hover { background: #fff7ed; }
 
-.btn-action.remove {
-    border-color: #ef4444; color: #ef4444;
+/* Nút xóa thùng rác */
+.btn-icon-remove {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%; /* Tròn xoay */
+    border: 1px solid #e2e8f0;
+    background: white;
+    color: #94a3b8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
 }
-.btn-action.remove:hover { background: #ef4444; color: white; }
 
-/* Responsive Mobile */
-@media (max-width: 768px) {
-    .my-book-item { flex-direction: column; align-items: flex-start; }
-    .my-book-item img { margin-bottom: 15px; width: 100px; height: 150px; }
-    .item-actions { width: 100%; flex-direction: row; justify-content: space-between; align-items: center; margin-top: 15px; border-top: 1px solid #f1f5f9; padding-top: 15px; }
+.btn-icon-remove:hover {
+    background: #fee2e2;
+    color: #ef4444;
+    border-color: #fca5a5;
+    transform: rotate(15deg); /* Hiệu ứng xoay nhẹ khi hover */
 }
+
+.book-cover {
+    position: relative;
+    margin-right: 25px;
+    flex-shrink: 0;
+}
+
+/* Badge căn giữa ở mép trên */
+.status-badge {
+    position: absolute;
+    
+    /* 1. Căn vị trí */
+    top: 8px;               /* Cách mép trên 8px */
+    left: 50%;              /* Đẩy sang giữa container */
+    transform: translateX(-50%); /* Kéo ngược lại 50% chiều rộng của chính nó để căn giữa chuẩn */
+    
+    /* 2. Style giao diện cho đẹp */
+    padding: 4px 12px;      /* Tăng padding ngang tí cho thoáng */
+    border-radius: 20px;    /* Bo tròn hẳn như viên thuốc cho mềm mại */
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    white-space: nowrap;    /* Đảm bảo chữ không bị xuống dòng */
+    z-index: 10;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.15); /* Đổ bóng để nổi trên ảnh */
+    
+    /* Hiệu ứng kính mờ (nếu thích) */
+    backdrop-filter: blur(4px); 
+}
+

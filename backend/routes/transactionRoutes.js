@@ -9,4 +9,7 @@ router.get('/', auth, transactionCtrl.getLibrary);
 router.post('/loans', auth, transactionCtrl.borrowBook);
 router.post('/buy', auth, transactionCtrl.buyBook);
 
+router.delete('/:id', auth, transactionCtrl.deleteTransaction); // Route xóa
+router.put('/:id', auth, transactionCtrl.updateStatus);         // Route trả sách (update)
+
 module.exports = router;

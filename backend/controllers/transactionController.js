@@ -43,7 +43,7 @@ exports.getLibrary = async (req, res) => {
         const params = [req.user.id];
 
         // Nếu có filter status (VD: 'BORROWING', 'COMPLETED')
-        if (status) {
+        if (status && status !== 'ALL') {
             sql += ` AND t.status = ?`;
             params.push(status);
         }
@@ -126,6 +126,26 @@ exports.deleteTransaction = async (req, res) => {
         res.json({ message: "Đã xóa thành công" });
     } catch (error) {
         console.error("Lỗi Xóa:", error);
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// 6. CẬP NHẬT TRẠNG THÁI (TRẢ SÁCH) - BỔ SUNG MỚI
+exports.updateStatus = async (req, res) => {
+    const transId = req.params.id;
+    const { status } = req.body; // Frontend gửi { status: 'RETURNED', }
+
+    if (!req.user || !req.user.id) return res.status(401).json({ message: "Chưa đăng nhập" });
+
+    try {  
+        await db.query(
+            'UPDATE transactions SET status = ?, return_date = NOW() WHERE trans_id = ? AND user_id = ?', 
+            [status, return_date, transId, req.user.id]
+        );
+
+        res.json({ message: "Cập nhật trạng thái thành công" });
+    } catch (error) {
+        console.error("Lỗi Update:", error);
         res.status(500).json({ message: error.message });
     }
 };

@@ -4,6 +4,7 @@
    ========================================= */
 
 import bookApi from '../api/bookAPI.js'; 
+import transactionApi from '../api/transactionAPI.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     initMyLibrary();
@@ -27,8 +28,9 @@ async function loadAndRenderBooks(filterStatus) {
          * Gọi API lấy danh sách giao dịch của User
          * FilterStatus: 'ALL', 'BORROWING', 'RETURNED', 'COMPLETED' (Mua), 'OVERDUE'
          */
-        const response = await bookApi.getAll({ status: filterStatus });
-        const transactions = response.data; 
+        const response = await transactionApi.getLibrary({ status: filterStatus });
+        console.log("Dữ liệu API trả về:", response);
+        const transactions = response; 
 
         container.innerHTML = ''; 
 
@@ -58,15 +60,16 @@ async function loadAndRenderBooks(filterStatus) {
 
 // --- HÀM TẠO HTML (Khớp với Schema Database) ---
 function createBookItemHTML(trans) {
-    // trans bao gồm thông tin từ bảng Transactions và Books (join)
-    const book = trans.bookInfo; // Giả định backend trả về object bookInfo lồng bên trong
+    // 1. Lấy thông tin sách (fallback nếu backend trả về dạng phẳng)
+    const book = trans.bookInfo || trans;
+    
     let statusLabel = '', statusClass = '', dateInfo = '', actionBtn = '';
 
-    // Format ngày tháng từ database
+    // Format ngày tháng
     const startDate = new Date(trans.start_date).toLocaleDateString('vi-VN');
     const dueDate = trans.due_date ? new Date(trans.due_date).toLocaleDateString('vi-VN') : '';
 
-    // Logic hiển thị dựa trên status trong bảng Transactions
+    // 2. Logic hiển thị trạng thái
     switch (trans.status) {
         case 'BORROWING':
             statusClass = 'status-borrowing';
@@ -92,13 +95,43 @@ function createBookItemHTML(trans) {
             actionBtn = `<button class="btn-action urgent" onclick="handleReturn('${trans.trans_id}')">Trả ngay</button>`;
             break;
 
-        case 'COMPLETED': // Đối với sách mua
+        case 'COMPLETED': // Sách mua
             statusClass = 'status-bought';
             statusLabel = 'Sở hữu';
             dateInfo = `<p><i class="fa-solid fa-bag-shopping"></i> Ngày mua: ${startDate}</p>`;
-            actionBtn = `<button class="btn-action read" onclick="location.href='reader.html?id=${trans.book_id}'">Đọc sách</button>`;
+            // actionBtn = `<button class="btn-action read"...>Đọc sách</button>`;
+            break;
+
+        case 'WISHLIST':
+            statusClass = 'status-wishlist'; 
+            statusLabel = 'Quan tâm';
+            dateInfo = `<p><i class="fa-solid fa-heart"></i> Đã thêm: ${startDate}</p>`;
+            actionBtn = `
+                <div class="wishlist-actions" style="display: flex; gap: 5px;">
+                    <button class="btn-action borrow" style="background-color: #3b82f6;" 
+                        onclick="handleConvertTransaction('${trans.book_id}', '${trans.trans_id}', 'BORROW')">
+                        Mượn
+                    </button>
+                    <button class="btn-action buy" style="background-color: #10b981;" 
+                        onclick="handleConvertTransaction('${trans.book_id}', '${trans.trans_id}', 'BUY')">
+                        Mua
+                    </button>
+                </div>
+            `;
             break;
     }
+
+    // --- MỚI: Logic hiển thị nút Xóa ---
+    // Chỉ hiển thị nút xóa khi transaction đã hoàn tất (RETURNED hoặc COMPLETED)
+    let deleteBtn = '';
+    if (trans.status === 'RETURNED' || trans.status === 'COMPLETED' || trans.status === 'WISHLIST') {
+        deleteBtn = `
+            <button class="btn-icon-remove" title="Xóa lịch sử" onclick="handleDeleteTransaction('${trans.trans_id}')">
+                <i class="fa-regular fa-trash-can"></i>
+            </button>
+        `;
+    }
+    // ----------------------------------
 
     return `
         <div class="my-book-item" id="trans-item-${trans.trans_id}">
@@ -114,15 +147,13 @@ function createBookItemHTML(trans) {
                     <p class="isbn text-muted">ISBN: ${book.isbn}</p>
                     <div class="action-group">
                         ${actionBtn}
-                        <button class="btn-icon-remove" title="Xóa" onclick="handleDeleteTransaction('${trans.trans_id}')">
-                            <i class="fa-regular fa-trash-can"></i>
-                        </button>
-                    </div>
+                        ${deleteBtn} </div>
                 </div>
             </div>
         </div>
     `;
 }
+
 
 // --- XỬ LÝ TABS (Lọc theo Status Database) ---
 function setupFilterTabs() {
@@ -145,11 +176,14 @@ function setupFilterTabs() {
 window.handleReturn = async (transId) => {
     if(confirm('Bạn xác nhận trả cuốn sách này?')) {
         try {
-            await bookApi.updateStatus(transId, { status: 'RETURNED', return_date: new Date() });
-            alert("Đã ghi nhận yêu cầu trả sách.");
-            initMyLibrary(); // Load lại danh sách
+            // Không cần gửi return_date: new Date() nữa
+            // Chỉ cần gửi status là đủ
+            await transactionApi.updateStatus(transId, { status: 'RETURNED' });
+            
+            alert("Đã trả sách thành công.");
+            initMyLibrary(); 
         } catch (error) {
-            alert("Không thể thực hiện yêu cầu trả sách.");
+            alert("Lỗi server: " + error.message);
         }
     }
 };
@@ -158,13 +192,39 @@ window.handleReturn = async (transId) => {
 window.handleDeleteTransaction = async (transId) => {
     if(confirm('Bạn muốn xóa bản ghi này khỏi tủ sách?')) {
         try {
-            await bookApi.deleteTransaction(transId);
+            await transactionApi.deleteTransaction(transId);
             const item = document.getElementById(`trans-item-${transId}`);
             item.style.transform = 'translateX(50px)';
             item.style.opacity = '0';
             setTimeout(() => item.remove(), 300);
         } catch (error) {
             alert("Lỗi: Không thể xóa.");
+        }
+    }
+};
+
+window.handleConvertTransaction = async (bookId, oldTransId, typeAction) => {
+    const actionName = typeAction === 'BORROW' ? "Mượn" : "Mua";
+    
+    if(confirm(`Bạn muốn chuyển sách này sang trạng thái "${actionName}"?`)) {
+        try {
+            // Bước 1: Gọi API Mượn hoặc Mua (Tạo giao dịch mới)
+            if (typeAction === 'BORROW') {
+                await transactionApi.borrowBook(bookId);
+            } else {
+                await transactionApi.buyBook(bookId);
+            }
+
+            // Bước 2: Xóa cái Wishlist cũ đi (để không bị trùng lặp trong tủ sách)
+            await transactionApi.deleteTransaction(oldTransId);
+
+            // Bước 3: Load lại danh sách
+            alert(`${actionName} sách thành công!`);
+            initMyLibrary(); 
+
+        } catch (error) {
+            console.error(error);
+            alert(`Lỗi: Không thể ${actionName} sách lúc này.`);
         }
     }
 };
