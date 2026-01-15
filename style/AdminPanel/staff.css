@@ -3,9 +3,21 @@
 .avatar { 
     width: 40px; height: 40px; border-radius: 50%; background: #e0e7ff; color: #4f46e5; 
     display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px;
+    object-fit: cover; /* Để nếu là ảnh img thì không bị méo */
 }
 .user-detail h4 { margin: 0 0 3px 0; font-size: 0.95rem; color: #333; font-weight: 600; }
 .user-detail span { font-size: 0.8rem; color: #888; }
+
+/* Trạng thái badges */
+.badge { padding: 4px 10px; border-radius: 15px; font-size: 0.75rem; font-weight: bold; display: inline-block; }
+.badge-admin { background: #1e40af; color: white; }
+.badge-lib { background: #e5e7eb; color: #374151; border: 1px solid #d1d5db; }
+.badge-stock { background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
+.badge-guard { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+
+.status-active { color: #16a34a; font-weight: 500; font-size: 0.9rem; }
+.status-leave { color: #ea580c; font-weight: 500; font-size: 0.9rem; }
+.status-quit { color: #dc2626; font-weight: 500; font-size: 0.9rem; }
 
 /* --- MODAL STYLES --- */
 .modal {
@@ -50,18 +62,23 @@
     width: 100%; padding: 10px; border: 1px solid #ddd;
     border-radius: 6px; font-size: 0.95rem; box-sizing: border-box; 
 }
-.form-group input:focus, .form-group select:focus { border-color: var(--primary-blue); outline: none; }
+.form-group input:focus, .form-group select:focus { border-color: #4f46e5; outline: none; }
 .form-row { display: flex; gap: 15px; }
 .form-row .form-group { flex: 1; }
 
-/* Buttons trong Modal */
-.btn-primary { background: var(--primary-blue); color: white; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: 500; }
+/* Buttons */
+.btn-primary { background: #4f46e5; color: white; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: 500; }
 .btn-secondary { background: white; color: #555; border: 1px solid #ddd; padding: 10px 20px; border-radius: 6px; cursor: pointer; }
 .btn-primary:hover { opacity: 0.9; }
 
-/* Upload Box (Cho Avatar) */
+.action-btn { border: none; background: none; cursor: pointer; font-size: 1rem; padding: 5px; transition: 0.2s; }
+.btn-edit { color: #3b82f6; }
+.btn-delete { color: #ef4444; }
+.action-btn:hover { transform: scale(1.1); }
+
+/* Upload Box */
 .upload-box {
     border: 2px dashed #ddd; padding: 15px; text-align: center;
     border-radius: 8px; cursor: pointer; color: #888; transition: all 0.2s;
 }
-.upload-box:hover { border-color: var(--primary-blue); color: var(--primary-blue); background: #f0f7ff; }
+.upload-box:hover { border-color: #4f46e5; color: #4f46e5; background: #f0f7ff; }
