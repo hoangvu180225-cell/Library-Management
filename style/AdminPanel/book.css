@@ -25,12 +25,9 @@ a { text-decoration: none; color: inherit; }
 
 /* TOOLBAR & FILTER */
 .toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-.filter-select { padding: 8px; border: 1px solid #ddd; border-radius: 5px; outline: none; }
-.view-switcher .btn-view { background: white; border: 1px solid #ddd; padding: 8px 15px; cursor: pointer; }
-.view-switcher .btn-view.active { background: var(--primary); color: white; border-color: var(--primary); }
 
 /* GRID VIEW */
-.book-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+.book-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; padding: 10px;}
 .book-card { background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05); transition: 0.3s; position: relative; }
 .book-card:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
 .book-cover-container { position: relative; width: 100%; height: 280px; }
