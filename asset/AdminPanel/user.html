@@ -23,7 +23,7 @@
         <header class="top-bar">
             <div class="search-box">
                 <i class="fas fa-search"></i>
-                <input type="text" placeholder="Tìm kiếm tên, email, sđt...">
+                <input type="text" id="searchInput" placeholder="Tìm kiếm tên, email, sđt...">
             </div>
             <div class="user-actions">
                 <button class="btn-add"><i class="fas fa-plus"></i> Thêm User</button>
@@ -41,89 +41,21 @@
             <div class="table-card">
                 <div class="card-header">
                     <h3 style="margin:0; color: #333;">Danh sách người dùng</h3>
-                    <select style="padding: 6px 10px; border:1px solid #ddd; border-radius:6px;">
-                        <option>Tất cả trạng thái</option>
-                        <option>Hoạt động</option>
-                        <option>Đã khoá</option>
-                    </select>
                 </div>
                 <table>
                     <thead>
                         <tr>
                             <th width="30%">Họ Tên & Email</th>
                             <th>Số điện thoại</th>
-                            <th>Điểm</th>
+                            <th>Điểm tích lũy</th>
                             <th>Hạng (Tier)</th>
                             <th>Trạng thái</th>
                             <th style="text-align:center;">Thao tác</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <div class="user-info">
-                                    <div class="avatar" style="background:#e0f2fe; color:#0369a1;">A</div>
-                                    <div class="user-detail">
-                                        <h4>Nguyễn Văn An</h4>
-                                        <span>vana@example.com</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>0987.654.321</td>
-                            <td style="font-weight:600;">820</td>
-                            <td><span class="tier-badge tier-gold"><i class="fas fa-crown"></i> Gold</span></td>
-                            <td><span class="st-active"><span class="status-dot"></span>Hoạt động</span></td>
-                            <td style="text-align:center;">
-                                <button class="action-btn btn-edit"><i class="fas fa-pen"></i></button>
-                                <button class="action-btn btn-delete"><i class="fas fa-trash"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="user-info">
-                                    <div class="avatar" style="background:#fce7f3; color:#be185d;">C</div>
-                                    <div class="user-detail">
-                                        <h4>Lê Văn Cường</h4>
-                                        <span>cuongle@example.com</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>0912.456.789</td>
-                            <td style="font-weight:600;">1,150</td>
-                            <td><span class="tier-badge tier-platinum"><i class="fas fa-gem"></i> Platinum</span></td>
-                            <td><span class="st-restricted"><span class="status-dot"></span>Hạn chế</span></td>
-                            <td style="text-align:center;">
-                                <button class="action-btn btn-edit"><i class="fas fa-pen"></i></button>
-                                <button class="action-btn btn-delete"><i class="fas fa-trash"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="user-info">
-                                    <div class="avatar" style="background:#fee2e2; color:#b91c1c;">D</div>
-                                    <div class="user-detail">
-                                        <h4>Phạm Thị Dung</h4>
-                                        <span>dung.pham@example.com</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>0933.221.100</td>
-                            <td style="font-weight:600;">120</td>
-                            <td><span class="tier-badge tier-bronze"><i class="fas fa-shield-alt"></i> Bronze</span></td>
-                            <td><span class="st-locked"><span class="status-dot"></span>Đã khoá</span></td>
-                            <td style="text-align:center;">
-                                <button class="action-btn btn-edit"><i class="fas fa-pen"></i></button>
-                                <button class="action-btn btn-delete"><i class="fas fa-trash"></i></button>
-                            </td>
-                        </tr>
-                    </tbody>
+                    <tbody id="userTableBody">
+                        </tbody>
                 </table>
-                <div class="pagination">
-                    <button class="page-btn">Trước</button>
-                    <button class="page-btn active">1</button>
-                    <button class="page-btn">2</button>
-                    <button class="page-btn">Sau</button>
-                </div>
             </div>
         </div>
 
@@ -136,10 +68,10 @@
                 </div>
                 <div class="modal-body">
                     <form id="userForm">
-                        <div class="form-row">
+                        <input type="hidden" id="userId"> <div class="form-row">
                             <div class="form-group" style="flex: 1.5;">
                                 <label>Họ và tên</label>
-                                <input type="text" id="userName" placeholder="Nhập họ tên độc giả..." required>
+                                <input type="text" id="userName" placeholder="Nhập họ tên..." required>
                             </div>
                             <div class="form-group" style="flex: 1;">
                                 <label>Số điện thoại</label>
@@ -147,45 +79,41 @@
                             </div>
                         </div>
 
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>Email</label>
-                                <input type="email" id="userEmail" placeholder="example@gmail.com" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Ngày sinh</label>
-                                <input type="date" id="userDob">
-                            </div>
-                        </div>
-
                         <div class="form-group">
-                            <label>Địa chỉ</label>
-                            <input type="text" id="userAddress" placeholder="Số nhà, đường, quận/huyện...">
+                            <label>Email</label>
+                            <input type="email" id="userEmail" placeholder="example@gmail.com" required>
                         </div>
 
                         <div class="form-row">
                             <div class="form-group">
                                 <label>Hạng thành viên</label>
                                 <select id="userTier">
-                                    <option value="bronze">Bronze (Đồng)</option>
-                                    <option value="silver">Silver (Bạc)</option>
-                                    <option value="gold">Gold (Vàng)</option>
-                                    <option value="platinum">Platinum (Bạch kim)</option>
+                                    <option value="BRONZE">Bronze (Đồng)</option>
+                                    <option value="SILVER">Silver (Bạc)</option>
+                                    <option value="GOLD">Gold (Vàng)</option>
+                                    <option value="PLATINUM">Platinum (Bạch kim)</option>
+                                    <option value="DIAMOND">Diamond (Kim cương)</option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label>Trạng thái</label>
-                                <select id="userStatus">
-                                    <option value="active">Hoạt động</option>
-                                    <option value="restricted">Bị hạn chế</option>
-                                    <option value="locked">Đã khoá</option>
-                                </select>
+                                <label>Điểm tích lũy</label>
+                                <input type="number" id="userPoints" value="0" min="0">
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label>Ghi chú (Admin)</label>
-                            <textarea rows="2" placeholder="Ghi chú về người dùng này..."></textarea>
+                            <label>Trạng thái</label>
+                            <select id="userStatus">
+                                <option value="ACTIVE">Hoạt động</option>
+                                <option value="RESTRICTED">Bị hạn chế</option>
+                                <option value="BANNED">Đã khoá</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <div id="avatarPreview" style="margin-top: 10px; display: none; text-align: center;">
+                                <img src="" alt="Preview" style="max-height: 80px; border-radius: 5px;">
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -197,77 +125,6 @@
         </div>
     </main>
 
-    <script>
-        // --- LOGIC MODAL & EDIT USER ---
-        const modal = document.getElementById('userModal');
-        const btnAdd = document.querySelector('.btn-add'); 
-        const closeBtns = document.querySelectorAll('.btn-close-modal');
-        const overlay = document.querySelector('.modal-overlay');
-        
-        const modalTitle = document.getElementById('modalTitle');
-        const btnSaveUser = document.getElementById('btnSaveUser');
-        const userForm = document.getElementById('userForm');
-        
-        const editBtns = document.querySelectorAll('.btn-edit');
-
-        const openModal = () => modal.classList.add('active');
-        const closeModal = () => modal.classList.remove('active');
-
-        // 1. Thêm mới
-        btnAdd.addEventListener('click', () => {
-            userForm.reset(); 
-            modalTitle.innerText = "Thêm người dùng mới";
-            btnSaveUser.innerText = "Lưu người dùng";
-            // Mặc định chọn Bronze và Active
-            document.getElementById('userTier').value = 'bronze';
-            document.getElementById('userStatus').value = 'active';
-            openModal();
-        });
-
-        // 2. Chỉnh sửa (Mock Data)
-        editBtns.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                
-                modalTitle.innerText = "Cập nhật hồ sơ độc giả";
-                btnSaveUser.innerText = "Lưu thay đổi";
-
-                // Giả lập đổ dữ liệu của 'Nguyễn Văn An'
-                document.getElementById('userName').value = "Nguyễn Văn An";
-                document.getElementById('userPhone').value = "0987.654.321";
-                document.getElementById('userEmail').value = "vana@example.com";
-                document.getElementById('userDob').value = "1995-08-20";
-                document.getElementById('userAddress').value = "123 Cầu Giấy, Hà Nội";
-                document.getElementById('userTier').value = "gold";
-                document.getElementById('userStatus').value = "active";
-
-                openModal();
-            });
-        });
-
-        // 3. Đóng Modal
-        closeBtns.forEach(btn => btn.addEventListener('click', closeModal));
-        overlay.addEventListener('click', closeModal);
-
-        // --- LOGIC XÓA (Dùng chung cho Staff và User) ---
-    const deleteBtns = document.querySelectorAll('.btn-delete');
-
-    deleteBtns.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.stopPropagation(); // Ngăn sự kiện click nhầm vào dòng
-
-            // Kiểm tra xem đang ở trang nào để hiện thông báo cho hợp lý
-            const msg = document.title.includes("Nhân sự") 
-                        ? 'Bạn có chắc muốn xóa nhân viên này?' 
-                        : 'Bạn có chắc muốn xóa người dùng này?';
-
-            if(confirm(msg)) {
-                // Tìm dòng tr chứa nút bấm và xóa nó đi
-                const row = btn.closest('tr');
-                if(row) row.remove();
-            }
-        });
-    });
-    </script>
+    <script type="module" src="../../script/Admin/user.js"></script>
 </body>
 </html>

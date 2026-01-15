@@ -1,46 +1,40 @@
 import axiosClient from './axiosClient.js';
 
 const adminApi = {
-    // 1. Lấy danh sách người dùng
+    // --- USER ---
     getAllUsers() {
-        const url = '/admin/users';
-        return axiosClient.get(url);
+        return axiosClient.get('/admin/users');
     },
 
-    // 2. Sửa thông tin người dùng
+    createUser(data) {
+        // Bỏ FormData, gửi JSON object
+        return axiosClient.post('/admin/users', data); 
+    },
+
     updateUser(id, data) {
-        const url = `/admin/users/${id}`;
-        return axiosClient.put(url, data);
+        return axiosClient.put(`/admin/users/${id}`, data);
     },
 
-    // 3. Xóa user
     deleteUser(id) {
-        const url = `/admin/users/${id}`;
-        return axiosClient.delete(url);
+        return axiosClient.delete(`/admin/users/${id}`);
     },
 
-    // 4. Lấy danh sách nhân viên
+    // --- STAFF ---
     getAllStaffs() {
-        const url = '/admin/staffs';
-        return axiosClient.get(url);
+        return axiosClient.get('/admin/staffs');
     },
 
-    // 5. Thêm nhân viên
-    createStaff(staffInfo) {
-        const url = '/admin/staffs';
-        return axiosClient.post(url, staffInfo);
+    createStaff(data) {
+        // Bỏ FormData, gửi JSON object
+        return axiosClient.post('/admin/staffs', data);
     },
 
-    // 6. Sửa nhân viên
-    updateStaff(id, staffInfo) {
-        const url = `/admin/staffs/${id}`;
-        return axiosClient.put(url, staffInfo);
+    updateStaff(id, data) {
+        return axiosClient.put(`/admin/staffs/${id}`, data);
     },
 
-    // 7. Xóa nhân viên
     deleteStaff(id) {
-        const url = `/admin/staffs/${id}`;
-        return axiosClient.delete(url);
+        return axiosClient.delete(`/admin/staffs/${id}`);
     }
 };
 

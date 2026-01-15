@@ -17,7 +17,7 @@ CREATE TABLE Users (
     password VARCHAR(255) NOT NULL,     
     phone VARCHAR(20),
     avatar VARCHAR(255),                
-    role ENUM('ADMIN', 'LIBRARIAN', 'STOCK_MANAGER', 'MEMBER') DEFAULT 'MEMBER',
+    role ENUM('ADMIN', 'STAFF', 'MEMBER') DEFAULT 'MEMBER',
     points INT DEFAULT 0,               
     tier ENUM('BRONZE', 'SILVER', 'GOLD', 'PLATINUM', 'DIAMOND') DEFAULT 'BRONZE',
     status ENUM('ACTIVE', 'RESTRICTED', 'BANNED') DEFAULT 'ACTIVE', 
