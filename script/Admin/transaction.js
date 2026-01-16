@@ -1,8 +1,10 @@
 import adminApi from '../../api/adminAPI.js'; 
+import { setupAdminProfile } from '../../script/Admin/dropdown.js';
 
 let globalTrans = []; 
 
 document.addEventListener('DOMContentLoaded', () => {
+    setupAdminProfile();
     fetchTransactions();
 });
 

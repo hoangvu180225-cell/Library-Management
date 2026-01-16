@@ -239,6 +239,18 @@ function checkLoginStatus() {
                 }
             });
         }
+        if (userInfo.role === 'ADMIN' || userInfo.role === 'STAFF') {
+            const navHome = document.getElementById('nav-home');
+            if (navHome && !document.getElementById('nav-admin')) {
+                const adminBtn = document.createElement('button');
+                adminBtn.id = 'nav-admin';
+                adminBtn.className = 'nav-link';
+                adminBtn.style.color = '#e74c3c'; // Màu đỏ cho nổi bật
+                adminBtn.innerHTML = '<i class="fa-solid fa-user-shield"></i> Quản trị';
+                adminBtn.onclick = () => window.location.href = '../AdminPanel/book.html';
+                navHome.parentNode.insertBefore(adminBtn, navHome.nextSibling);
+            }
+        }
     } else {
         if(guestNav) guestNav.style.display = 'flex';
         if(userNav) userNav.style.display = 'none';
@@ -421,12 +433,27 @@ function handleAuthSubmit() {
             e.preventDefault();
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
+            
             try {
                 const res = await authApi.login({ email, password });
+                
+                // Lưu Token và Thông tin User
                 localStorage.setItem('accessToken', res.token);
                 localStorage.setItem('userInfo', JSON.stringify(res.userInfo));
+                
                 alert("Đăng nhập thành công!");
-                window.location.reload();
+
+                // --- ĐIỀU HƯỚNG DỰA TRÊN ROLE ---
+                const role = res.userInfo.role; // Lấy role từ thông tin trả về
+                
+                if (role === 'ADMIN' || role === 'STAFF') {
+                    // Nếu là Admin/Staff thì nhảy qua trang quản lý sách
+                    window.location.href = '../AdminPanel/book.html'; 
+                } else {
+                    // Nếu là USER thì load lại trang hiện tại (Trang chủ)
+                    window.location.reload(); 
+                }
+
             } catch (err) {
                 console.error(err);
                 const msg = err.response?.data?.message || "Đăng nhập thất bại!";

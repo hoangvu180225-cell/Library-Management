@@ -1,8 +1,10 @@
 import adminApi from '../../api/adminAPI.js'; 
+import { setupAdminProfile } from '../../script/Admin/dropdown.js';
 
 let globalUsers = []; 
 
 document.addEventListener('DOMContentLoaded', () => {
+    setupAdminProfile();
     fetchUsers();
     setupModalLogic();
 });

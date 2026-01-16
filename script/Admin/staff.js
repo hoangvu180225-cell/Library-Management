@@ -1,4 +1,5 @@
 import adminApi from '../../api/adminAPI.js'; 
+import { setupAdminProfile } from '../../script/Admin/dropdown.js'; 
 
 let globalStaff = []; 
 
@@ -9,6 +10,7 @@ const CURRENT_USER_ROLE = localStorage.getItem('role') || 'ADMIN';
 // Mẹo: Mở Console trình duyệt gõ: localStorage.setItem('role', 'STAFF') rồi F5 để test chế độ nhân viên
 
 document.addEventListener('DOMContentLoaded', () => {
+    setupAdminProfile();
     fetchStaffs();
     setupModalLogic();
     checkPermissionUI();

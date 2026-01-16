@@ -1,11 +1,13 @@
 /* =========================================
    QUẢN LÝ SÁCH (ADMIN) - SỬ DỤNG IMPORT API
    ========================================= */
-import bookApi from '../../api/bookAPI.js'; // Đường dẫn trỏ về file API của bạn
+import bookApi from '../../api/bookAPI.js'; 
+import { setupAdminProfile } from '../../script/Admin/dropdown.js'; 
 
 let globalBooks = []; 
 
 document.addEventListener('DOMContentLoaded', () => {
+    setupAdminProfile();
     fetchBooks();
     setupModalLogic();
 });
