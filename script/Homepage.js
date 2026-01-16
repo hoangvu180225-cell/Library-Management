@@ -1,254 +1,17 @@
 /* =========================================
-   SCRIPT QUẢN LÝ TOÀN BỘ WEBSITE (Đã tích hợp API)
+   SCRIPT: Homepage.js
+   Mục đích: Xử lý logic riêng của Trang Chủ (Danh sách sách, Phân trang, Bảng xếp hạng)
    ========================================= */
-import authApi from '../api/authAPI.js';
 import bookApi from '../api/bookAPI.js'; 
+import { initSharedUI } from './ShareUI.js'; // Import giao diện chung
 
-// --- CẤU HÌNH CHUNG ---
+// --- CẤU HÌNH ---
 const ITEMS_PER_PAGE = 6;       // Số sách mỗi trang
 let currentPage = 1;            // Trang hiện tại
 let currentCategory = 'Tất cả'; // Danh mục đang chọn
-let globalBookList = [];        // Biến lưu trữ danh sách sách lấy từ API
+let globalBookList = [];        // Biến lưu trữ danh sách sách từ API
 
-/* =========================================
-   1. ENTRY POINT (CHẠY KHI WEB TẢI XONG)
-   ========================================= */
-document.addEventListener('DOMContentLoaded', async () => {
-    
-    // 1.1 KHỞI TẠO CÁC TÍNH NĂNG UI CƠ BẢN
-    checkLoginStatus();    
-    setupHeaderNav();      
-    setupAuthModals();     
-
-    // 1.2 GỌI API LẤY DANH SÁCH SÁCH (Thay thế cho BookData.js)
-    const bookContainer = document.getElementById('book-list-container');
-    if (bookContainer) {
-        setupCategoryTabs(); // Cài đặt nút lọc danh mục
-        await fetchAndRenderBooks();
-    }
-
-    // 1.3 KHỞI TẠO TRANG LIÊN HỆ
-    const contactForm = document.querySelector('.contact-form form');
-    if (contactForm) setupContactLogic(contactForm);
-});
-
-/* =========================================
-   2. LOGIC TƯƠNG TÁC API DỮ LIỆU SÁCH
-   ========================================= */
-async function fetchAndRenderBooks() {
-    try {
-        const response = await bookApi.getAll(); 
-        
-        // Lưu dữ liệu vào biến toàn cục để dùng cho lọc/phân trang client-side
-        globalBookList = response.data || response; // Tùy cấu trúc trả về của BE
-
-        console.log("Dữ liệu sách lấy về:", globalBookList); 
-        if (globalBookList.length > 0) {
-            console.log("Cấu trúc 1 quyển sách:", globalBookList[0]);
-        }
-        
-        // Render lần đầu
-        loadPage(1);
-        renderRanking(globalBookList);
-
-    } catch (error) {
-        console.error("Lỗi lấy dữ liệu sách:", error);
-        document.getElementById('book-list-container').innerHTML = 
-            `<p style="text-align:center; color:red;">Không thể kết nối đến máy chủ dữ liệu.</p>`;
-    }
-}
-
-/* =========================================
-   3. LOGIC ĐĂNG NHẬP, ĐĂNG KÝ & TÀI KHOẢN (Đã chuẩn hóa)
-   ========================================= */
-function checkLoginStatus() {
-    const token = localStorage.getItem('accessToken');
-    // Parse an toàn để tránh lỗi nếu JSON hỏng
-    let userInfo = {};
-    try {
-        userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
-    } catch (e) { userInfo = {}; }
-    
-    const guestNav = document.querySelector('.header-right.guest');
-    const userNav = document.querySelector('.header-right.user');
-
-    if (token) {
-        if(guestNav) guestNav.style.display = 'none';
-        if(userNav) {
-            userNav.style.display = 'flex';
-            
-            // Hiển thị Avatar User
-            const avatarImg = userNav.querySelector('.user-avatar img');
-            if(avatarImg && userInfo.name) {
-                avatarImg.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(userInfo.name)}&background=random`;
-            }
-
-            // Xử lý Đăng xuất
-            const avatarDiv = userNav.querySelector('.user-avatar');
-            if(avatarDiv) {
-                avatarDiv.onclick = () => {
-                    if(confirm("Bạn muốn đăng xuất?")) {
-                        localStorage.clear();
-                        window.location.reload();
-                    }
-                };
-            }
-        }
-    } else {
-        if(guestNav) guestNav.style.display = 'flex';
-        if(userNav) userNav.style.display = 'none';
-    }
-}
-
-function setupAuthModals() {
-    const loginModal = document.getElementById('loginModal');
-    const registerModal = document.getElementById('registerModal');
-    const loginBtn = document.getElementById('Login-Btn');
-    const registerBtn = document.getElementById('Register-Btn');
-    const closeBtns = document.querySelectorAll('.close-modal');
-    const switchToRegister = document.getElementById('switch-to-register');
-    const switchToLogin = document.getElementById('switch-to-login');
-
-    // Mở Modal (Gán sự kiện bằng JS thay vì HTML onclick)
-    if (loginBtn) loginBtn.onclick = () => { loginModal.style.display = 'block'; };
-    if (registerBtn) registerBtn.onclick = () => { registerModal.style.display = 'block'; };
-
-    // Đóng Modal
-    closeBtns.forEach(btn => {
-        btn.onclick = () => {
-            loginModal.style.display = 'none';
-            registerModal.style.display = 'none';
-        };
-    });
-
-    // Click ra ngoài để đóng
-    window.onclick = (event) => {
-        if (event.target === loginModal) loginModal.style.display = 'none';
-        if (event.target === registerModal) registerModal.style.display = 'none';
-    };
-
-    // Chuyển đổi qua lại
-    if (switchToRegister) {
-        switchToRegister.onclick = (e) => {
-            e.preventDefault();
-            loginModal.style.display = 'none';
-            registerModal.style.display = 'block';
-        };
-    }
-
-    if (switchToLogin) {
-        switchToLogin.onclick = (e) => {
-            e.preventDefault();
-            registerModal.style.display = 'none';
-            loginModal.style.display = 'block';
-        };
-    }
-    
-    handleAuthSubmit();
-}
-
-function handleAuthSubmit() {
-    // --- XỬ LÝ ĐĂNG NHẬP ---
-    const loginForm = document.getElementById('login-form');
-    if (loginForm) {
-        loginForm.onsubmit = async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-
-            try {
-                // GỌI API LOGIN
-                const response = await authApi.login({ email, password });
-                
-                // Lưu Token & Info
-                localStorage.setItem('accessToken', response.token);
-                localStorage.setItem('userInfo', JSON.stringify(response.userInfo));
-                
-                alert("Đăng nhập thành công!");
-                window.location.reload(); // Load lại để cập nhật Header
-            } catch (error) {
-                console.error(error);
-                alert(error.response?.data?.message || "Sai tài khoản hoặc mật khẩu!");
-            }
-        };
-    }
-
-    // --- XỬ LÝ ĐĂNG KÝ ---
-    const registerForm = document.getElementById('register-form');
-    if (registerForm) {
-        registerForm.onsubmit = async (e) => {
-            e.preventDefault();
-            const inputs = registerForm.querySelectorAll('input');
-            // Mapping theo thứ tự input trong HTML của bạn
-            // 0: Họ tên, 1: Email, 2: Pass, 3: Confirm Pass, 4: Phone
-            const name = inputs[0].value;
-            const email = inputs[1].value;
-            const password = inputs[2].value;
-            const confirmPass = inputs[3].value;
-            const phone = inputs[4].value;
-
-            console.log(name, email, password, phone);
-            // --- BỔ SUNG: CHECK ĐỘ DÀI PASSWORD ---
-            if (password.length < 6) {
-                alert("Mật khẩu phải có ít nhất 6 ký tự!");
-                return;
-            }
-
-            if (password !== confirmPass) {
-                alert("Mật khẩu xác nhận không khớp!");
-                return;
-            }
-
-            try {
-                // GỌI API REGISTER
-                await authApi.register({ name, email, password, phone });
-                alert("Đăng ký thành công! Vui lòng đăng nhập.");
-                
-                // Chuyển sang Modal Login
-                document.getElementById('registerModal').style.display = 'none';
-                document.getElementById('loginModal').style.display = 'block';
-            } catch (error) {
-                console.error(error);
-                alert(error.response?.data?.message || "Lỗi đăng ký! Có thể Email đã tồn tại.");
-            }
-        };
-    }
-}
-
-/* =========================================
-   4. LOGIC CHUYỂN TRANG (NAVIGATION)
-   ========================================= */
-function setupHeaderNav() {
-    const navLinks = {
-        'nav-home': 'HomePage.html',
-        'nav-policy': 'Policy.html',
-        'nav-contact': 'Contact.html',
-        'nav-notif': 'Notification.html',
-        'nav-books': 'MyBook.html' 
-    };
-
-    for (const [id, url] of Object.entries(navLinks)) {
-        const btn = document.getElementById(id);
-        if (btn) {
-            btn.addEventListener('click', () => {
-                if (url === '#') alert("Tính năng đang phát triển!");
-                else window.location.href = url;
-            });
-        }
-    }
-    
-    // Logo về trang chủ
-    const logo = document.querySelector('.header-logo');
-    if(logo) {
-        logo.style.cursor = 'pointer';
-        logo.addEventListener('click', () => window.location.href = 'HomePage.html');
-    }
-}
-
-/* =========================================
-   5. LOGIC HIỂN THỊ SÁCH (LỌC & PHÂN TRANG)
-   ========================================= */
-   const CATEGORY_MAP = {
+const CATEGORY_MAP = {
     1: 'Hành động',
     2: 'Khoa học viễn tưởng',
     3: 'Lãng mạn',
@@ -258,23 +21,77 @@ function setupHeaderNav() {
     7: 'Trinh thám'
 };
 
+/* =========================================
+   1. ENTRY POINT (CHẠY KHI WEB TẢI XONG)
+   ========================================= */
+document.addEventListener('DOMContentLoaded', async () => {
+    
+    // 1.1 KHỞI TẠO GIAO DIỆN CHUNG (Header, Footer, Modal, Login/Register)
+    initSharedUI(); 
+
+    // 1.2 LOGIC RIÊNG CỦA HOMEPAGE
+    const bookContainer = document.getElementById('book-list-container');
+    
+    // Chỉ chạy logic load sách nếu đang ở trang có chứa container sách
+    if (bookContainer) {
+        setupCategoryTabs(); // Cài đặt sự kiện click cho các nút danh mục
+        await fetchAndRenderBooks(); // Gọi API lấy dữ liệu
+    }
+});
+
+/* =========================================
+   2. LOGIC TƯƠNG TÁC API & DỮ LIỆU
+   ========================================= */
+async function fetchAndRenderBooks() {
+    try {
+        const response = await bookApi.getAll(); 
+        
+        // Xử lý dữ liệu tùy theo cấu trúc trả về của API (mảng trực tiếp hoặc object .data)
+        globalBookList = Array.isArray(response) ? response : (response.data || []);
+
+        // Log kiểm tra dữ liệu
+        // console.log("Dữ liệu sách:", globalBookList); 
+        
+        if (globalBookList.length === 0) {
+            document.getElementById('book-list-container').innerHTML = 
+                `<p style="text-align:center; color:#64748b;">Chưa có dữ liệu sách.</p>`;
+            return;
+        }
+
+        // Render trang đầu tiên
+        loadPage(1);
+        
+        // Render bảng xếp hạng (Mặc định là Top Reading)
+        renderRanking(globalBookList, 'reading');
+
+    } catch (error) {
+        console.error("Lỗi lấy dữ liệu sách:", error);
+        document.getElementById('book-list-container').innerHTML = 
+            `<p style="text-align:center; color:red;">Không thể kết nối đến máy chủ dữ liệu.</p>`;
+    }
+}
+
+/* =========================================
+   3. LOGIC HIỂN THỊ SÁCH (LỌC & PHÂN TRANG)
+   ========================================= */
 function loadPage(page) {
     currentPage = page;
     
-    // Lọc dữ liệu
+    // 3.1 Lọc dữ liệu theo danh mục
     const filteredBooks = (currentCategory === 'Tất cả') 
         ? globalBookList 
         : globalBookList.filter(book => {
-            // Lấy tên thể loại từ ID để so sánh với cái Tab đang chọn
+            // Mapping ID thể loại sang Tên thể loại
             const catName = CATEGORY_MAP[book.category_id]; 
             return catName === currentCategory;
         });
 
-    // Tính toán phân trang
+    // 3.2 Tính toán phân trang (Cắt mảng)
     const start = (page - 1) * ITEMS_PER_PAGE;
     const end = start + ITEMS_PER_PAGE;
     const displayBooks = filteredBooks.slice(start, end);
     
+    // 3.3 Render ra HTML
     renderBooks(displayBooks);
     renderPagination(filteredBooks.length, page);
 }
@@ -283,7 +100,7 @@ function renderBooks(bookList) {
     const container = document.getElementById('book-list-container');
     if (!container) return;
     
-    container.innerHTML = '';
+    container.innerHTML = ''; // Xóa nội dung cũ
 
     if(bookList.length === 0) {
         container.innerHTML = `<p style="text-align:center; width:100%; color:#64748b; margin-top:30px;">
@@ -293,23 +110,23 @@ function renderBooks(bookList) {
     }
 
     bookList.forEach(book => {
-        // --- XỬ LÝ LOGIC HIỂN THỊ ---
-        
-        // 1. Xử lý tồn kho
+        // --- XỬ LÝ UI ---
+        // Badge tồn kho
         let stockBadge = book.stock > 0 
             ? `<span class="badge in-stock">Còn ${book.stock}</span>` 
             : `<span class="badge out-stock">Hết hàng</span>`;
         
-        // 2. Xử lý Thể loại: Nếu backend trả về tên thì dùng, nếu trả về ID thì map sang tên
-        let categoryName = book.genre || CATEGORY_MAP[book.category_id] || 'Đang cập nhật';
+        // Tên thể loại
+        let categoryName = book.genre || CATEGORY_MAP[book.category_id] || 'Khác';
 
-        // 3. Xử lý Mô tả: Cắt ngắn nếu quá dài (cho đỡ vỡ giao diện)
-        // Lấy field 'description' từ DB (Code cũ là 'desc' -> Sai)
-        let rawDesc = book.description || 'Chưa có mô tả cho cuốn sách này.';
+        // Cắt mô tả ngắn
+        let rawDesc = book.description || 'Chưa có mô tả.';
         let shortDesc = rawDesc.length > 80 ? rawDesc.substring(0, 80) + '...' : rawDesc;
 
-        // --- RENDER HTML ---
-        // Lưu ý: Đã thay book.id bằng book.book_id
+        // Format tiền tệ
+        let priceFormatted = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(book.price || 0);
+
+        // --- HTML CARD ---
         const html = `
             <div class="book-card">
                 <div class="book-thumb">
@@ -328,7 +145,7 @@ function renderBooks(bookList) {
                     <p class="book-desc" title="${rawDesc}">${shortDesc}</p>
                     
                     <p class="book-price" style="color: #d9534f; font-weight: bold; margin-top: 5px;">
-                        ${new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(book.price || 0)}
+                        ${priceFormatted}
                     </p>
                 </div>
                 <div class="book-actions">
@@ -348,6 +165,7 @@ function renderPagination(totalItems, activePage) {
 
     if (totalPages <= 1) return;
 
+    // Helper tạo nút
     const createBtn = (content, targetPage, isActive = false) => {
         const btn = document.createElement('button');
         btn.innerHTML = content;
@@ -359,8 +177,11 @@ function renderPagination(totalItems, activePage) {
     // Nút Previous
     paginationContainer.appendChild(createBtn('<i class="fa-solid fa-chevron-left"></i>', activePage > 1 ? activePage - 1 : 1));
 
-    // Nút số trang
+    // Các nút số trang
     for (let i = 1; i <= totalPages; i++) {
+        // Chỉ hiện tối đa 5 nút trang để tránh quá dài (Optional logic)
+        if (totalPages > 10 && (i < activePage - 2 || i > activePage + 2) && i !== 1 && i !== totalPages) continue;
+        
         paginationContainer.appendChild(createBtn(i, i, i === activePage));
     }
 
@@ -369,6 +190,7 @@ function renderPagination(totalItems, activePage) {
 }
 
 function setupCategoryTabs() {
+    // Tab Danh mục chính
     const catBtns = document.querySelectorAll('.cat-btn');
     catBtns.forEach(btn => {
         btn.addEventListener('click', function() {
@@ -376,18 +198,17 @@ function setupCategoryTabs() {
             this.classList.add('active');
             
             currentCategory = this.innerText.trim();
-            loadPage(1); // Về trang 1 khi lọc
+            loadPage(1); // Reset về trang 1 khi đổi danh mục
         });
     });
     
+    // Tab Bảng xếp hạng (Top Reading / Trending)
     const rankTimeBtns = document.querySelectorAll('.ranktime');
     rankTimeBtns.forEach(btn => {
         btn.addEventListener('click', function() {
-            // Xử lý UI active
             document.querySelector('.ranktime.active')?.classList.remove('active');
             this.classList.add('active');
 
-            // Lấy text để quyết định tiêu chí
             const type = this.innerText.trim();
             if (type === "Top Reading") {
                 renderRanking(globalBookList, 'reading');
@@ -399,7 +220,7 @@ function setupCategoryTabs() {
 }
 
 /* =========================================
-   6. LOGIC BẢNG XẾP HẠNG & LIÊN HỆ
+   4. LOGIC BẢNG XẾP HẠNG (SIDEBAR)
    ========================================= */
 function renderRanking(bookList, criteria = 'reading') {
     const container = document.getElementById('rank-list-container');
@@ -407,14 +228,14 @@ function renderRanking(bookList, criteria = 'reading') {
     
     container.innerHTML = '';
 
-    // Tạo bản sao để tránh làm thay đổi mảng gốc
+    // Clone mảng để sort không ảnh hưởng mảng gốc
     let sortedBooks = [...bookList];
 
     if (criteria === 'reading') {
-        // Sắp xếp theo Top Reading (borrow_count)
+        // Sắp xếp theo lượt mượn (giả sử field là borrow_count)
         sortedBooks.sort((a, b) => (b.borrow_count || 0) - (a.borrow_count || 0));
     } else {
-        // Sắp xếp theo Trending (views)
+        // Sắp xếp theo lượt xem (views)
         sortedBooks.sort((a, b) => (b.views || 0) - (a.views || 0));
     }
 
@@ -422,7 +243,6 @@ function renderRanking(bookList, criteria = 'reading') {
     const topBooks = sortedBooks.slice(0, 5);
 
     topBooks.forEach((book, index) => {
-        // Xác định nhãn hiển thị dựa trên tiêu chí
         const statsLabel = criteria === 'reading' 
             ? `${(book.borrow_count || 0).toLocaleString()} lượt mượn`
             : `${(book.views || 0).toLocaleString()} lượt xem`;
@@ -440,18 +260,11 @@ function renderRanking(bookList, criteria = 'reading') {
     });
 }
 
-function setupContactLogic(form) {
-    form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        alert("Cảm ơn bạn! Chúng tôi đã nhận được tin nhắn.");
-        form.reset();
-    });
-}
-
 /* =========================================
-   7. HÀM HỖ TRỢ (UTILS)
+   5. UTILS (Global Functions)
    ========================================= */
-// QUAN TRỌNG: Gán vào window để HTML onclick gọi được khi dùng module
+// Gán vào window để HTML onclick gọi được (Do dùng type="module")
 window.viewDetails = function(id) {
+    // Chuyển hướng sang trang chi tiết kèm ID
     window.location.href = `BookDetail.html?id=${id}`;
 };

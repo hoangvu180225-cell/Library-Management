@@ -9,13 +9,14 @@ CREATE TABLE Categories (
     slug VARCHAR(100)                  
 );
 
--- 2. Bảng Người dùng
+-- 2. Bảng Người dùng (Đã thêm cột address)
 CREATE TABLE Users (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
     full_name VARCHAR(100) NOT NULL,    
     email VARCHAR(100) NOT NULL UNIQUE, 
     password VARCHAR(255) NOT NULL,     
     phone VARCHAR(20),
+    address VARCHAR(255),               -- MỚI: Thêm cột địa chỉ ở đây
     avatar VARCHAR(255),                
     role ENUM('ADMIN', 'STAFF', 'MEMBER') DEFAULT 'MEMBER',
     points INT DEFAULT 0,               
@@ -25,7 +26,7 @@ CREATE TABLE Users (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
--- 3. Bảng Sách (Đã bổ sung Publisher, Year, Format)
+-- 3. Bảng Sách
 CREATE TABLE Books (
     book_id INT AUTO_INCREMENT PRIMARY KEY,
     isbn VARCHAR(20) UNIQUE,                
@@ -33,9 +34,9 @@ CREATE TABLE Books (
     author VARCHAR(100) NOT NULL,      
     category_id INT,
     
-    publisher VARCHAR(100) DEFAULT NULL,        -- MỚI: Nhà xuất bản
-    publication_year INT DEFAULT NULL,          -- MỚI: Năm xuất bản
-    book_format VARCHAR(50) DEFAULT 'Bìa mềm',  -- MỚI: Hình thức
+    publisher VARCHAR(100) DEFAULT NULL,        -- Nhà xuất bản
+    publication_year INT DEFAULT NULL,          -- Năm xuất bản
+    book_format VARCHAR(50) DEFAULT 'Bìa mềm',  -- Hình thức
     
     price DECIMAL(10, 2) DEFAULT 0,         
     image VARCHAR(255),                 
@@ -52,7 +53,7 @@ CREATE TABLE Books (
     FOREIGN KEY (category_id) REFERENCES Categories(category_id) ON DELETE SET NULL
 );
 
--- 4. Bảng Mượn Trả
+-- 4. Bảng Giao dịch (Mượn/Trả/Mua)
 CREATE TABLE Transactions (
     trans_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,

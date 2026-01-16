@@ -14,24 +14,24 @@ INSERT INTO Categories (name, slug) VALUES
 ('Thiếu nhi', 'thieu-nhi'),                   -- ID: 6
 ('Trinh thám', 'trinh-tham');                 -- ID: 7
 
--- --- B. NGƯỜI DÙNG ---
-INSERT INTO Users (full_name, email, password, phone, role, points, tier, status) VALUES 
+-- --- B. NGƯỜI DÙNG (Đã thêm địa chỉ) ---
+INSERT INTO Users (full_name, email, password, phone, address, role, points, tier, status) VALUES 
 -- 1. Admin
-('Phan Hoang Vu', 'admin@library.com', '123456', '0988888888', 'ADMIN', 9999, 'DIAMOND', 'ACTIVE'),
+('Phan Hoang Vu', 'admin@library.com', '123456', '0988888888', '123 Đường Admin, Q.1, TP.HCM', 'ADMIN', 9999, 'DIAMOND', 'ACTIVE'),
 
 -- 2, 3, 4. Nhân viên (STAFF)
-('Lê Thủ Thư', 'staff1@library.com', '123456', '0977777777', 'STAFF', 500, 'GOLD', 'ACTIVE'),
-('Nguyễn Quản Kho', 'staff2@library.com', '123456', '0966666666', 'STAFF', 0, 'BRONZE', 'ACTIVE'),
-('Trần Hỗ Trợ', 'staff3@library.com', '123456', '0955555555', 'STAFF', 0, 'BRONZE', 'ACTIVE'),
+('Lê Thủ Thư', 'staff1@library.com', '123456', '0977777777', '456 Đường Sách, Q.3, TP.HCM', 'STAFF', 500, 'GOLD', 'ACTIVE'),
+('Nguyễn Quản Kho', 'staff2@library.com', '123456', '0966666666', '789 Đường Kho, Q.Thủ Đức, TP.HCM', 'STAFF', 0, 'BRONZE', 'ACTIVE'),
+('Trần Hỗ Trợ', 'staff3@library.com', '123456', '0955555555', '321 Đường Hỗ Trợ, Q.Bình Thạnh, TP.HCM', 'STAFF', 0, 'BRONZE', 'ACTIVE'),
 
 -- 5, 6, 7, 8, 9. Độc giả (MEMBER)
-('Nguyen Van A', 'member1@gmail.com', '123456', '0911111111', 'MEMBER', 150, 'BRONZE', 'ACTIVE'),
-('Tran Thi B', 'member2@gmail.com', '123456', '0922222222', 'MEMBER', 300, 'SILVER', 'ACTIVE'),
-('Le Van C', 'member3@gmail.com', '123456', '0933333333', 'MEMBER', 0, 'BRONZE', 'RESTRICTED'),
-('Pham Thi D', 'member4@gmail.com', '123456', '0944444444', 'MEMBER', 550, 'GOLD', 'ACTIVE'),
-('Hoang Van E', 'member5@gmail.com', '123456', '0900000000', 'MEMBER', 900, 'DIAMOND', 'ACTIVE');
+('Nguyen Van A', 'member1@gmail.com', '123456', '0911111111', '12 Ngõ Trạm, Hà Nội', 'MEMBER', 150, 'BRONZE', 'ACTIVE'),
+('Tran Thi B', 'member2@gmail.com', '123456', '0922222222', '34 Lê Lợi, Đà Nẵng', 'MEMBER', 300, 'SILVER', 'ACTIVE'),
+('Le Van C', 'member3@gmail.com', '123456', '0933333333', '56 Nguyễn Huệ, Q.1, TP.HCM', 'MEMBER', 0, 'BRONZE', 'RESTRICTED'),
+('Pham Thi D', 'member4@gmail.com', '123456', '0944444444', '78 Trần Hưng Đạo, Cần Thơ', 'MEMBER', 550, 'GOLD', 'ACTIVE'),
+('Hoang Van E', 'member5@gmail.com', '123456', '0900000000', '90 Hùng Vương, Huế', 'MEMBER', 900, 'DIAMOND', 'ACTIVE');
 
--- --- C. SÁCH (CÓ SỐ BORROW_COUNT "ẢO" CAO) ---
+-- --- C. SÁCH ---
 INSERT INTO Books (isbn, title, author, category_id, publisher, publication_year, book_format, price, image, description, stock, total_stock, views, rating, borrow_count) VALUES 
 
 -- ID: 1, 2, 3 (Hành động)

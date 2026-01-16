@@ -847,3 +847,275 @@ body {
         padding-right: 0;
     }
 }
+
+/* =========================================
+   10. USER DROPDOWN (AVATAR)
+   ========================================= */
+.user-menu-container {
+    position: relative;
+    display: inline-block;
+}
+
+/* Dropdown Menu Box */
+.dropdown-menu {
+    position: absolute;
+    top: 120%; /* Cách avatar một chút */
+    right: 0;
+    width: 260px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+    border: 1px solid #f1f5f9;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.2s ease;
+    z-index: 1000;
+}
+
+/* Class active để hiện menu (dùng JS toggle) */
+.user-menu-container.active .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.dropdown-header {
+    padding: 15px 20px;
+    border-bottom: 1px solid #f1f5f9;
+    background: #f8fafc;
+    border-radius: 12px 12px 0 0;
+}
+
+.dropdown-header .user-name {
+    display: block;
+    font-weight: 700;
+    color: var(--primary-color);
+    font-size: 16px;
+}
+
+.dropdown-header .user-role {
+    font-size: 13px;
+    color: var(--text-light);
+}
+
+.dropdown-items {
+    list-style: none;
+    padding: 8px 0;
+}
+
+.dropdown-items li a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 20px;
+    color: var(--text-main);
+    text-decoration: none;
+    font-size: 14px;
+    transition: 0.2s;
+}
+
+.dropdown-items li a:hover {
+    background: #f1f5f9;
+    color: var(--accent-color);
+}
+
+.dropdown-items li.divider {
+    height: 1px;
+    background: #e2e8f0;
+    margin: 8px 0;
+}
+
+.dropdown-items li a.logout {
+    color: #ef4444; /* Màu đỏ */
+}
+
+.dropdown-items li a.logout:hover {
+    background: #fef2f2;
+}
+
+/* =========================================
+   11. PROFILE MODAL UI
+   ========================================= */
+/* Override độ rộng modal mặc định cho trang Profile */
+.profile-modal-box {
+    width: 800px; /* Rộng hơn modal login */
+    max-width: 95%;
+    padding: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-container {
+    display: flex;
+    min-height: 500px;
+}
+
+/* Cột trái (Sidebar) */
+.profile-sidebar {
+    width: 300px;
+    background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+    border-right: 1px solid #e2e8f0;
+    padding: 30px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.profile-avatar-large {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    margin-bottom: 15px;
+}
+
+.profile-avatar-large img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid white;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.change-avatar-btn {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid white;
+}
+
+.profile-name {
+    font-size: 20px;
+    color: var(--primary-color);
+    margin-bottom: 5px;
+}
+
+.profile-email {
+    font-size: 14px;
+    color: var(--text-light);
+    margin-bottom: 25px;
+}
+
+/* Member Card Style */
+.member-card {
+    background: var(--primary-color);
+    color: white;
+    width: 100%;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: left;
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.member-card::after {
+    content: '';
+    position: absolute;
+    top: -20px; right: -20px;
+    width: 80px; height: 80px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 50%;
+}
+
+.card-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-size: 13px;
+    color: #cbd5e1;
+}
+
+.rank-badge {
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 800;
+    font-size: 11px;
+    text-transform: uppercase;
+    color: var(--primary-color);
+}
+
+.rank-badge.gold { background: #facc15; } /* Màu vàng */
+
+.points {
+    font-weight: 700;
+    color: white;
+    font-size: 16px;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 6px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 3px;
+    margin: 10px 0 5px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: #facc15;
+}
+
+.next-rank {
+    font-size: 11px;
+    text-align: center;
+    color: #94a3b8;
+}
+
+/* Cột phải (Content) */
+.profile-content {
+    flex: 1;
+    padding: 30px;
+    overflow-y: auto;
+}
+
+.profile-content h3 {
+    font-size: 16px;
+    color: var(--primary-color);
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.form-grid .full-width {
+    grid-column: span 2;
+}
+
+.profile-actions {
+    margin-top: 30px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+}
+
+/* Responsive cho Profile Modal */
+@media (max-width: 768px) {
+    .profile-container {
+        flex-direction: column;
+    }
+    .profile-sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid #e2e8f0;
+    }
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+}

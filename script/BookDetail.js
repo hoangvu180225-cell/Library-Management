@@ -1,20 +1,29 @@
-// File: detail.js
+/* =========================================
+   SCRIPT: BookDetail.js
+   ========================================= */
 import bookApi from '../api/bookAPI.js';
 import transactionApi from '../api/transactionAPI.js';
+import { initSharedUI } from './ShareUI.js'; 
 
 document.addEventListener('DOMContentLoaded', async () => {
+    
+    initSharedUI(); 
+
+    // 2. LOGIC RIÊNG CỦA TRANG CHI TIẾT
     const params = new URLSearchParams(window.location.search);
     const bookId = params.get('id');
 
-    // 1. Kiểm tra ID sách
+    // Kiểm tra ID sách
     if (!bookId) {
-        window.location.href = '/asset/Homepage/HomePage.html';
+        // Sửa lại đường dẫn cho đúng
+        window.location.href = 'HomePage.html'; 
         return;
     }
 
-    // 2. Gọi API lấy dữ liệu và Render
+    // Gọi API lấy dữ liệu và Render
     try {
         const response = await bookApi.getById(bookId);
+        // Tăng tính tương thích: hỗ trợ cả {data: ...} và trả về thẳng object
         const book = response.data || response; 
 
         if (book) {
@@ -24,17 +33,17 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     } catch (error) {
         console.error("Lỗi:", error);
-        document.querySelector('main').innerHTML = `
-            <div style="text-align: center; padding: 100px 20px;">
+        document.querySelector('.book-container').innerHTML = `
+            <div style="text-align: center; padding: 100px 20px; width: 100%;">
                 <h2 style="color: #d9534f;">Không tìm thấy sách!</h2>
                 <p>Sách bạn tìm kiếm không tồn tại hoặc đã bị xóa.</p>
-                <a href="/asset/Homepage/HomePage.html" class="btn btn-primary">Về trang chủ</a>
+                <a href="HomePage.html" class="btn btn-primary" style="margin-top:20px; display:inline-block;">Về trang chủ</a>
             </div>
         `;
     }
 });
 
-// --- HÀM GÁN SỰ KIỆN CHO NÚT BẤM (Đã đồng bộ) ---
+// --- HÀM GÁN SỰ KIỆN CHO NÚT BẤM ---
 function setupActionButtons(bookId) {
     // Nút Mượn
     const btnBorrow = document.getElementById('btn-borrow');
@@ -60,10 +69,7 @@ function setupActionButtons(bookId) {
                     alert("Mua thành công! Kiểm tra trong tủ sách của bạn.");
                     window.location.href = 'MyBook.html';
                 } catch (error) {
-                    // SỬA: Log toàn bộ lỗi để debug
                     console.error("Lỗi mua sách:", error); 
-                    
-                    // Hiển thị thông báo
                     const msg = error.response?.data?.message || error.message || "Giao dịch thất bại.";
                     alert(msg);
                 }
@@ -79,7 +85,7 @@ function setupActionButtons(bookId) {
                 await transactionApi.addToLibrary(bookId);
                 alert("Đã thêm vào danh sách quan tâm!");
             } catch (error) {
-                alert("Không thể thêm vào tủ sách.");
+                alert("Không thể thêm vào tủ sách. (Có thể bạn chưa đăng nhập)");
             }
         });
     }
@@ -89,7 +95,8 @@ function setupActionButtons(bookId) {
 function renderBookInfo(book) {
     document.title = `${book.title} - Thư viện Online`;
     const imgElement = document.getElementById('detail-image');
-    if (imgElement) imgElement.src = book.image || 'assets/images/default-book.png';
+    // Sửa lại đường dẫn ảnh mặc định nếu cần
+    if (imgElement) imgElement.src = book.image || '../../assets/images/default-book.png';
 
     setText('detail-title', book.title);
     setText('detail-author', book.author);
@@ -98,10 +105,11 @@ function renderBookInfo(book) {
     renderStars(book.rating || 0);
 
     // Xử lý Giá tiền
-    const priceFormatted = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(book.price);
+    const priceFormatted = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(book.price || 0);
     setText('detail-price', priceFormatted);
     
-    const fakeOldPrice = book.price * 1.25; 
+    // Giả lập giá cũ để hiển thị giảm giá cho đẹp
+    const fakeOldPrice = (book.price || 0) * 1.25; 
     const oldPriceEl = document.getElementById('detail-old-price');
     const discountEl = document.getElementById('detail-discount');
     
@@ -115,15 +123,18 @@ function renderBookInfo(book) {
         if(discountEl) discountEl.style.display = 'none';
     }
 
-    // Thông tin chi tiết
-    setText('info-id', book.book_id || book.id); 
+    // Thông tin chi tiết bảng
     setText('info-isbn', book.isbn || "Chưa có ISBN");
     setText('info-genre', book.category_name || "Đang cập nhật");
-    setText('info-author', book.author); 
     setText('info-author-table', book.author); 
     setText('info-publisher', book.publisher || "Đang cập nhật"); 
     setText('info-year', book.publication_year || "---");
     setText('info-format', book.book_format || "Bìa mềm");
+
+    // Breadcrumb (Đường dẫn)
+    setText('crumb-title', book.title);
+    const crumbGenre = document.getElementById('crumb-genre');
+    if(crumbGenre) crumbGenre.textContent = book.category_name || "Sách";
 
     // Mô tả
     const descEl = document.getElementById('detail-desc');

@@ -2,11 +2,11 @@
    SCRIPT QUẢN LÝ TỦ SÁCH CÁ NHÂN
    (Kết nối dữ liệu từ Database thông qua bookApi)
    ========================================= */
-
-import bookApi from '../api/bookAPI.js'; 
+import { initSharedUI } from './ShareUI.js'; 
 import transactionApi from '../api/transactionAPI.js';
 
 document.addEventListener('DOMContentLoaded', () => {
+    initSharedUI(); 
     initMyLibrary();
     setupFilterTabs();
 });
