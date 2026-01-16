@@ -31,7 +31,7 @@ axiosClient.interceptors.response.use(
         // Kiểm tra nếu lỗi là 401 (Chưa đăng nhập) hoặc 403 (Token hết hạn/Không có quyền)
         if (error.response && (error.response.status === 401 || error.response.status === 403)) {
             // Thông báo cho người dùng
-            alert("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại!");
+            alert("Bạn cần đăng nhập để thực hiện thao tác này!");
 
             // Xóa sạch Token và Thông tin User cũ
             localStorage.removeItem('accessToken');

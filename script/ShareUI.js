@@ -309,44 +309,56 @@ function setupProfileLogic() {
 }
 
 // Hàm gọi API lấy dữ liệu và điền vào form
+// Hàm gọi API lấy dữ liệu và điền vào form
 async function loadProfileData() {
     try {
         const res = await authApi.getProfile();
         const user = res.data || res; // Tùy vào response trả về
 
-        // Đổ dữ liệu vào Cột trái (Sidebar)
+        // 1. Đổ dữ liệu text cơ bản
         document.getElementById('display-name').textContent = user.full_name;
         document.getElementById('display-email').textContent = user.email;
         document.getElementById('profile-avatar-img').src = user.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.full_name)}&background=random`;
         
-        // Hạng & Điểm
+        // 2. XỬ LÝ HẠNG THÀNH VIÊN (LOGIC MỚI)
         const tierEl = document.getElementById('display-tier');
-        tierEl.textContent = user.tier || "MEMBER";
-        tierEl.className = `rank-badge ${user.tier === 'GOLD' ? 'gold' : ''}`; // Style màu nếu thích
+        const tierName = user.tier || "MEMBER"; // Nếu null thì là MEMBER
+        
+        // Hiển thị tên hạng
+        tierEl.textContent = tierName;
+        
+        // Gán class màu: chuyển về chữ thường (VD: 'GOLD' -> 'gold')
+        // Kết quả sẽ là: class="rank-badge gold" hoặc class="rank-badge silver"
+        tierEl.className = `rank-badge ${tierName.toLowerCase()}`;
+
+        // 3. Hiển thị điểm
         document.getElementById('display-points').textContent = (user.points || 0).toLocaleString();
 
-        // Trạng thái (Mapping từ DB sang tiếng Việt)
+        // 4. Xử lý trạng thái (Mapping màu sắc)
         const statusEl = document.getElementById('display-status');
         if (user.status === 'ACTIVE') {
             statusEl.textContent = "Hoạt động";
             statusEl.style.color = "#4ade80"; // Xanh lá
+        } else if (user.status === 'BANNED') {
+            statusEl.textContent = "Đã khóa";
+            statusEl.style.color = "#f87171"; // Đỏ
         } else {
             statusEl.textContent = user.status;
-            statusEl.style.color = "#f87171"; // Đỏ
+            statusEl.style.color = "#fbbf24"; // Vàng (Chờ duyệt/Khác)
         }
 
-        // Đổ dữ liệu vào Form
+        // 5. Đổ dữ liệu vào Form input
         document.getElementById('input-name').value = user.full_name || "";
         document.getElementById('input-phone').value = user.phone || "";
         document.getElementById('input-address').value = user.address || "";
         
-        // Reset ô mật khẩu
+        // Reset ô mật khẩu để tránh người dùng bấm nhầm
         document.getElementById('input-old-pass').value = "";
         document.getElementById('input-new-pass').value = "";
 
     } catch (error) {
-        console.error(error);
-        alert("Không thể tải thông tin cá nhân. Vui lòng đăng nhập lại.");
+        console.error("Lỗi load profile:", error);
+        alert("Không thể tải thông tin cá nhân. Vui lòng thử lại sau.");
     }
 }
 

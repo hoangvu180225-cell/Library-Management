@@ -1119,3 +1119,54 @@ body {
         grid-template-columns: 1fr;
     }
 }
+
+/* --- STYLE CHO HUY HIỆU HẠNG (TIER BADGE) --- */
+
+/* Style khung chung */
+.rank-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background-color: #6c757d; /* Màu mặc định cho MEMBER */
+    min-width: 60px;
+    text-align: center;
+}
+
+/* Các màu riêng biệt cho từng hạng */
+
+/* Hạng Đồng */
+.rank-badge.bronze {
+    background: linear-gradient(135deg, #cd7f32, #e6aac3); 
+    box-shadow: 0 2px 5px rgba(205, 127, 50, 0.4);
+}
+
+/* Hạng Bạc */
+.rank-badge.silver {
+    background: linear-gradient(135deg, #bdc3c7, #2c3e50);
+    box-shadow: 0 2px 5px rgba(189, 195, 199, 0.4);
+}
+
+/* Hạng Vàng */
+.rank-badge.gold {
+    background: linear-gradient(135deg, #f1c40f, #f39c12);
+    box-shadow: 0 2px 5px rgba(241, 196, 15, 0.4);
+    text-shadow: 0 1px 1px rgba(0,0,0,0.2);
+}
+
+/* Hạng Bạch Kim */
+.rank-badge.platinum {
+    background: linear-gradient(135deg, #00b894, #55efc4);
+    box-shadow: 0 2px 5px rgba(0, 184, 148, 0.4);
+}
+
+/* Hạng Kim Cương */
+.rank-badge.diamond {
+    background: linear-gradient(135deg, #74b9ff, #0984e3);
+    box-shadow: 0 2px 5px rgba(116, 185, 255, 0.4);
+    border: 1px solid rgba(255,255,255,0.3);
+}

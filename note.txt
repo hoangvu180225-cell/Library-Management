@@ -1,4 +1,3 @@
-upload ảnh sách từ máy
 Cấu trúc dự án:
  A - api
     I - axiosClient: cấu hình chung file json trước khi gửi đi
@@ -12,3 +11,24 @@ Cấu trúc dự án:
  G - script
  H - style
  I - uploads
+
+ *function: 
+ A - HomePage:
+   - Đăng nhập/Đăng ký
+   - Tìm sách theo tên
+   - Lọc sách theo thể loại
+   - Sang trang chi tiết sách (Cập nhật lượt xem +1)
+   - Truy cập các trang Liên hệ, Quy Định,...
+   
+   - Mua sách
+   - Mượn sách
+   - Trả sách
+   - Tab Sách của Tôi
+      - Xem trạng thái sách
+      - Thao tác với sách đã quan tâm
+   - Hồ sơ
+      - Xem Points, Tier (Tier tính theo Points: 200, 500, 1000, 2000, Tier Đồng mượn 5 cuốn/tuần, mỗi Tier cao hơn +1)
+      - Points tự cập nhật (mượn trả đúng hạn +20đ, quá hạn -5đ/ngày, ...)
+   - Đăng xuất
+
+B - Admin

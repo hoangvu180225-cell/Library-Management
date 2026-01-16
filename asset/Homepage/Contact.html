@@ -8,8 +8,7 @@
     <link rel="stylesheet" href="../../style/HomePage/Homepage.css">
 </head>
 <body>
-    <header class="header"> 
-    </header>
+    <header class="header"></header>
 
     <div class="page-container">
         <h1 class="page-title">Liên hệ với chúng tôi</h1>
@@ -26,18 +25,20 @@
                 </div>
                 <div class="contact-form">
                     <h3>Gửi tin nhắn</h3>
-                    <form style="margin-top:15px;">
+                    
+                    <form style="margin-top:15px;" id="contact-form">
                         <div class="input-group">
-                            <input type="text" placeholder="Họ và tên của bạn">
+                            <input type="text" placeholder="Họ và tên của bạn" required>
                         </div>
                         <div class="input-group">
-                            <input type="email" placeholder="Email liên hệ">
+                            <input type="email" placeholder="Email liên hệ" required>
                         </div>
                         <div class="input-group">
-                            <textarea placeholder="Nội dung cần hỗ trợ..."></textarea>
+                            <textarea placeholder="Nội dung cần hỗ trợ..." required></textarea>
                         </div>
                         <button class="btn btn-primary" style="width:100%">Gửi tin nhắn</button>
                     </form>
+
                 </div>
             </div>
         </div>
@@ -45,6 +46,30 @@
 
     <footer class="footer"></footer>
     
-    <script type="module" src="../../script/Homepage.js"></script>
+    <script type="module">
+        // Import hàm tạo Header/Footer từ file chung
+        import { initSharedUI } from '../../script/ShareUI.js';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // 1. Khởi tạo giao diện chung
+            initSharedUI();
+
+            // 2. Xử lý form liên hệ
+            const contactForm = document.getElementById('contact-form');
+
+            if (contactForm) {
+                contactForm.addEventListener('submit', (e) => {
+                    e.preventDefault(); // Ngăn load lại trang
+
+                    // Hiển thị thông báo
+                    alert("Chúng tôi đã nhận được thông tin từ bạn, vui lòng kiểm tra email phản hồi trong 24h tới!");
+                    
+                    // Xóa trắng form
+                    contactForm.reset();
+                });
+            }
+        });
+    </script>
 </body>
 </html>
