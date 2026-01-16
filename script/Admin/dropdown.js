@@ -141,7 +141,9 @@ export function setupAdminProfile() {
     // Cập nhật tên Admin hiển thị trên thanh Header
     const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
     const nameDisplay = adminProfile.querySelector('span');
+    const roleDisplay = adminProfile.querySelector('small');
     if (nameDisplay && userInfo.name) nameDisplay.textContent = userInfo.name;
+    if (roleDisplay && userInfo.role) roleDisplay.textContent = userInfo.role;
 
     // --- 4. XỬ LÝ DROPDOWN ---
     adminProfile.onclick = (e) => {
