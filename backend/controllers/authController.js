@@ -67,3 +67,62 @@ exports.login = async (req, res) => {
         res.status(500).json({ message: "Lỗi Server", error: error.message });
     }
 };
+
+// 1. LẤY THÔNG TIN PROFILE (GET /auth/profile)
+exports.getProfile = async (req, res) => {
+    try {
+        // Lấy ID từ token (req.user do middleware verifyToken tạo ra)
+        const userId = req.user.id; 
+
+        const [rows] = await db.execute(
+            'SELECT user_id, full_name, email, phone, address, avatar, role, tier, points, status FROM Users WHERE user_id = ?', 
+            [userId]
+        );
+
+        if (rows.length === 0) {
+            return res.status(404).json({ message: "Không tìm thấy người dùng" });
+        }
+
+        res.json(rows[0]);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Lỗi Server" });
+    }
+};
+
+// 2. CẬP NHẬT PROFILE & ĐỔI MẬT KHẨU (PUT /auth/profile)
+exports.updateProfile = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const { full_name, phone, address, currentPassword, newPassword } = req.body;
+
+        // Lấy thông tin user hiện tại để check mật khẩu
+        const [rows] = await db.execute('SELECT * FROM Users WHERE user_id = ?', [userId]);
+        if (rows.length === 0) return res.status(404).json({ message: "User không tồn tại" });
+        
+        const user = rows[0];
+
+        // --- XỬ LÝ ĐỔI MẬT KHẨU (Nếu có gửi lên) ---
+        let passwordToSave = user.password; // Mặc định giữ mật khẩu cũ
+
+        if (newPassword && newPassword.trim() !== "") {
+            // Nếu muốn đổi pass, phải nhập đúng pass cũ
+            if (!currentPassword || currentPassword !== user.password) {
+                return res.status(400).json({ message: "Mật khẩu hiện tại không đúng!" });
+            }
+            passwordToSave = newPassword; // Cập nhật mật khẩu mới
+        }
+
+        // --- CẬP NHẬT DATABASE ---
+        await db.execute(
+            'UPDATE Users SET full_name = ?, phone = ?, address = ?, password = ? WHERE user_id = ?',
+            [full_name, phone, address, passwordToSave, userId]
+        );
+
+        res.json({ message: "Cập nhật thông tin thành công!" });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Lỗi Server" });
+    }
+};

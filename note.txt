@@ -1,0 +1,11 @@
+upload ảnh sách từ máy
+Cấu trúc dự án:
+ A - api
+ B - asset
+ C - backend
+ D - database 
+ E - icon
+ F - node_modules
+ G - script
+ H - style
+ I - uploads

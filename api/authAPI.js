@@ -9,6 +9,12 @@ const authApi = {
     },
     getMe() {
         return axiosClient.get('/auth/me');
+    },
+    getProfile() {
+        return axiosClient.get('/auth/profile');
+    },
+    updateProfile(data) {
+        return axiosClient.put('/auth/profile', data);
     }
 };
 

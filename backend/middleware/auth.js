@@ -1,4 +1,4 @@
-const jwt = require('jsonwebtoken');
+    const jwt = require('jsonwebtoken');
 
 const auth = (req, res, next) => {
     // 1. Lấy token từ header "Authorization"

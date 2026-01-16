@@ -33,11 +33,10 @@ const HEADER_HTML = `
             <div class="dropdown-menu" id="user-dropdown">
                 <div class="dropdown-header">
                     <span class="user-name">User</span>
-                    <span class="user-role">Sinh viên</span>
+                    <span class="user-role">Thành viên</span>
                 </div>
                 <ul class="dropdown-items">
                     <li><a href="#" id="open-profile-btn"><i class="fa-solid fa-user"></i> Hồ sơ cá nhân</a></li>
-                    <li><a href="#"><i class="fa-solid fa-gear"></i> Cài đặt</a></li>
                     <li class="divider"></li>
                     <li><a href="#" class="logout"><i class="fa-solid fa-right-from-bracket"></i> Đăng xuất</a></li>
                 </ul>
@@ -83,8 +82,14 @@ const MODALS_HTML = `
             <span class="close-modal close-login">&times;</span>
             <div class="modal-header"><h2>Đăng nhập</h2></div>
             <form id="login-form">
-                <div class="input-group"><label>Email</label><input type="email" id="email" required></div>
-                <div class="input-group"><label>Mật khẩu</label><input type="password" id="password" required></div>
+                <div class="input-group">
+                    <label>Email</label>
+                    <input type="email" id="email" placeholder="Ví dụ: sinhvien@hust.edu.vn" required>
+                </div>
+                <div class="input-group">
+                    <label>Mật khẩu</label>
+                    <input type="password" id="password" placeholder="Nhập mật khẩu của bạn" required>
+                </div>
                 <button type="submit" class="btn-submit">Đăng nhập</button>
                 <div class="auth-switch">Chưa có tài khoản? <a href="#" id="switch-to-register">Đăng ký ngay</a></div>
             </form>
@@ -96,11 +101,26 @@ const MODALS_HTML = `
             <span class="close-modal close-register">&times;</span>
             <div class="modal-header"><h2>Đăng ký</h2></div>
             <form id="register-form">
-                <div class="input-group"><label>Họ tên</label><input type="text" required></div>
-                <div class="input-group"><label>Email</label><input type="email" required></div>
-                <div class="input-group"><label>Mật khẩu</label><input type="password" required></div>
-                <div class="input-group"><label>Nhập lại MK</label><input type="password" required></div>
-                <div class="input-group"><label>SĐT</label><input type="tel" required></div>
+                <div class="input-group">
+                    <label>Họ tên</label>
+                    <input type="text" placeholder="Nguyễn Văn A" required>
+                </div>
+                <div class="input-group">
+                    <label>Email</label>
+                    <input type="email" placeholder="example@hust.edu.vn" required>
+                </div>
+                <div class="input-group">
+                    <label>Mật khẩu</label>
+                    <input type="password" placeholder="Tối thiểu 6 ký tự" required>
+                </div>
+                <div class="input-group">
+                    <label>Nhập lại mật khẩu</label>
+                    <input type="password" placeholder="Xác nhận lại mật khẩu" required>
+                </div>
+                <div class="input-group">
+                    <label>Số điện thoại</label>
+                    <input type="tel" placeholder="Ví dụ: 0987xxxxxx" required>
+                </div>
                 <button type="submit" class="btn-submit">Đăng ký</button>
                 <div class="auth-switch">Đã có tài khoản? <a href="#" id="switch-to-login">Đăng nhập</a></div>
             </form>
@@ -113,26 +133,41 @@ const MODALS_HTML = `
             <div class="profile-container">
                 <div class="profile-sidebar">
                     <div class="profile-avatar-large">
-                        <img src="" alt="Avatar">
+                        <img id="profile-avatar-img" src="" alt="Avatar">
                     </div>
-                    <h2 class="profile-name">User</h2>
-                    <p class="profile-email">email@hust.edu.vn</p>
+                    <h2 class="profile-name" id="display-name">Loading...</h2>
+                    <p class="profile-email" id="display-email">...</p>
+                    
                     <div class="member-card">
-                        <div class="card-row"><span>Hạng</span><span class="rank-badge gold">VÀNG</span></div>
-                        <div class="card-row"><span>Điểm</span><span class="points">1,250 đ</span></div>
+                        <div class="card-row"><span>Hạng</span><span class="rank-badge" id="display-tier">...</span></div>
+                        <div class="card-row"><span>Điểm</span><span class="points" id="display-points">0</span></div>
+                        <div class="card-row" style="margin-top:5px; border-top:1px solid rgba(255,255,255,0.2); padding-top:5px;">
+                            <span>Trạng thái</span>
+                            <span id="display-status" style="font-weight:bold;">...</span>
+                        </div>
                     </div>
                 </div>
+
                 <div class="profile-content">
                     <h3>Cập nhật thông tin</h3>
                     <form id="profile-form">
                         <div class="form-grid">
-                            <div class="input-group"><label>Họ tên</label><input type="text"></div>
-                            <div class="input-group"><label>SĐT</label><input type="tel"></div>
-                            <div class="input-group full-width"><label>Địa chỉ</label><input type="text"></div>
+                            <div class="input-group"><label>Họ tên</label><input type="text" id="input-name" required></div>
+                            <div class="input-group"><label>SĐT</label><input type="tel" id="input-phone" required></div>
+                            <div class="input-group full-width"><label>Địa chỉ</label><input type="text" id="input-address"></div>
                         </div>
+
+                        <h3 style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 10px;">Đổi mật khẩu</h3>
+                        <p style="font-size: 12px; color: #666; margin-bottom: 10px;">(Để trống nếu không muốn đổi)</p>
+                        
+                        <div class="form-grid">
+                            <div class="input-group"><label>Mật khẩu hiện tại</label><input type="password" id="input-old-pass"></div>
+                            <div class="input-group"><label>Mật khẩu mới</label><input type="password" id="input-new-pass"></div>
+                        </div>
+
                         <div class="profile-actions">
                             <button type="button" class="btn btn-outline close-profile">Hủy</button>
-                            <button type="submit" class="btn btn-primary">Lưu</button>
+                            <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
                         </div>
                     </form>
                 </div>
@@ -152,7 +187,7 @@ export function initSharedUI() {
     setupHeaderNav();
     setupAuthModals();
     setupUserDropdown();
-    setupProfileModal();
+    setupProfileLogic();
 }
 
 // Hàm bơm HTML vào các thẻ placeholder
@@ -225,24 +260,124 @@ function setupUserDropdown() {
     }
 }
 
-function setupProfileModal() {
+// --- HÀM XỬ LÝ PROFILE MỚI ---
+function setupProfileLogic() {
     const openBtn = document.getElementById("open-profile-btn");
     const modal = document.getElementById("profileModal");
     const closeBtns = document.querySelectorAll(".close-profile");
+    const profileForm = document.getElementById("profile-form");
     const userMenuContainer = document.querySelector(".user-menu-container");
 
+    // 1. MỞ MODAL & LOAD DỮ LIỆU TỪ API
     if (openBtn && modal) {
-        openBtn.addEventListener("click", (e) => {
+        openBtn.addEventListener("click", async (e) => {
             e.preventDefault();
-            modal.style.display = "block";
             if(userMenuContainer) userMenuContainer.classList.remove("active");
+            
+            modal.style.display = "block";
+            
+            // Gọi hàm load dữ liệu
+            await loadProfileData();
         });
-        
-        closeBtns.forEach(btn => btn.addEventListener("click", () => modal.style.display = "none"));
-        
-        modal.addEventListener("click", (e) => {
-            if (e.target === modal) modal.style.display = "none";
+    }
+
+    // 2. ĐÓNG MODAL
+    closeBtns.forEach(btn => btn.addEventListener("click", () => modal.style.display = "none"));
+    window.addEventListener("click", (e) => {
+        if (e.target === modal) modal.style.display = "none";
+    });
+
+    // 3. XỬ LÝ SUBMIT FORM
+    if (profileForm) {
+        profileForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            await handleProfileUpdate();
         });
+    }
+}
+
+// Hàm gọi API lấy dữ liệu và điền vào form
+async function loadProfileData() {
+    try {
+        const res = await authApi.getProfile();
+        const user = res.data || res; // Tùy vào response trả về
+
+        // Đổ dữ liệu vào Cột trái (Sidebar)
+        document.getElementById('display-name').textContent = user.full_name;
+        document.getElementById('display-email').textContent = user.email;
+        document.getElementById('profile-avatar-img').src = user.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.full_name)}&background=random`;
+        
+        // Hạng & Điểm
+        const tierEl = document.getElementById('display-tier');
+        tierEl.textContent = user.tier || "MEMBER";
+        tierEl.className = `rank-badge ${user.tier === 'GOLD' ? 'gold' : ''}`; // Style màu nếu thích
+        document.getElementById('display-points').textContent = (user.points || 0).toLocaleString();
+
+        // Trạng thái (Mapping từ DB sang tiếng Việt)
+        const statusEl = document.getElementById('display-status');
+        if (user.status === 'ACTIVE') {
+            statusEl.textContent = "Hoạt động";
+            statusEl.style.color = "#4ade80"; // Xanh lá
+        } else {
+            statusEl.textContent = user.status;
+            statusEl.style.color = "#f87171"; // Đỏ
+        }
+
+        // Đổ dữ liệu vào Form
+        document.getElementById('input-name').value = user.full_name || "";
+        document.getElementById('input-phone').value = user.phone || "";
+        document.getElementById('input-address').value = user.address || "";
+        
+        // Reset ô mật khẩu
+        document.getElementById('input-old-pass').value = "";
+        document.getElementById('input-new-pass').value = "";
+
+    } catch (error) {
+        console.error(error);
+        alert("Không thể tải thông tin cá nhân. Vui lòng đăng nhập lại.");
+    }
+}
+
+// Hàm gửi dữ liệu cập nhật
+async function handleProfileUpdate() {
+    const full_name = document.getElementById('input-name').value;
+    const phone = document.getElementById('input-phone').value;
+    const address = document.getElementById('input-address').value;
+    const currentPassword = document.getElementById('input-old-pass').value;
+    const newPassword = document.getElementById('input-new-pass').value;
+
+    // Validate sơ bộ
+    if (newPassword && !currentPassword) {
+        alert("Vui lòng nhập mật khẩu hiện tại để xác nhận thay đổi mật khẩu!");
+        return;
+    }
+
+    try {
+        const payload = {
+            full_name,
+            phone,
+            address,
+            currentPassword,
+            newPassword
+        };
+
+        await authApi.updateProfile(payload);
+        
+        alert("Cập nhật thông tin thành công!");
+        document.getElementById("profileModal").style.display = "none";
+        
+        // Cập nhật lại localStorage userInfo để Header bên ngoài cũng đổi tên theo
+        let currentUser = JSON.parse(localStorage.getItem('userInfo') || '{}');
+        currentUser.name = full_name;
+        localStorage.setItem('userInfo', JSON.stringify(currentUser));
+        
+        // Reload lại trang hoặc gọi lại checkLoginStatus() để cập nhật Header
+        window.location.reload();
+
+    } catch (error) {
+        console.error(error);
+        const msg = error.response?.data?.message || "Lỗi cập nhật profile";
+        alert(msg);
     }
 }
 
@@ -279,6 +414,7 @@ function setupAuthModals() {
 }
 
 function handleAuthSubmit() {
+    // --- XỬ LÝ ĐĂNG NHẬP (Giữ nguyên) ---
     const loginForm = document.getElementById('login-form');
     if (loginForm) {
         loginForm.onsubmit = async (e) => {
@@ -289,14 +425,58 @@ function handleAuthSubmit() {
                 const res = await authApi.login({ email, password });
                 localStorage.setItem('accessToken', res.token);
                 localStorage.setItem('userInfo', JSON.stringify(res.userInfo));
-                alert("Đăng nhập thành công");
+                alert("Đăng nhập thành công!");
                 window.location.reload();
             } catch (err) {
-                alert("Đăng nhập thất bại");
+                console.error(err);
+                const msg = err.response?.data?.message || "Đăng nhập thất bại!";
+                alert(msg);
             }
         };
     }
-    // (Thêm logic registerForm tương tự...)
+
+    // --- XỬ LÝ ĐĂNG KÝ (Bổ sung phần này) ---
+    const registerForm = document.getElementById('register-form');
+    if (registerForm) {
+        registerForm.onsubmit = async (e) => {
+            e.preventDefault();
+            
+            // Lấy các ô input theo thứ tự trong HTML
+            const inputs = registerForm.querySelectorAll('input');
+            const name = inputs[0].value;
+            const email = inputs[1].value;
+            const password = inputs[2].value;
+            const confirmPass = inputs[3].value;
+            const phone = inputs[4].value;
+
+            // Validate cơ bản
+            if (password.length < 6) {
+                alert("Mật khẩu phải có ít nhất 6 ký tự!");
+                return;
+            }
+            if (password !== confirmPass) {
+                alert("Mật khẩu nhập lại không khớp!");
+                return;
+            }
+
+            try {
+                // Gọi API Đăng ký
+                await authApi.register({ name, email, password, phone });
+                alert("Đăng ký thành công! Vui lòng đăng nhập.");
+
+                // Tự động chuyển sang form đăng nhập
+                document.getElementById('registerModal').style.display = 'none';
+                document.getElementById('loginModal').style.display = 'block';
+                
+                // Reset form đăng ký
+                registerForm.reset();
+            } catch (err) {
+                console.error(err);
+                const msg = err.response?.data?.message || "Đăng ký thất bại (Email có thể đã tồn tại)!";
+                alert(msg);
+            }
+        };
+    }
 }
 
 function setupHeaderNav() {
