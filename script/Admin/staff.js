@@ -3,9 +3,7 @@ import { setupAdminProfile } from '../../script/Admin/dropdown.js';
 
 let globalStaff = []; 
 
-// --- CẤU HÌNH QUYỀN HẠN (MOCK) ---
-// Trong thực tế, bạn sẽ lấy giá trị này từ localStorage sau khi đăng nhập
-// Ví dụ: localStorage.getItem('role')
+
 const CURRENT_USER_ROLE = localStorage.getItem('role') || 'ADMIN'; 
 // Mẹo: Mở Console trình duyệt gõ: localStorage.setItem('role', 'STAFF') rồi F5 để test chế độ nhân viên
 
@@ -19,7 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
 // 0. Xử lý giao diện dựa trên quyền hạn
 function checkPermissionUI() {
     const btnAdd = document.querySelector('.btn-add');
-    // Nếu là STAFF thì ẩn nút "Thêm nhân viên"
     if (CURRENT_USER_ROLE !== 'ADMIN' && btnAdd) {
         btnAdd.style.display = 'none';
     }

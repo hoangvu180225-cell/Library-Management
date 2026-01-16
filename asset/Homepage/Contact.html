@@ -28,15 +28,15 @@
                     
                     <form style="margin-top:15px;" id="contact-form">
                         <div class="input-group">
-                            <input type="text" placeholder="Họ và tên của bạn" required>
+                            <input type="text" id="c-name" placeholder="Họ và tên của bạn" required>
                         </div>
                         <div class="input-group">
-                            <input type="email" placeholder="Email liên hệ" required>
+                            <input type="email" id="c-email" placeholder="Email liên hệ" required>
                         </div>
                         <div class="input-group">
-                            <textarea placeholder="Nội dung cần hỗ trợ..." required></textarea>
+                            <textarea id="c-message" placeholder="Nội dung cần hỗ trợ..." required></textarea>
                         </div>
-                        <button class="btn btn-primary" style="width:100%">Gửi tin nhắn</button>
+                        <button type="submit" class="btn btn-primary" style="width:100%" id="btn-submit">Gửi tin nhắn</button>
                     </form>
 
                 </div>
@@ -47,26 +47,46 @@
     <footer class="footer"></footer>
     
     <script type="module">
-        // Import hàm tạo Header/Footer từ file chung
-        import { initSharedUI } from '../../script/ShareUI.js';
+        // 1. Import SharedUI (Kiểm tra lại tên file SharedUI.js hay ShareUI.js)
+        import { initSharedUI } from '../../script/ShareUI.js'; 
+        // 2. Import API (QUAN TRỌNG)
+        import contactApi from '../../api/contactAPI.js'; 
 
         document.addEventListener('DOMContentLoaded', () => {
-            
-            // 1. Khởi tạo giao diện chung
             initSharedUI();
 
-            // 2. Xử lý form liên hệ
             const contactForm = document.getElementById('contact-form');
+            const btnSubmit = document.getElementById('btn-submit');
 
             if (contactForm) {
-                contactForm.addEventListener('submit', (e) => {
-                    e.preventDefault(); // Ngăn load lại trang
-
-                    // Hiển thị thông báo
-                    alert("Chúng tôi đã nhận được thông tin từ bạn, vui lòng kiểm tra email phản hồi trong 24h tới!");
+                contactForm.addEventListener('submit', async (e) => {
+                    e.preventDefault(); 
                     
-                    // Xóa trắng form
-                    contactForm.reset();
+                    // Lấy dữ liệu
+                    const full_name = document.getElementById('c-name').value;
+                    const email = document.getElementById('c-email').value;
+                    const message = document.getElementById('c-message').value;
+
+                    // UX: Disable nút để tránh bấm nhiều lần
+                    const originalText = btnSubmit.innerText;
+                    btnSubmit.innerText = "Đang gửi...";
+                    btnSubmit.disabled = true;
+
+                    try {
+                        // GỌI API THẬT
+                        await contactApi.submit({ full_name, email, message });
+                        
+                        alert("Gửi liên hệ thành công! Chúng tôi sẽ phản hồi sớm.");
+                        contactForm.reset(); // Xóa trắng form
+
+                    } catch (error) {
+                        console.error(error);
+                        alert("Lỗi gửi tin nhắn: " + (error.response?.data?.message || error.message));
+                    } finally {
+                        // Mở lại nút
+                        btnSubmit.innerText = originalText;
+                        btnSubmit.disabled = false;
+                    }
                 });
             }
         });

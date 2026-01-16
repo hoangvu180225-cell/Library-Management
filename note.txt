@@ -26,6 +26,7 @@ Cấu trúc dự án:
    - Tab Sách của Tôi
       - Xem trạng thái sách
       - Thao tác với sách đã quan tâm
+      - Nếu không có sách có thể chuyển thẳng về
    - Hồ sơ
       - Xem Points, Tier (Tier tính theo Points: 200, 500, 1000, 2000, Tier Đồng mượn 5 cuốn/tuần, mỗi Tier cao hơn +1)
       - Points tự cập nhật (mượn trả đúng hạn +20đ, quá hạn -5đ/ngày, ...)

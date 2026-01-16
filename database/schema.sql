@@ -1,22 +1,26 @@
 DROP DATABASE IF EXISTS LibraryManagement;
-CREATE DATABASE LibraryManagement;
+CREATE DATABASE LibraryManagement CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE LibraryManagement;
 
--- 1. Bảng Thể loại
+-- =============================================
+-- 1. BẢNG THỂ LOẠI (Categories)
+-- =============================================
 CREATE TABLE Categories (
     category_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL UNIQUE, 
     slug VARCHAR(100)                  
 );
 
--- 2. Bảng Người dùng (Đã thêm cột address)
+-- =============================================
+-- 2. BẢNG NGƯỜI DÙNG (Users)
+-- =============================================
 CREATE TABLE Users (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
     full_name VARCHAR(100) NOT NULL,    
     email VARCHAR(100) NOT NULL UNIQUE, 
     password VARCHAR(255) NOT NULL,     
     phone VARCHAR(20),
-    address VARCHAR(255),               -- MỚI: Thêm cột địa chỉ ở đây
+    address VARCHAR(255),               -- Cột địa chỉ (Mới thêm)
     avatar VARCHAR(255),                
     role ENUM('ADMIN', 'STAFF', 'MEMBER') DEFAULT 'MEMBER',
     points INT DEFAULT 0,               
@@ -26,7 +30,9 @@ CREATE TABLE Users (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
--- 3. Bảng Sách
+-- =============================================
+-- 3. BẢNG SÁCH (Books)
+-- =============================================
 CREATE TABLE Books (
     book_id INT AUTO_INCREMENT PRIMARY KEY,
     isbn VARCHAR(20) UNIQUE,                
@@ -34,9 +40,9 @@ CREATE TABLE Books (
     author VARCHAR(100) NOT NULL,      
     category_id INT,
     
-    publisher VARCHAR(100) DEFAULT NULL,        -- Nhà xuất bản
-    publication_year INT DEFAULT NULL,          -- Năm xuất bản
-    book_format VARCHAR(50) DEFAULT 'Bìa mềm',  -- Hình thức
+    publisher VARCHAR(100) DEFAULT NULL,    -- Nhà xuất bản
+    publication_year INT DEFAULT NULL,      -- Năm xuất bản
+    book_format VARCHAR(50) DEFAULT 'Bìa mềm', -- Hình thức
     
     price DECIMAL(10, 2) DEFAULT 0,         
     image VARCHAR(255),                 
@@ -53,22 +59,26 @@ CREATE TABLE Books (
     FOREIGN KEY (category_id) REFERENCES Categories(category_id) ON DELETE SET NULL
 );
 
--- 4. Bảng Giao dịch (Mượn/Trả/Mua)
+-- =============================================
+-- 4. BẢNG GIAO DỊCH (Transactions)
+-- =============================================
 CREATE TABLE Transactions (
     trans_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     book_id INT NOT NULL, 
     type ENUM('BORROW', 'BUY') DEFAULT 'BORROW', 
     start_date DATETIME DEFAULT CURRENT_TIMESTAMP, 
-    due_date DATETIME,                                     
-    return_date DATETIME,                                  
+    due_date DATETIME,                                         
+    return_date DATETIME,                                      
     status ENUM('PENDING', 'BORROWING', 'RETURNED', 'OVERDUE', 'COMPLETED', 'CANCELLED', 'WISHLIST') DEFAULT 'PENDING',
     note TEXT, 
-    FOREIGN KEY (user_id) REFERENCES Users(user_id),
-    FOREIGN KEY (book_id) REFERENCES Books(book_id)
+    FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (book_id) REFERENCES Books(book_id) ON DELETE CASCADE
 );
 
--- 5. Bảng Đánh giá
+-- =============================================
+-- 5. BẢNG ĐÁNH GIÁ (Reviews)
+-- =============================================
 CREATE TABLE Reviews (
     review_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
@@ -76,6 +86,20 @@ CREATE TABLE Reviews (
     rating INT CHECK (rating >= 1 AND rating <= 5),
     comment TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES Users(user_id),
-    FOREIGN KEY (book_id) REFERENCES Books(book_id)
+    FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (book_id) REFERENCES Books(book_id) ON DELETE CASCADE
+);
+
+-- =============================================
+-- 6. BẢNG LIÊN HỆ (Contacts) - MỚI
+-- =============================================
+CREATE TABLE Contacts (
+    contact_id INT AUTO_INCREMENT PRIMARY KEY,
+    full_name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    message TEXT NOT NULL,
+    reply_text TEXT DEFAULT NULL, -- Nội dung admin trả lời
+    status ENUM('PENDING', 'REPLIED') DEFAULT 'PENDING',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    replied_at TIMESTAMP NULL
 );

@@ -6,7 +6,7 @@ USE LibraryManagement;
 
 -- --- A. THỂ LOẠI ---
 INSERT INTO Categories (name, slug) VALUES 
-('Hành động', 'hanh-dong'),                   -- ID: 1
+('Hành động', 'hanh-dong'),                  -- ID: 1
 ('Khoa học viễn tưởng', 'khoa-hoc-vien-tuong'), -- ID: 2
 ('Lãng mạn', 'lang-man'),                     -- ID: 3
 ('Lịch sử', 'lich-su'),                       -- ID: 4
@@ -79,10 +79,18 @@ INSERT INTO Transactions (user_id, book_id, type, start_date, due_date, return_d
 (9, 23, 'BORROW', '2023-11-01', '2023-11-15', '2023-11-10', 'RETURNED', 'Trả đúng hạn'),
 (5, 4, 'BORROW', '2023-09-01', '2023-09-15', NULL, 'OVERDUE', 'Quá hạn'),
 (6, 15, 'BORROW', NOW(), DATE_ADD(NOW(), INTERVAL 14 DAY), NULL, 'PENDING', 'Chờ duyệt'),
-(8, 22, 'BORROW', NOW(), DATE_ADD(NOW(), INTERVAL 14 DAY), NULL, 'PENDING', 'Chờ duyệt');
+(8, 22, 'BORROW', NOW(), DATE_ADD(NOW(), INTERVAL 14 DAY), NULL, 'PENDING', 'Chờ duyệt'),
+-- Thêm ví dụ Wishlist (Quan tâm)
+(9, 10, 'BORROW', NOW(), NULL, NULL, 'WISHLIST', 'Sách muốn đọc sau này');
 
 -- --- E. ĐÁNH GIÁ ---
 INSERT INTO Reviews (user_id, book_id, rating, comment) VALUES 
 (6, 16, 5, 'Tuyệt vời!'),
 (5, 15, 5, 'Rất hay.'),
 (9, 23, 5, 'Kinh điển.');
+
+-- --- F. LIÊN HỆ MẪU (CONTACTS) ---
+INSERT INTO Contacts (full_name, email, message, reply_text, status, replied_at) VALUES
+('Nguyen Van A', 'member1@gmail.com', 'Tôi muốn hỏi về cách gia hạn sách?', 'Bạn có thể gia hạn trực tiếp trên web hoặc mang sách đến quầy.', 'REPLIED', NOW()),
+('Tran Thi B', 'member2@gmail.com', 'Sách Harry Potter bao giờ có thêm hàng?', NULL, 'PENDING', NULL),
+('Khách vãng lai', 'guest@gmail.com', 'Làm sao để đăng ký thẻ thành viên?', NULL, 'PENDING', NULL);

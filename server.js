@@ -15,6 +15,7 @@ const bookRoutes = require('./backend/routes/bookRoutes');
 const adminRoutes = require('./backend/routes/adminRoutes');
 const transactionRoutes = require('./backend/routes/transactionRoutes');
 const reviewRoutes = require('./backend/routes/reviewRoutes');
+const contactRoutes = require('./backend/routes/contactRoutes');
 
 // --- 3. Đăng ký Routes (Khớp với các bảng API của bạn) ---
 
@@ -32,6 +33,9 @@ app.use('/api/transaction', transactionRoutes);
 
 // Bảng 5: Reviews (Đánh giá sách)
 app.use('/api/reviews', reviewRoutes);
+
+// Bảng 6: Contact (Liên hệ)
+app.use('/api/contacts', contactRoutes);
 
 // --- 4. Xử lý lỗi tập trung (Optional) ---
 app.use((err, req, res, next) => {
