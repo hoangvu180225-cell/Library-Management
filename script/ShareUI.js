@@ -13,7 +13,7 @@ const HEADER_HTML = `
     <div class="header-middle">
         <div class="search-box">
             <i class="fa-solid fa-magnifying-glass search-icon"></i>
-            <input type="text" placeholder="Tìm tên sách, tác giả, ISBN...">
+            <input type="text" placeholder="Tìm tên sách...">
         </div>
     </div>
     <div class="header-right guest">

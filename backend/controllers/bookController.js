@@ -2,10 +2,33 @@ const db = require('../db');
 
 exports.getAllBooks = async (req, res) => {
     try {
-        const [rows] = await db.query('SELECT * FROM books');
+        // Lấy từ khóa tìm kiếm từ query param (VD: /books?keyword=Harry)
+        const { keyword } = req.query; 
+
+        let sql = `
+            SELECT b.*, c.name as category_name 
+            FROM Books b 
+            LEFT JOIN Categories c ON b.category_id = c.category_id
+        `;
+        
+        let params = [];
+
+        // Nếu có từ khóa, thêm điều kiện WHERE
+        if (keyword) {
+            sql += ` WHERE b.title LIKE ? OR b.author LIKE ? OR b.isbn LIKE ?`;
+            const searchTerm = `%${keyword}%`; // Tìm kiếm tương đối (%từ khóa%)
+            params = [searchTerm, searchTerm, searchTerm];
+        }
+
+        // Sắp xếp sách mới nhất lên đầu
+        sql += ` ORDER BY b.book_id DESC`;
+
+        const [rows] = await db.execute(sql, params);
         res.json(rows);
+
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        console.error(error);
+        res.status(500).json({ message: "Lỗi Server" });
     }
 };
 

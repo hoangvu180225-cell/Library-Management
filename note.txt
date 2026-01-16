@@ -1,7 +1,10 @@
 upload ảnh sách từ máy
 Cấu trúc dự án:
  A - api
+    I - axiosClient: cấu hình chung file json trước khi gửi đi
+    II - Còn lại: Gắn url để gửi??
  B - asset
+    I - 
  C - backend
  D - database 
  E - icon
