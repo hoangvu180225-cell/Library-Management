@@ -10,18 +10,19 @@ exports.getAllBooks = async (req, res) => {
 };
 
 exports.getRanking = async (req, res) => {
-    const { type } = req.query; // week/month/year
     try {
         const [rows] = await db.query('SELECT * FROM books ORDER BY views DESC LIMIT 5');
-        res.json(rows); // Trả về top 5 books
+        res.json(rows); 
     } catch (error) { res.status(500).json({ message: error.message }); }
 };
 
 exports.getBookById = async (req, res) => {
     try {
-        const bookId = req.params.id; // Lấy ID từ URL (VD: /books/1)
+        const bookId = req.params.id; 
 
-        // Query Database (Có thể JOIN thêm bảng Categories để lấy tên thể loại)
+        const updateViewSql = `UPDATE Books SET views = views + 1 WHERE book_id = ?`;
+        await db.execute(updateViewSql, [bookId]);
+        
         const sql = `
             SELECT b.*, c.name as category_name 
             FROM Books b 
@@ -31,12 +32,10 @@ exports.getBookById = async (req, res) => {
         
         const [rows] = await db.execute(sql, [bookId]);
 
-        // Nếu không tìm thấy sách
         if (rows.length === 0) {
             return res.status(404).json({ message: "Không tìm thấy sách" });
         }
 
-        // Trả về object sách đầu tiên tìm thấy
         res.json(rows[0]);
 
     } catch (error) {
@@ -46,10 +45,8 @@ exports.getBookById = async (req, res) => {
 };
 
 exports.updateBook = async (req, res) => {
-    // 1. Lấy ID sách từ URL (VD: /api/books/10)
     const bookId = req.params.id; 
 
-    // 2. Lấy toàn bộ dữ liệu từ Frontend gửi lên (req.body)
     const { 
         isbn, 
         title, 
@@ -61,12 +58,10 @@ exports.updateBook = async (req, res) => {
         category_id, 
         stock, 
         price, 
-        image // Đây là link ảnh (chuỗi text)
+        image
     } = req.body;
 
     try {
-        // 3. Câu lệnh SQL Update đầy đủ
-        // Lưu ý: Thứ tự dấu ? phải khớp chính xác với thứ tự biến trong mảng params bên dưới
         const sql = `
             UPDATE Books 
             SET 
@@ -84,7 +79,6 @@ exports.updateBook = async (req, res) => {
             WHERE book_id = ?
         `;
 
-        // 4. Mảng tham số (Mapping 1-1 với dấu ?)
         const params = [
             isbn, 
             title, 
@@ -97,13 +91,11 @@ exports.updateBook = async (req, res) => {
             stock, 
             price, 
             image, 
-            bookId // Tham số cuối cùng cho điều kiện WHERE book_id = ?
+            bookId 
         ];
 
-        // 5. Thực thi câu lệnh
         const [result] = await db.query(sql, params);
 
-        // Kiểm tra xem có sách nào được update không (phòng trường hợp ID sai)
         if (result.affectedRows === 0) {
             return res.status(404).json({ message: "Không tìm thấy sách có ID: " + bookId });
         }

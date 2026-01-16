@@ -26,9 +26,9 @@ axiosClient.interceptors.response.use(
     (error) => {
         // Xử lý lỗi chung, ví dụ nếu 401 (Unauthorized) thì đá về trang login
         if (error.response && error.response.status === 401) {
-            alert("Phiên đăng nhập hết hạn!");
+            alert("Vui lòng đăng nhập để thực hiện chức năng!");
             localStorage.removeItem('accessToken');
-            window.location.href = '/login.html';
+            window.location.href = '/asset/Homepage/HomePage.html';
         }
         return Promise.reject(error);
     }
