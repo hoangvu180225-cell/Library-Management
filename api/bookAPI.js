@@ -24,9 +24,14 @@ const bookApi = {
     
     // 4. Thêm sách mới
     create(bookInfo) {
-        const url = '/books';
-        return axiosClient.post(url, bookInfo);
-    },
+    const url = '/books';
+    return axiosClient.post(url, bookInfo, {
+        headers: {
+            // Ép buộc trình duyệt tự thiết lập boundary cho FormData
+            'Content-Type': 'multipart/form-data' 
+        }
+    });
+},
 
     // 5. Sửa thông tin sách
     update(id, bookInfo) {
