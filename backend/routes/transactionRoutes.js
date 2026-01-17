@@ -1,15 +1,16 @@
 const express = require('express');
 const router = express.Router();
 const transactionCtrl = require('../controllers/transactionController');
-const auth = require('../middleware/auth');
+const {verifyToken} = require('../middleware/auth');
 
+router.use(verifyToken);
 // Các API yêu cầu token
-router.post('/add', auth, transactionCtrl.addToLibrary);
-router.get('/', auth, transactionCtrl.getLibrary);
-router.post('/loans', auth, transactionCtrl.borrowBook);
-router.post('/buy', auth, transactionCtrl.buyBook);
+router.post('/add',  transactionCtrl.addToLibrary);
+router.get('/', transactionCtrl.getLibrary);
+router.post('/loans', transactionCtrl.borrowBook);
+router.post('/buy', transactionCtrl.buyBook);
 
-router.delete('/:id', auth, transactionCtrl.deleteTransaction); // Route xóa
-router.put('/:id', auth, transactionCtrl.updateStatus);         // Route trả sách (update)
+router.delete('/:id', transactionCtrl.deleteTransaction); // Route xóa
+router.put('/:id', transactionCtrl.updateStatus);         // Route trả sách (update)
 
 module.exports = router;

@@ -1,15 +1,20 @@
 const express = require('express');
 const router = express.Router();
 const authController = require('../controllers/authController');
-const authMiddleware = require('../middleware/auth'); 
 
-// Route công khai (Ai cũng gọi được)
+// SỬA LẠI DÒNG NÀY: Dùng destructuring để lấy đúng hàm verifyToken
+const { verifyToken } = require('../middleware/auth'); 
+
+// --- Route công khai ---
 router.post('/login', authController.login);
 router.post('/register', authController.register);
 
-// Route bảo vệ (Phải có Token mới gọi được)
-// Middleware sẽ chạy trước, nếu Token ngon lành thì mới cho vào Controller
-router.get('/profile', authMiddleware, authController.getProfile);
-router.put('/profile', authMiddleware, authController.updateProfile);
+// --- Middleware xác thực ---
+// Kể từ dòng này trở xuống, tất cả các route đều yêu cầu Token
+router.use(verifyToken);
+
+// --- Route bảo vệ ---
+router.get('/profile', authController.getProfile);
+router.put('/profile', authController.updateProfile);
 
 module.exports = router;
